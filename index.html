@@ -110,7 +110,7 @@ footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;text-al
       found += list.length;
       const num = String(u.unite).replace(/\D/g, "");
       const live = u.activites.some(a => a.lien);
-      html += `<section class="unit${live ? "" : " empty-unit"}"><div class="unit-head"><span class="ring"><span class="disc">${esc(num)}</span></span><div><small>${esc(u.unite)} · <span class="ar">الوحدة ${esc(num)}</span></small><h2>${esc(u.titre || "").replace(/ ([?!:;])/g, " $1")}</h2>${u.ar ? `<span class="ar">${esc(u.ar)}</span>` : ""}</div></div>`;
+      html += `<section class="unit${live ? "" : " empty-unit"}"><div class="unit-head"><span class="ring"><span class="disc">${esc(u.badge || num)}</span></span><div><small>${esc(u.unite)} · <span class="ar">${esc(u.uniteAr || ("الوحدة " + num))}</span></small><h2>${esc(u.titre || "").replace(/ ([?!:;])/g, " $1")}</h2>${u.ar ? `<span class="ar">${esc(u.ar)}</span>` : ""}</div></div>`;
       html += list.length
         ? `<div class="grid">` + list.map(a => a.lien
             ? `<a class="tile" href="${esc(a.lien)}"><span class="icon">${esc(a.icone || "📘")}</span><span class="txt">${esc(a.titre)}${a.ar ? `<span class="ar">${esc(a.ar)}</span>` : ""}</span><span class="go" aria-hidden="true">→</span></a>`

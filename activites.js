@@ -4,6 +4,9 @@
 // Sans « lien », la vignette s'affiche grisée avec « Bientôt ».
 // « ar » = traduction arabe affichée sous le titre français.
 window.ACTIVITES = [
+  { unite: "Bienvenue", uniteAr: "أهلًا وسهلًا", badge: "★", titre: "Découvrir la France", ar: "اكتشف فرنسا", activites: [
+    { titre: "La France en images", ar: "فرنسا بالصور", lien: "france/", icone: "🎬" }
+  ] },
   { unite: "Unité 0", titre: "Les lettres", ar: "الحروف", activites: [
     { titre: "Épeler en français", ar: "التهجئة بالفرنسية", lien: "epeler/", icone: "🔤" }
   ] },
