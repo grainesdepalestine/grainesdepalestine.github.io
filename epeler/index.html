@@ -727,4 +727,13 @@ nameIn.addEventListener("input", () => {
 if(location.protocol==="file:") document.getElementById("home").hidden=true;
 /* class link (?classe=1): the activity alone, no way back to the rest of the site */
 if(new URLSearchParams(location.search).has("classe")) document.getElementById("home").hidden=true;
+/* ?classe=1&etape=N: open step N only (1 Alphabet, 2 Mon nom, 3 Exercices), the other steps are hidden */
+(function(){
+  const q = new URLSearchParams(location.search), n = parseInt(q.get("etape"), 10);
+  if(!q.has("classe") || !(n >= 1 && n <= tabs.length)) return;
+  const t = tabs[n-1];
+  openTab(t);
+  document.getElementById("path").hidden = true;
+  document.querySelectorAll(".nextstep").forEach(b => { b.hidden = true; });
+})();
 </script>
