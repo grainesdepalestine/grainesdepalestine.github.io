@@ -135,6 +135,9 @@ footer .btn{text-decoration:none;font-size:.95rem;white-space:normal}
 .helpbtn{font-family:var(--body);font-size:1.05rem;font-weight:700;text-align:left;border:2px dashed var(--teal);background:var(--mist);color:var(--forest);border-radius:14px;padding:10px 14px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;width:100%}
 .helpbtn[aria-expanded="true"]{border-style:solid;background:var(--ok-soft)}
 .helpbtn .ar{font-weight:400}
+.backlat{align-self:flex-start;font-family:var(--body);font-size:.95rem;font-weight:700;border:none;background:none;color:var(--teal);cursor:pointer;padding:0;text-decoration:underline;display:flex;gap:8px;flex-wrap:wrap}
+.backlat .ar{font-weight:400}
+.sugg .found{font-family:var(--body);font-size:2rem;font-weight:700;letter-spacing:.05em;color:var(--forest)}
 .helpbtn:focus-visible{outline:3px solid var(--red);outline-offset:2px}
 .help{border:3px solid var(--teal);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:12px}
 .help label{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-weight:700}
@@ -199,8 +202,9 @@ footer .btn{text-decoration:none;font-size:.95rem;white-space:normal}
       <label for="nameIn" class="lbl"><span>✏️ Écris ton nom et ton prénom ici</span><span class="ar">اكتب اسمك واسم عائلتك هنا</span></label>
       <input id="nameIn" autocomplete="off" spellcheck="false" maxlength="40" value="" placeholder="ex. : AMAL" dir="auto">
     </div>
-    <button class="helpbtn" id="helpBtn" aria-expanded="false" aria-controls="helpBox"><span>❓ Tu ne sais pas comment écrire ton nom en français ?</span><span class="ar">لا تعرف كيف تكتب اسمك بالفرنسية؟</span></button>
+    <button class="helpbtn" id="helpBtn" aria-expanded="false" aria-controls="helpBox"><span>❓ Je ne sais pas écrire mon nom en lettres latines (seulement en arabe)</span><span class="ar">لا أعرف كتابة اسمي بالحروف اللاتينية (بالعربية فقط)</span></button>
     <div class="help" id="helpBox" hidden>
+      <button class="backlat" id="backLat">← J’écris mon nom en lettres latines <span class="ar">أكتب اسمي بالحروف اللاتينية</span></button>
       <label for="arIn"><span>Écris ton prénom en arabe :</span><span class="ar">اكتب اسمك بالعربية:</span></label>
       <input id="arIn" autocomplete="off" spellcheck="false" maxlength="40" dir="rtl" lang="ar">
       <div class="sugg" id="sugg" aria-live="polite" hidden></div>
@@ -218,17 +222,6 @@ footer .btn{text-decoration:none;font-size:.95rem;white-space:normal}
     <div class="note" id="practiceNote" hidden>
       Dis chaque lettre à voix haute. Puis clique sur la lettre pour vérifier.
       <span class="ar">قل كل حرف بصوت عالٍ، ثم اضغط على الحرف لتتحقّق.</span>
-    </div>
-    <div class="papers" id="papers">
-      <h3><span>📄 Mon nom sur mes papiers</span><span class="ar">اسمي في وثائقي</span></h3>
-      <p><span>Recopie ton nom et ton prénom comme sur ton passeport ou ton titre de séjour.</span><span class="ar">انسخ اسم عائلتك واسمك كما هما في جواز سفرك أو بطاقة إقامتك.</span></p>
-      <div class="pf">
-        <label>NOM <span class="ar">اسم العائلة</span><input id="papNom" autocomplete="off" spellcheck="false" maxlength="30" style="text-transform:uppercase"></label>
-        <label>Prénom <span class="ar">الاسم</span><input id="papPrenom" autocomplete="off" spellcheck="false" maxlength="30"></label>
-      </div>
-      <div class="row">
-        <button class="btn" id="papSpell">▶ Épeler mon nom <span class="ar">تهجَّ اسمي</span></button>
-      </div>
     </div>
     <button class="btn red nextstep" data-go="t-ex">Étape 3 : les exercices → <span class="ar">التالي</span></button>
   </section>
@@ -694,57 +687,40 @@ function findNames(t){
   return PRENOMS_AR.filter(p => p.key.startsWith(k)).slice(0, 4);
 }
 const helpBtn = document.getElementById("helpBtn"), helpBox = document.getElementById("helpBox"), arIn = document.getElementById("arIn");
+const nameField = document.querySelector("#p-nom .field");
 function openHelp(on){
-  helpBox.hidden = !on; helpBtn.setAttribute("aria-expanded", on);
-  if(on) arIn.focus({ preventScroll: true });
+  // Arabic mode: only the Arabic field and the letters stay on screen
+  helpBox.hidden = !on; helpBtn.hidden = on; nameField.hidden = on;
+  helpBtn.setAttribute("aria-expanded", on);
+  if(on){ nameIn.value = ""; renderName(); arIn.focus({ preventScroll: true }); }
+  else { arIn.value = ""; sugg.hidden = true; sugg.innerHTML = ""; nameIn.value = ""; renderName(); nameIn.focus({ preventScroll: true }); }
 }
-helpBtn.addEventListener("click", () => openHelp(helpBox.hidden));
+helpBtn.addEventListener("click", () => openHelp(true));
+document.getElementById("backLat").addEventListener("click", () => openHelp(false));
 function renderSugg(){
   const t = arIn.value;
-  if(!t.trim()){ sugg.hidden = true; sugg.innerHTML = ""; return; }
+  if(!t.trim()){ sugg.hidden = true; sugg.innerHTML = ""; nameIn.value = ""; renderName(); return; }
   const found = findNames(t);
-  let html = "";
-  if(found.length){
-    html += '<p><b>Ton prénom en lettres françaises : choisis.</b><span class="ar">اسمك بالحروف الفرنسية: اختر.</span></p>';
-    found.forEach(p => {
-      html += `<div class="srow"><span class="who">${p.ar}</span><div class="opts">` +
-        spellings(p).map(o => `<button class="opt" data-w="${o.w}">${o.w}<small>${o.tag} · <span class="ar" style="display:inline">${o.tagAr}</span></small></button>`).join("") +
-        `</div></div>`;
-    });
+  const k = normAr(t);
+  // pick the spelling only when the name is complete (exact match), not while typing
+  const hit = found.length === 1 && (found[0].key === k || k.startsWith(found[0].key + " ")) ? found[0] : null;
+  if(hit){
+    const w = hit.fr[0];
+    if(nameIn.value !== w){ nameIn.value = w; renderName(); }
+    sugg.innerHTML = `<p>Ton prénom en lettres latines : <span class="ar">اسمك بالحروف اللاتينية:</span></p><span class="found">${w}</span>` + PASSPORT_MSG;
+    sugg.hidden = false;
   } else {
-    html += '<p><b>Je ne trouve pas ce prénom.</b><span class="ar">لم أجد هذا الاسم.</span></p>';
+    nameIn.value = ""; renderName();
+    sugg.innerHTML = found.length ? "" : '<p><b>Je ne trouve pas ce prénom. Demande à ton professeur.</b><span class="ar">لم أجد هذا الاسم. اسأل أستاذك.</span></p>';
+    sugg.hidden = !sugg.innerHTML;
   }
-  sugg.innerHTML = html + PASSPORT_MSG;
-  sugg.hidden = false;
 }
-sugg.addEventListener("click", e => {
-  const b = e.target.closest(".opt"); if(!b) return;
-  nameIn.value = b.dataset.w;
-  renderName();
-  nameIn.scrollIntoView({ behavior: "smooth", block: "start" });
-  document.getElementById("spellAll").click();
-});
 arIn.addEventListener("input", renderSugg);
 // Arabic typed in the main field: move it to the translation help
 nameIn.addEventListener("input", () => {
   if(!isArabic(nameIn.value)) return;
-  arIn.value = nameIn.value.replace(/[A-Za-z]/g, "").trim();
-  nameIn.value = ""; renderName();
-  openHelp(true); renderSugg();
-});
-
-/* ---------- Mon nom sur mes papiers ---------- */
-const papNom = document.getElementById("papNom"), papPrenom = document.getElementById("papPrenom");
-try{ const sv = JSON.parse(localStorage.getItem("gdp-papiers") || "{}"); papNom.value = sv.nom || ""; papPrenom.value = sv.prenom || ""; }catch(e){}
-function savePapers(){ try{ localStorage.setItem("gdp-papiers", JSON.stringify({ nom: papNom.value, prenom: papPrenom.value })); }catch(e){} }
-papNom.addEventListener("input", savePapers); papPrenom.addEventListener("input", savePapers);
-document.getElementById("papSpell").addEventListener("click", () => {
-  const full = (papNom.value.trim().toUpperCase() + " " + papPrenom.value.trim()).trim();
-  if(!full){ papNom.focus(); return; }
-  nameIn.value = full.slice(0, 40);
-  renderName();
-  nameIn.scrollIntoView({ behavior: "smooth", block: "start" });
-  document.getElementById("spellAll").click();
+  const t = nameIn.value.replace(/[A-Za-z]/g, "").trim();
+  openHelp(true); arIn.value = t; renderSugg();
 });
 
 /* back to the general index: hidden in the downloaded (offline) copy */
