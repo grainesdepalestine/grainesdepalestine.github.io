@@ -5,13 +5,19 @@
 // « ar » = traduction arabe affichée sous le titre français.
 window.ACTIVITES = [
   { unite: "Bienvenue", uniteAr: "أهلًا وسهلًا", badge: "★", titre: "Découvrir la France", ar: "اكتشف فرنسا", activites: [
-    { titre: "La France en images", ar: "فرنسا بالصور", lien: "france/", icone: "🎬" }
+    { titre: "La France en images", ar: "فرنسا بالصور", lien: "france/", icone: "🎬" },
+    { titre: "Le livre complet (PDF)", ar: "الكتاب كاملًا (PDF)", lien: "livre/Premiers_pas_en_France_A1.pdf", icone: "📄" }
   ] },
   { unite: "Unité 0", titre: "Les lettres", ar: "الحروف", activites: [
+    { titre: "Le livre · Unité 0 (PDF)", ar: "الكتاب · الوحدة ٠ (PDF)", lien: "livre/Unite0_Les_lettres.pdf", icone: "📄" },
     { titre: "Épeler en français", ar: "التهجئة بالفرنسية", lien: "epeler/", icone: "🔤" }
   ] },
-  { unite: "Unité 1", titre: "Bonjour !", ar: "مرحبًا!", activites: [] },
-  { unite: "Unité 2", titre: "Quel jour ? Quelle heure ?", ar: "أيّ يوم؟ كم الساعة؟", activites: [] },
+  { unite: "Unité 1", titre: "Bonjour !", ar: "مرحبًا!", activites: [
+    { titre: "Le livre · Unité 1 (PDF)", ar: "الكتاب · الوحدة ١ (PDF)", lien: "livre/Unite1_Bonjour.pdf", icone: "📄" }
+  ] },
+  { unite: "Unité 2", titre: "Quel jour ? Quelle heure ?", ar: "أيّ يوم؟ كم الساعة؟", activites: [
+    { titre: "Le livre · Unité 2 (PDF)", ar: "الكتاب · الوحدة ٢ (PDF)", lien: "livre/Unite2_Jour_Heure.pdf", icone: "📄" }
+  ] },
   { unite: "Unité 3", titre: "À l'aéroport", ar: "في المطار", activites: [] },
   { unite: "Unité 4", titre: "Je cherche la gare", ar: "أبحث عن محطة القطار", activites: [] },
   { unite: "Unité 5", titre: "À la boulangerie", ar: "في المخبز", activites: [] },
