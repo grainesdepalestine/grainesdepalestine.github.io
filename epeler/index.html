@@ -725,4 +725,6 @@ nameIn.addEventListener("input", () => {
 
 /* back to the general index: hidden in the downloaded (offline) copy */
 if(location.protocol==="file:") document.getElementById("home").hidden=true;
+/* class link (?classe=1): the activity alone, no way back to the rest of the site */
+if(new URLSearchParams(location.search).has("classe")) document.getElementById("home").hidden=true;
 </script>
