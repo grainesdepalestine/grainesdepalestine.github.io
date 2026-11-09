@@ -1,6 +1,6 @@
 // Garde le site en mémoire sur le téléphone : il s'ouvre même sans internet.
-const CACHE = "gdp-v4";
-const PAGES = ["./", "index.html", "activites.js", "epeler/", "france/", "france/poster.jpg", "karim-youssef/", "karim-youssef/poster.jpg", "accueil-mairie/", "accueil-mairie/poster.jpg", "unite1/"];
+const CACHE = "gdp-v5";
+const PAGES = ["./", "index.html", "activites.js", "epeler/", "france/", "france/poster.jpg", "karim-youssef/", "karim-youssef/poster.jpg", "accueil-mairie/", "accueil-mairie/poster.jpg", "unite1/", "livre/"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => Promise.all(PAGES.map(p => c.add(p).catch(() => {})))).then(() => self.skipWaiting()));
 });

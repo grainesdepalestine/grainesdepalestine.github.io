@@ -4,6 +4,9 @@
 // Sans « lien », la vignette s'affiche grisée avec « Bientôt ».
 // « ar » = traduction arabe affichée sous le titre français.
 window.ACTIVITES = [
+  { unite: "Le livre", uniteAr: "الكتاب", badge: "📖", titre: "Premiers pas en France", ar: "خطواتي الأولى في فرنسا", activites: [
+    { titre: "Le livre de l’élève (PDF)", ar: "كتاب الطالب", lien: "livre/", icone: "📖" }
+  ] },
   { unite: "Bienvenue", uniteAr: "أهلًا وسهلًا", badge: "★", titre: "Découvrir la France", ar: "اكتشف فرنسا", activites: [
     { titre: "La France en images", ar: "فرنسا بالصور", lien: "france/", icone: "🎬" }
   ] },
@@ -21,5 +24,7 @@ window.ACTIVITES = [
   { unite: "Unité 5", titre: "À la boulangerie", ar: "في المخبز", activites: [] },
   { unite: "Unité 6", titre: "Au supermarché", ar: "في السوبرماركت", activites: [] },
   { unite: "Unité 7", titre: "J'ai mal", ar: "أشعر بألم", activites: [] },
-  { unite: "Unité 8", titre: "Se soigner", ar: "العلاج", activites: [] }
+  { unite: "Unité 8", titre: "Se soigner", ar: "العلاج", activites: [] },
+  { unite: "Unité 9", titre: "À l'université : trouver un logement", ar: "في الجامعة: البحث عن سكن", activites: [] },
+  { unite: "Unité 10", titre: "En vacances à Paris", ar: "عطلة في باريس", activites: [] }
 ];
