@@ -26,6 +26,7 @@ window.ACTIVITES = [
   { unite: "Unité 6", titre: "Au supermarché", ar: "في السوبرماركت", activites: [] },
   { unite: "Unité 7", titre: "J'ai mal", ar: "أشعر بألم", activites: [] },
   { unite: "Unité 8", titre: "Se soigner", ar: "العلاج", activites: [] },
-  { unite: "Unité 9", titre: "À l'université : trouver un logement", ar: "في الجامعة: البحث عن سكن", activites: [] },
-  { unite: "Unité 10", titre: "En vacances à Paris", ar: "عطلة في باريس", activites: [] }
+  { unite: "Unité 9", titre: "À l'université", ar: "في الجامعة", activites: [] },
+  { unite: "Unité 10", titre: "Trouver un logement", ar: "البحث عن سكن", activites: [] },
+  { unite: "Unité 11", titre: "En vacances à Paris", ar: "عطلة في باريس", activites: [] }
 ];
