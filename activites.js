@@ -16,6 +16,7 @@ window.ACTIVITES = [
   { unite: "Unité 1", titre: "Bonjour !", ar: "مرحبًا!", activites: [
     { titre: "La BD : Karim et Youssef", ar: "قصة مصوّرة: كريم ويوسف", lien: "karim-youssef/", icone: "💬" },
     { titre: "À l’accueil de la mairie", ar: "في استقبال البلدية", lien: "accueil-mairie/", icone: "🏛️" },
+    { titre: "Les sons (prononciation)", ar: "الأصوات والنطق", lien: "prononciation/", icone: "🔊" },
     { titre: "Exercices de l’Unité 1", ar: "تمارين الوحدة ١", lien: "unite1/", icone: "✏️" }
   ] },
   { unite: "Unité 2", titre: "Quel jour ? Quelle heure ?", ar: "أيّ يوم؟ كم الساعة؟", activites: [] },
