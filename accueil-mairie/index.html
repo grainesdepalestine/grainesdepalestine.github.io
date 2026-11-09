@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fr" translate="no">
+<head>
+<meta charset="utf-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>À l’accueil de la mairie — Graines de Palestine</title>
+<link rel="icon" href="../img/pousse.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Kalam:wght@700&family=Noto+Naskh+Arabic:wght@400;700&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --white:#ffffff; --ink:#151a18; --forest:#1f3d33; --teal:#1e6b59; --leaf:#2f8a6e;
+  --mist:#eef4f1; --line:#d5e2dc; --red:#c8213f;
+  --hand:"Kalam","Comic Sans MS",cursive;
+  --body:"Andika","Trebuchet MS",system-ui,sans-serif;
+  --ar:"Noto Naskh Arabic","Amiri","Geeza Pro",serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--white);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45}
+.ar{font-family:var(--ar);direction:rtl;unicode-bidi:isolate}
+.wrap{max-width:960px;margin:0 auto;padding:18px 16px 40px;display:flex;flex-direction:column;gap:20px}
+.home{align-self:flex-start;text-decoration:none;font-family:var(--body);font-size:1.2rem;font-weight:700;padding:13px 24px;border-radius:999px;background:var(--red);color:#fff;box-shadow:0 3px 0 var(--forest);display:inline-flex;gap:8px;align-items:center}
+.home .ar{font-weight:400;font-size:1rem}
+.home:focus-visible{outline:3px solid var(--forest);outline-offset:3px}
+header{display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--forest);padding-bottom:14px}
+.badge{width:70px;height:70px;border-radius:50%;border:4px solid var(--forest);display:grid;place-items:center;flex:none;overflow:hidden;background:#fff}
+.badge img{width:52px;height:52px;object-fit:contain}
+h1{font-family:var(--hand);font-size:clamp(1.7rem,5vw,2.4rem);margin:0;line-height:1.05;color:var(--forest)}
+h1 .ar{display:block;text-align:left;font-family:var(--ar);font-size:1.2rem;color:var(--teal);margin-top:4px}
+.player{border:4px solid var(--forest);border-radius:18px;overflow:hidden;background:#000}
+video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#000}
+.hint{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0;font-size:1.05rem}
+.dl{align-self:flex-start;text-decoration:none;font-weight:700;font-size:1.05rem;padding:11px 20px;border-radius:999px;border:2px solid var(--forest);color:var(--forest);background:#fff;display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap}
+.dl .ar{font-weight:400}
+.dl:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home" href="../">🏠 ← Sommaire <span class="ar">الفهرس</span></a>
+  <header>
+    <div class="badge"><img src="../img/pousse.png" alt=""></div>
+    <h1>À l’accueil de la mairie <span class="ar">في استقبال البلدية</span></h1>
+  </header>
+
+  <p class="hint"><span>Unité 1 · Youssef et Mme Martin. Écoute, puis répète.</span><span class="ar">الوحدة ١ · يوسف والسيدة مارتان. استمع ثم ردّد.</span></p>
+
+  <div class="player">
+    <video controls playsinline preload="metadata" poster="poster.jpg">
+      <source src="Accueil_mairie.mp4?v=1" type="video/mp4">
+    </video>
+  </div>
+
+  <a class="dl" href="Accueil_mairie.mp4" download>⬇ Télécharger la vidéo (1 Mo) <span class="ar">حمّل الفيديو</span></a>
+
+  <footer>Graines de Palestine · Premiers pas en France</footer>
+</div>
+<script>if("serviceWorker" in navigator && (location.protocol==="https:"||location.hostname==="localhost")){navigator.serviceWorker.register("../sw.js",{scope:"../"}).catch(function(){});}</script>
+</body>
+</html>

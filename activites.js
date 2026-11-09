@@ -11,7 +11,8 @@ window.ACTIVITES = [
     { titre: "Épeler en français", ar: "التهجئة بالفرنسية", lien: "epeler/", icone: "🔤" }
   ] },
   { unite: "Unité 1", titre: "Bonjour !", ar: "مرحبًا!", activites: [
-    { titre: "La BD : Karim et Youssef", ar: "قصة مصوّرة: كريم ويوسف", lien: "karim-youssef/", icone: "💬" }
+    { titre: "La BD : Karim et Youssef", ar: "قصة مصوّرة: كريم ويوسف", lien: "karim-youssef/", icone: "💬" },
+    { titre: "À l’accueil de la mairie", ar: "في استقبال البلدية", lien: "accueil-mairie/", icone: "🏛️" }
   ] },
   { unite: "Unité 2", titre: "Quel jour ? Quelle heure ?", ar: "أيّ يوم؟ كم الساعة؟", activites: [] },
   { unite: "Unité 3", titre: "À l'aéroport", ar: "في المطار", activites: [] },
