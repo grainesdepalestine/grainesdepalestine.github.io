@@ -10,7 +10,9 @@ window.ACTIVITES = [
   { unite: "Unité 0", titre: "Les lettres", ar: "الحروف", activites: [
     { titre: "Épeler en français", ar: "التهجئة بالفرنسية", lien: "epeler/", icone: "🔤" }
   ] },
-  { unite: "Unité 1", titre: "Bonjour !", ar: "مرحبًا!", activites: [] },
+  { unite: "Unité 1", titre: "Bonjour !", ar: "مرحبًا!", activites: [
+    { titre: "La BD : Karim et Youssef", ar: "قصة مصوّرة: كريم ويوسف", lien: "karim-youssef/", icone: "💬" }
+  ] },
   { unite: "Unité 2", titre: "Quel jour ? Quelle heure ?", ar: "أيّ يوم؟ كم الساعة؟", activites: [] },
   { unite: "Unité 3", titre: "À l'aéroport", ar: "في المطار", activites: [] },
   { unite: "Unité 4", titre: "Je cherche la gare", ar: "أبحث عن محطة القطار", activites: [] },
