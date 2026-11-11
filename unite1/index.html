@@ -110,6 +110,13 @@ h1 .ar{display:block;text-align:left;font-size:1.15rem;color:var(--teal);margin-
 .fb{min-height:48px;font-size:1.2rem;font-weight:700;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .fb.ok{color:var(--ok)}.fb.bad{color:var(--red)}
 .final{text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
+.more{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;padding-top:14px;border-top:2px dashed var(--line)}
+.more a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 8px;border-radius:18px;text-decoration:none;font-weight:700;font-size:1.1rem;color:var(--forest);border:3px solid var(--forest);box-shadow:0 4px 0 var(--forest)}
+.more a .i{font-size:1.9rem;line-height:1.1}
+.more a .ar{font-weight:400;font-size:1rem}
+.more a.m{background:#fff4dc}
+.more a.r{background:#e3f3ec}
+.more a:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
 .final .score{font-family:var(--hand);font-size:3rem;color:var(--forest)}
 footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
 .dl{text-decoration:none;font-weight:700;padding:11px 20px;border-radius:999px;border:2px solid var(--forest);color:var(--forest);background:#fff;display:inline-flex;gap:8px;flex-wrap:wrap;justify-content:center}
@@ -205,7 +212,10 @@ function openStep(i){
     <div class="quiz" id="quiz"></div>`;
   panel.querySelectorAll("[data-a]").forEach(b => b.addEventListener("click", () => { panel.querySelectorAll(".on").forEach(x => x.classList.remove("on")); b.classList.add("on"); play(b.dataset.a); }));
   panel.querySelectorAll(".playall").forEach(b => b.addEventListener("click", async () => { const my = ++jid; for(const l of b.parentNode.querySelectorAll(".line")){ if(my !== jid) return; panel.querySelectorAll(".on").forEach(x => x.classList.remove("on")); l.classList.add("on"); await play(l.dataset.a); await wait(500); } }));
-  quiz = s.quiz; qi = 0; results = []; autoNext = false; newQ();
+  quiz = s.quiz; qi = 0; results = []; autoNext = false;
+  // reprendre là où l'élève s'était arrêté dans cette série (après actualisation ou retour)
+  try{ const pos = JSON.parse(localStorage.getItem("gdp-u1-pos") || "null"); if(pos && pos.id === s.id && pos.qi > 0 && pos.qi < quiz.length){ qi = pos.qi; results = pos.results || []; } }catch(e){}
+  newQ();
   try{ localStorage.setItem("gdp-u1-step", s.id); }catch(e){}
 }
 function mix(n){ // ordre mélangé : aucun mot à sa place, et jamais deux voisins qui se suivent
@@ -218,6 +228,7 @@ function shuffle(a){ a = [...a]; for(let i = a.length - 1; i > 0; i--){ const j 
 let autoNext = false;
 function newQ(){
   jid++; tries = 0; locked = false; built = [];
+  try{ localStorage.setItem("gdp-u1-pos", JSON.stringify({ id: DATA.steps[si].id, qi, results })); }catch(e){}
   const el = document.getElementById("quiz"), q = quiz[qi];
   const dots = quiz.map((_, i) => `<span class="dot${results[i] === true ? " ok" : results[i] === false ? " bad" : ""}${i === qi ? " cur" : ""}"></span>`).join("");
   let body = "";
@@ -298,10 +309,11 @@ function refreshDots(){ document.querySelectorAll(".dot").forEach((d, i) => { d.
 function finish(){
   stopAll(); const n = results.filter(Boolean).length, s = DATA.steps[si];
   done[s.id] = true; saveDone(); renderSteps();
+  try{ localStorage.removeItem("gdp-u1-pos"); }catch(e){}
   const last = si === DATA.steps.length - 1;
   document.getElementById("quiz").innerHTML = `<div class="final"><div class="score">${n} / ${quiz.length}</div>
     <div>${n >= quiz.length * .8 ? 'Excellent ! <span class="ar">ممتاز!</span>' : n >= quiz.length * .5 ? 'Bien ! Continue. <span class="ar">جيد! استمر.</span>' : 'Écoute encore, puis recommence. <span class="ar">استمع مرة أخرى ثم أعد.</span>'}</div>
-    <div class="row"><button class="btn ghost" id="again">↻ Recommencer <span class="ar">أعد</span></button>${last || classe1 ? "" : `<button class="btn red" id="go">Étape ${si + 2} : ${esc(DATA.steps[si + 1].fr)} → <span class="ar">التالي</span></button>`}</div></div>`;
+    <div class="row"><button class="btn ghost" id="again">↻ Recommencer <span class="ar">أعد</span></button>${last || classe1 ? "" : `<button class="btn red" id="go">Étape ${si + 2} : ${esc(DATA.steps[si + 1].fr)} → <span class="ar">التالي</span></button>`}</div>${location.protocol === "file:" ? "" : `<div class="more"><a class="m" href="../mots/?e=${s.id}"><span class="i">📚</span>Mes mots<span class="ar">كلماتي</span></a><a class="r" href="../revise/"><span class="i">⭐</span>Je révise<span class="ar">أراجع</span></a></div>`}</div>`;
   if(n >= quiz.length * .5){ bip(true); }
   document.getElementById("again").addEventListener("click", () => { qi = 0; results = []; autoNext = true; newQ(); });
   const go = document.getElementById("go"); if(go) go.addEventListener("click", () => { openStep(si + 1); window.scrollTo({top: 0, behavior: "smooth"}); });

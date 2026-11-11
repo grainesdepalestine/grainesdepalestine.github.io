@@ -3,17 +3,20 @@
 //   { titre: "Épeler en français", ar: "التهجئة بالفرنسية", lien: "epeler/", icone: "🔤" }
 // Sans « lien », la vignette s'affiche grisée avec « Bientôt ».
 // « ar » = traduction arabe affichée sous le titre français.
+// OUVRIR UNE UNITÉ : mettre « ouverte: true ». Une unité fermée affiche 🔒 : pas de lien,
+//   ses mots n'apparaissent ni dans « Mes mots » ni dans « Je révise ».
+// « suivi » = où l'appli d'exercices de l'unité enregistre les étapes finies (cercle de progression).
 window.ACTIVITES = [
-  { unite: "Le livre", uniteAr: "الكتاب", badge: "📖", titre: "Premiers pas en France", ar: "خطواتي الأولى في فرنسا", activites: [
+  { unite: "Le livre", ouverte: true, uniteAr: "الكتاب", badge: "📖", titre: "Premiers pas en France", ar: "خطواتي الأولى في فرنسا", activites: [
     { titre: "Le livre de l’élève (PDF)", ar: "كتاب الطالب", lien: "livre/", icone: "📖" }
   ] },
-  { unite: "Bienvenue", uniteAr: "أهلًا وسهلًا", badge: "★", titre: "Découvrir la France", ar: "اكتشف فرنسا", activites: [
+  { unite: "Bienvenue", ouverte: true, uniteAr: "أهلًا وسهلًا", badge: "★", titre: "Découvrir la France", ar: "اكتشف فرنسا", activites: [
     { titre: "La France en images", ar: "فرنسا بالصور", lien: "france/", icone: "🎬" }
   ] },
-  { unite: "Unité 0", titre: "Les lettres", ar: "الحروف", activites: [
+  { unite: "Unité 0", ouverte: true, titre: "Les lettres", ar: "الحروف", activites: [
     { titre: "Épeler en français", ar: "التهجئة بالفرنسية", lien: "epeler/", icone: "🔤" }
   ] },
-  { unite: "Unité 1", titre: "Bonjour !", ar: "مرحبًا!", activites: [
+  { unite: "Unité 1", ouverte: true, suivi: { cle: "gdp-u1-done", etapes: ["mots", "dialogues", "tuvous", "presenter", "grammaire", "sons", "revisions"] }, titre: "Bonjour !", ar: "مرحبًا!", activites: [
     { titre: "La BD : Karim et Youssef", ar: "قصة مصوّرة: كريم ويوسف", lien: "karim-youssef/", icone: "💬" },
     { titre: "À l’accueil de la mairie", ar: "في استقبال البلدية", lien: "accueil-mairie/", icone: "🏛️" },
     { titre: "Les sons (prononciation)", ar: "الأصوات والنطق", lien: "prononciation/", icone: "🔊" },

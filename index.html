@@ -57,6 +57,18 @@ a.tile:focus-visible{outline:3px solid var(--forest);outline-offset:3px}
 .tile.soon .ar{color:#56645e}
 .tile small{font-size:.85rem;font-weight:400}
 @keyframes pulse{0%,100%{box-shadow:0 4px 0 #8f1229,0 0 0 0 rgba(200,33,63,.45)}50%{box-shadow:0 4px 0 #8f1229,0 0 0 10px rgba(200,33,63,0)}}
+.unit.locked .ring{background:#d9dfdc}
+.unit.locked .disc{background:#9aa8a2}
+.unit.locked h2,.unit.locked .unit-head .ar,.unit.locked small{color:#7b8a84}
+.ring.prog{background:conic-gradient(var(--leaf) calc(var(--p)*1%),#d9dfdc 0)}
+.pc{display:inline-block;margin-top:4px;font-size:.95rem;font-weight:700;color:var(--leaf)}
+.pc .ar{display:inline;font-size:.95rem}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tool{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:20px;text-decoration:none;color:var(--forest);background:var(--mist);border:3px solid var(--forest);font-weight:700;font-size:1.2rem;line-height:1.2;box-shadow:0 4px 0 var(--forest)}
+.tool .icon{font-size:2rem;flex:none}
+.tool .ar{display:block;font-size:1.05rem;color:var(--teal)}
+.tool:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+@media (max-width:420px){.tool{font-size:1.05rem;padding:12px}}
 .empty{margin-left:78px;padding:12px 16px;border:2px dashed var(--line);border-radius:16px;color:#56645e;font-size:1rem}
 
 footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;text-align:center}
@@ -96,6 +108,13 @@ footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;text-al
     return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   }
 
+  function progress(u) {
+    if (!u.suivi) return null;
+    let d = {}; try { d = JSON.parse(localStorage.getItem(u.suivi.cle) || "{}") || {}; } catch (e) {}
+    const n = u.suivi.etapes.filter(id => d[id]).length;
+    return { n, t: u.suivi.etapes.length, p: Math.round(n * 100 / u.suivi.etapes.length) };
+  }
+
   function render(q) {
     q = (q || "").trim().toLowerCase();
     let html = "";
@@ -106,7 +125,11 @@ footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;text-al
       found += list.length;
       const num = String(u.unite).replace(/\D/g, "");
       const live = u.activites.some(a => a.lien);
-      html += `<section class="unit${live ? "" : " empty-unit"}"><div class="unit-head"><span class="ring"><span class="disc">${esc(u.badge || num)}</span></span><div><small>${esc(u.unite)} · <span class="ar">${esc(u.uniteAr || ("الوحدة " + num))}</span></small><h2>${esc(u.titre || "").replace(/ ([?!:;])/g, " $1")}</h2>${u.ar ? `<span class="ar">${esc(u.ar)}</span>` : ""}</div></div>`;
+      const open = u.ouverte === true, pr = open ? progress(u) : null;
+      const ring = pr ? `<span class="ring prog" style="--p:${pr.p}">` : `<span class="ring">`;
+      const pcTxt = !open ? `<span class="pc" style="color:#7b8a84">Bientôt · <span class="ar">قريبًا</span></span>` : pr ? `<span class="pc">${pr.p === 100 ? "✓ " : ""}${pr.n} / ${pr.t} étapes · ${pr.p} % <span class="ar">تقدّمي</span></span>` : "";
+      html += `<section class="unit${!open ? " locked" : live ? "" : " empty-unit"}"><div class="unit-head">${ring}<span class="disc">${open ? esc(u.badge || num) : "🔒"}</span></span><div><small>${esc(u.unite)} · <span class="ar">${esc(u.uniteAr || ("الوحدة " + num))}</span></small><h2>${esc(u.titre || "").replace(/ ([?!:;])/g, " $1")}</h2>${u.ar ? `<span class="ar">${esc(u.ar)}</span>` : ""}${pcTxt}</div></div>`;
+      if (!open) { html += `</section>`; continue; }
       html += list.length
         ? `<div class="grid">` + list.map(a => a.lien
             ? `<a class="tile" href="${esc(a.lien)}"><span class="icon">${esc(a.icone || "📘")}</span><span class="txt">${esc(a.titre)}${a.ar ? `<span class="ar">${esc(a.ar)}</span>` : ""}</span><span class="go" aria-hidden="true">→</span></a>`

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="fr" translate="no">
+<head>
+<meta charset="utf-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Je révise — Graines de Palestine</title>
+<link rel="icon" href="../img/pousse.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Kalam:wght@700&family=Noto+Naskh+Arabic:wght@400;700&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --white:#ffffff; --ink:#151a18; --forest:#1f3d33; --teal:#1e6b59; --leaf:#2f8a6e;
+  --mist:#eef4f1; --line:#d5e2dc; --red:#c8213f; --sun:#f6b93b;
+  --hand:"Kalam","Comic Sans MS",cursive;
+  --body:"Andika","Trebuchet MS",system-ui,sans-serif;
+  --ar:"Noto Naskh Arabic","Amiri","Geeza Pro",serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--white);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45}
+.ar{font-family:var(--ar);direction:rtl;unicode-bidi:isolate;font-weight:400}
+.wrap{max-width:720px;margin:0 auto;padding:18px 16px 40px;display:flex;flex-direction:column;gap:18px}
+.home{align-self:flex-start;text-decoration:none;font-size:1.2rem;font-weight:700;padding:13px 24px;border-radius:999px;background:var(--red);color:#fff;box-shadow:0 3px 0 var(--forest);display:inline-flex;gap:8px;align-items:center}
+.home .ar{font-size:1rem}
+a:focus-visible,button:focus-visible{outline:3px solid var(--forest);outline-offset:3px}
+header{display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--forest);padding-bottom:14px}
+.badge{width:70px;height:70px;border-radius:50%;border:4px solid var(--forest);display:grid;place-items:center;flex:none;background:#fff;font-size:2.2rem}
+h1{font-family:var(--hand);font-size:clamp(1.7rem,5vw,2.4rem);margin:0;line-height:1.05;color:var(--forest)}
+h1 .ar{display:block;text-align:left;font-size:1.2rem;color:var(--teal);margin-top:4px}
+.info{padding:12px 16px;border-radius:16px;background:var(--mist);display:flex;flex-direction:column;gap:4px}
+.info .ar{text-align:right}
+.dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.dot{width:16px;height:16px;border-radius:50%;background:#d9dfdc}
+.dot.cur{outline:3px solid var(--sun)}
+.dot.ok{background:var(--leaf)} .dot.bad{background:var(--red)}
+.card{border:4px solid var(--forest);border-radius:24px;padding:20px 16px;display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center}
+.q{font-weight:700;font-size:1.2rem;display:flex;flex-direction:column;gap:2px}
+.big{font-size:2rem;font-weight:700;color:var(--forest)}
+.big.ar{font-size:2.2rem;color:var(--teal)}
+.listen{width:96px;height:96px;border-radius:50%;border:none;background:var(--leaf);box-shadow:0 5px 0 var(--forest);cursor:pointer;display:grid;place-items:center}
+.listen svg{width:46px;height:46px;fill:#fff}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.opt{font:inherit;font-weight:700;font-size:1.2rem;padding:16px 10px;border-radius:18px;border:3px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;min-height:64px}
+.opt.ar{font-size:1.35rem;font-weight:400}
+.opt.ok{border-color:var(--leaf);background:#e3f3ec}
+.opt.no{border-color:var(--red);background:#fde8ec;color:#8f1229}
+.opt:disabled{cursor:default}
+.btn{font:inherit;font-weight:700;font-size:1.2rem;padding:13px 26px;border-radius:999px;border:none;background:var(--red);color:#fff;box-shadow:0 3px 0 var(--forest);cursor:pointer;display:inline-flex;gap:8px;align-items:center;text-decoration:none}
+.btn.ghost{background:#fff;color:var(--forest);border:2px solid var(--forest)}
+.score{font-family:var(--hand);font-size:3rem;color:var(--forest);line-height:1}
+.miss{width:100%;display:flex;flex-direction:column;gap:8px;text-align:left}
+.mw{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:6px 12px 6px 6px;border:2px solid var(--line);border-radius:14px;background:#fff;font:inherit;cursor:pointer;text-align:left}
+.mw .pl{width:40px;height:40px;border-radius:50%;background:var(--leaf);display:grid;place-items:center}
+.mw .pl svg{width:18px;height:18px;fill:#fff}
+.row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;text-align:center}
+@media (max-width:420px){.opts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home" href="../">🏠 ← Sommaire <span class="ar">الفهرس</span></a>
+  <header>
+    <div class="badge">⭐</div>
+    <h1>Je révise <span class="ar">أراجع</span></h1>
+  </header>
+  <div class="info" id="info"></div>
+  <div class="dots" id="dots"></div>
+  <div class="card" id="card"></div>
+  <footer>Graines de Palestine · Premiers pas en France</footer>
+</div>
+<script src="../activites.js"></script>
+<script src="../mots.js"></script>
+<script>
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const PLAY = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+const wait = ms => new Promise(r => setTimeout(r, ms));
+let actx = null;
+function bip(ok){ try{ actx = actx || new (window.AudioContext || window.webkitAudioContext)(); if(actx.state === "suspended") actx.resume();
+  (ok ? [[660,0],[880,.12]] : [[220,0],[180,.16]]).forEach(([f,t]) => { const o = actx.createOscillator(), g = actx.createGain(); o.type = ok ? "sine" : "square"; o.frequency.value = f;
+    const t0 = actx.currentTime + t; g.gain.setValueAtTime(.0001, t0); g.gain.exponentialRampToValueAtTime(ok ? .35 : .12, t0 + .02); g.gain.exponentialRampToValueAtTime(.0001, t0 + (ok ? .22 : .26));
+    o.connect(g).connect(actx.destination); o.start(t0); o.stop(t0 + .3); }); }catch(e){} return wait(ok ? 380 : 450); }
+let au = null;
+function play(src){ try{ if(au) au.pause(); au = new Audio("../" + src); au.play().catch(() => {}); }catch(e){} }
+const shuffle = a => { a = a.slice(); for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+/* Les mots à réviser = unités OUVERTES, étapes FINIES par l'élève sur ce téléphone */
+const pool = [], doneNames = [];
+let firstUnit = null;
+(window.ACTIVITES || []).forEach(u => {
+  const M = (window.MOTS || {})[u.unite];
+  if (!M || u.ouverte !== true) return;
+  const lien = (u.activites.find(a => a.lien && /^unite/.test(a.lien)) || {}).lien;
+  if (!firstUnit) firstUnit = { u, lien };
+  let d = {}; try { d = JSON.parse(localStorage.getItem(M.cle) || "{}") || {}; } catch (e) {}
+  M.groupes.forEach(g => { if (d[g.e]) { g.m.forEach(m => pool.push({ ...m, g: g.t })); doneNames.push(g.t); } });
+});
+
+const info = document.getElementById("info"), card = document.getElementById("card"), dots = document.getElementById("dots");
+const N = 10;
+let qs = [], qi = 0, res = [], missed = [];
+
+function start(){
+  // 10 questions, chaque mot une seule fois si possible
+  const words = shuffle(pool); qs = [];
+  for (let i = 0; i < N; i++) qs.push({ w: words[i % words.length], k: i % 3 });
+  qs = shuffle(qs); qi = 0; res = []; missed = [];
+  show();
+}
+function options(w, key){
+  const same = shuffle(pool.filter(x => x.g === w.g && x[key] !== w[key]));
+  const other = shuffle(pool.filter(x => x.g !== w.g && x[key] !== w[key]));
+  const seen = new Set([w[key]]), out = [w];
+  for (const x of same.concat(other)) { if (out.length >= 4) break; if (!seen.has(x[key])) { seen.add(x[key]); out.push(x); } }
+  return shuffle(out);
+}
+function drawDots(){ dots.innerHTML = qs.map((_, i) => `<span class="dot${res[i] === true ? " ok" : res[i] === false ? " bad" : ""}${i === qi ? " cur" : ""}"></span>`).join(""); }
+function show(){
+  drawDots();
+  const { w, k } = qs[qi];
+  // k=0 : j'écoute → je choisis le français · k=1 : je lis l'arabe → je choisis le français · k=2 : j'écoute → je choisis l'arabe
+  const key = k === 2 ? "ar" : "fr";
+  const ask = k === 1
+    ? `<div class="q"><span>Comment dit-on en français ?</span><span class="ar">كيف نقول بالفرنسية؟</span></div><div class="big ar">${esc(w.ar)}</div>`
+    : `<div class="q"><span>${k === 0 ? "Écoute. Quel mot ?" : "Écoute. Qu’est-ce que ça veut dire ?"}</span><span class="ar">${k === 0 ? "استمع. ما هي الكلمة؟" : "استمع. ما معناها؟"}</span></div><button class="listen" id="lis" aria-label="Écouter">${PLAY}</button>`;
+  card.innerHTML = ask + `<div class="opts">` + options(w, key).map(o => `<button class="opt${key === "ar" ? " ar" : ""}" data-ok="${o === w ? 1 : 0}">${esc(o[key])}</button>`).join("") + `</div><div class="row" id="nx"></div>`;
+  const lis = document.getElementById("lis");
+  if (lis) { lis.onclick = () => play(w.a); play(w.a); }
+  let first = true;
+  card.querySelectorAll(".opt").forEach(b => b.onclick = async () => {
+    if (b.dataset.ok === "1") {
+      b.classList.add("ok"); card.querySelectorAll(".opt").forEach(x => x.disabled = true);
+      if (res[qi] === undefined) res[qi] = first;
+      drawDots(); await bip(true);
+      document.getElementById("nx").innerHTML = `<button class="btn" id="go">${qi + 1 < qs.length ? 'Suivant → <span class="ar">التالي</span>' : 'Mon score → <span class="ar">نتيجتي</span>'}</button>`;
+      document.getElementById("go").onclick = () => { qi++; qi < qs.length ? show() : end(); };
+      document.getElementById("go").focus();
+    } else {
+      b.classList.add("no"); b.disabled = true;
+      if (first) { first = false; res[qi] = false; if (!missed.includes(w)) missed.push(w); drawDots(); }
+      await bip(false);
+    }
+  });
+}
+function end(){
+  qi = -1; drawDots();
+  const n = res.filter(Boolean).length;
+  const msg = n >= 8 ? 'Excellent ! <span class="ar">ممتاز!</span>' : n >= 5 ? 'Bien ! Continue. <span class="ar">جيد! استمر.</span>' : 'Écoute encore les mots, puis recommence. <span class="ar">استمع إلى الكلمات مرة أخرى ثم أعد.</span>';
+  card.innerHTML = `<div class="score">${n} / ${qs.length}</div><div class="q">${msg}</div>` +
+    (missed.length ? `<div class="q"><span>Les mots à revoir :</span><span class="ar">كلمات أراجعها:</span></div><div class="miss">` +
+      missed.map((m, i) => `<button class="mw" data-i="${i}"><span class="pl">${PLAY}</span><b>${esc(m.fr)}</b><span class="ar">${esc(m.ar)}</span></button>`).join("") + `</div>` : "") +
+    `<div class="row"><button class="btn" id="again">↻ Encore 10 mots <span class="ar">١٠ كلمات أخرى</span></button><a class="btn ghost" href="../mots/">📚 Mes mots <span class="ar">كلماتي</span></a></div>`;
+  card.querySelectorAll(".mw").forEach(b => b.onclick = () => play(missed[+b.dataset.i].a));
+  document.getElementById("again").onclick = start;
+}
+
+if (pool.length < 4) {
+  info.hidden = true; dots.hidden = true;
+  card.innerHTML = `<div class="q"><span>Fais d’abord une étape des exercices. Les mots que tu as travaillés viendront ici.</span><span class="ar">أنجز أولًا مرحلة من التمارين. الكلمات التي درستها ستظهر هنا.</span></div>` +
+    (firstUnit && firstUnit.lien ? `<a class="btn" href="../${esc(firstUnit.lien)}">✏️ Exercices de l’${esc(firstUnit.u.unite)} → <span class="ar">التمارين</span></a>` : "");
+} else {
+  info.innerHTML = `<span>Je révise ${pool.length} mots : ${doneNames.map(esc).join(", ")}.</span><span class="ar">أراجع الكلمات التي درستها.</span>`;
+  start();
+}
+</script>
+<script>if("serviceWorker" in navigator && (location.protocol==="https:"||location.hostname==="localhost")){navigator.serviceWorker.register("../sw.js",{scope:"../"}).catch(function(){});}</script>
+</body>
+</html>

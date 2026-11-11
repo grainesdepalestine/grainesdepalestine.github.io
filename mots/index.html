@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fr" translate="no">
+<head>
+<meta charset="utf-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mes mots — Graines de Palestine</title>
+<link rel="icon" href="../img/pousse.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Kalam:wght@700&family=Noto+Naskh+Arabic:wght@400;700&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --white:#ffffff; --ink:#151a18; --forest:#1f3d33; --teal:#1e6b59; --leaf:#2f8a6e;
+  --mist:#eef4f1; --line:#d5e2dc; --red:#c8213f;
+  --hand:"Kalam","Comic Sans MS",cursive;
+  --body:"Andika","Trebuchet MS",system-ui,sans-serif;
+  --ar:"Noto Naskh Arabic","Amiri","Geeza Pro",serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--white);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45}
+.ar{font-family:var(--ar);direction:rtl;unicode-bidi:isolate;font-weight:400}
+.wrap{max-width:760px;margin:0 auto;padding:18px 16px 40px;display:flex;flex-direction:column;gap:18px}
+.home{align-self:flex-start;text-decoration:none;font-size:1.2rem;font-weight:700;padding:13px 24px;border-radius:999px;background:var(--red);color:#fff;box-shadow:0 3px 0 var(--forest);display:inline-flex;gap:8px;align-items:center}
+.home .ar{font-size:1rem}
+.home:focus-visible,button:focus-visible{outline:3px solid var(--forest);outline-offset:3px}
+header{display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--forest);padding-bottom:14px}
+.badge{width:70px;height:70px;border-radius:50%;border:4px solid var(--forest);display:grid;place-items:center;flex:none;background:#fff;font-size:2.2rem}
+h1{font-family:var(--hand);font-size:clamp(1.7rem,5vw,2.4rem);margin:0;line-height:1.05;color:var(--forest)}
+h1 .ar{display:block;text-align:left;font-size:1.2rem;color:var(--teal);margin-top:4px}
+.hint{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0}
+.hide{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:16px;background:var(--mist);border:2px solid var(--line);font-weight:700;cursor:pointer;flex-wrap:wrap}
+.hide input{width:24px;height:24px;accent-color:var(--leaf)}
+.unit-t{font-family:var(--hand);color:var(--forest);font-size:1.5rem;margin:0;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+.unit-t .ar{font-size:1.1rem;color:var(--teal)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:inherit;font-weight:700;font-size:1rem;padding:9px 16px;border-radius:999px;border:2px solid var(--forest);background:#fff;color:var(--forest);cursor:pointer;display:inline-flex;gap:6px;align-items:baseline}
+.chip .ar{font-size:.95rem}
+.chip[aria-pressed="true"]{background:var(--forest);color:#fff}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.w{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:118px;padding:12px 8px;border-radius:18px;border:3px solid var(--line);background:#fff;font:inherit;color:inherit;text-align:center;cursor:pointer;box-shadow:0 3px 0 var(--line)}
+.w .ic{font-size:1.7rem;line-height:1.1}
+.w .ic.num{font-family:var(--hand);font-size:2.2rem;color:var(--red)}
+.w .fr{font-weight:700;font-size:1.1rem;line-height:1.25}
+.w .ar{font-size:1.1rem;color:var(--teal);line-height:1.4}
+.w.on{border-color:#f6b93b;background:#fff4dc;box-shadow:0 3px 0 #f6b93b}
+.cards.long{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.cards.long .w{min-height:0;padding:12px 10px}
+.hidden-ar .w .ar{filter:blur(7px);transition:filter .2s}
+.hidden-ar .w.show .ar{filter:none}
+.none{padding:14px 16px;border:2px dashed var(--line);border-radius:16px;color:#56645e}
+footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;text-align:center}
+@media (max-width:480px){.cards{grid-template-columns:1fr 1fr}.cards.long{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="home" href="../">🏠 ← Sommaire <span class="ar">الفهرس</span></a>
+  <header>
+    <div class="badge">📚</div>
+    <h1>Mes mots <span class="ar">كلماتي</span></h1>
+  </header>
+  <p class="hint"><span>Clique sur un mot pour l’écouter.</span><span class="ar">انقر على كلمة لتسمعها.</span></p>
+  <label class="hide"><input type="checkbox" id="hideAr"> Cacher l’arabe <span class="ar">إخفاء العربية</span></label>
+  <div id="box"></div>
+  <footer>Graines de Palestine · Premiers pas en France</footer>
+</div>
+<script src="../activites.js"></script>
+<script src="../mots.js"></script>
+<script>
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const PLAY = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+const box = document.getElementById("box");
+const groups = [];
+(window.ACTIVITES || []).forEach(u => {
+  const M = (window.MOTS || {})[u.unite];
+  if (!M || u.ouverte !== true) return;            // unité fermée : ses mots restent cachés
+  M.groupes.forEach(g => groups.push({ ...g, u }));
+});
+const want = new URLSearchParams(location.search).get("e");
+let gi = Math.max(0, groups.findIndex(g => g.e === want));
+function draw(){
+  if (!groups.length) { box.innerHTML = `<div class="none">Pas encore de mots. <span class="ar">لا توجد كلمات بعد.</span></div>`; return; }
+  const g = groups[gi], long = g.m.some(m => m.fr.length > 22);
+  box.innerHTML = `<div style="display:flex;flex-direction:column;gap:14px">
+    <h2 class="unit-t"><span>${esc(g.u.unite)} · ${esc(g.u.titre)}</span><span class="ar">${esc(g.u.ar || "")}</span></h2>
+    <div class="chips">${groups.map((x, i) => `<button class="chip" aria-pressed="${i === gi}" data-i="${i}">${esc(x.t)} <span class="ar">${esc(x.tar)}</span></button>`).join("")}</div>
+    <div class="cards${long ? " long" : ""}">${g.m.map(m => `<button class="w" data-a="../${esc(m.a)}">${m.ic ? `<span class="ic${/^\d+$/.test(m.ic) ? " num" : ""}">${esc(m.ic)}</span>` : ""}<span class="fr">${esc(m.fr)}</span><span class="ar">${esc(m.ar)}</span></button>`).join("")}</div></div>`;
+  box.querySelectorAll(".chip").forEach(c => c.onclick = () => { gi = +c.dataset.i; draw(); });
+}
+draw();
+
+let au = null, cur = null;
+box.addEventListener("click", e => {
+  const b = e.target.closest(".w"); if (!b) return;
+  b.classList.add("show");
+  if (au) au.pause(); if (cur) cur.classList.remove("on");
+  au = new Audio(b.dataset.a); cur = b; b.classList.add("on");
+  au.onended = () => b.classList.remove("on");
+  au.play().catch(() => b.classList.remove("on"));
+});
+const hide = document.getElementById("hideAr");
+try { hide.checked = localStorage.getItem("gdp-mots-cache") === "1"; } catch (e) {}
+const applyHide = () => { box.classList.toggle("hidden-ar", hide.checked); box.querySelectorAll(".w.show").forEach(w => w.classList.remove("show")); try { localStorage.setItem("gdp-mots-cache", hide.checked ? "1" : "0"); } catch (e) {} };
+hide.addEventListener("change", applyHide); applyHide();
+</script>
+<script>if("serviceWorker" in navigator && (location.protocol==="https:"||location.hostname==="localhost")){navigator.serviceWorker.register("../sw.js",{scope:"../"}).catch(function(){});}</script>
+</body>
+</html>
