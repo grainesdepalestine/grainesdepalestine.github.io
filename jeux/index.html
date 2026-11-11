@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr" translate="no">
+<meta charset="utf-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jeux · Unité 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Kalam:wght@700&family=Noto+Naskh+Arabic:wght@400;700&display=swap">
+<style>
+:root{--ink:#151a18;--forest:#1f3d33;--leaf:#2f8a6e;--mist:#eef4f1;--line:#d5e2dc;--red:#c8213f;
+  --hand:"Kalam","Comic Sans MS",cursive;--body:"Andika","Trebuchet MS",system-ui,sans-serif;--ar:"Noto Naskh Arabic","Amiri","Geeza Pro",serif}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:#fff;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.45}
+.wrap{max-width:760px;margin:0 auto;padding:18px 16px 48px;display:flex;flex-direction:column;gap:20px}
+.ar{font-family:var(--ar);direction:rtl;unicode-bidi:isolate}
+.home{align-self:flex-start;text-decoration:none;font-size:1.15rem;font-weight:700;padding:12px 22px;border-radius:999px;background:var(--red);color:#fff;box-shadow:0 3px 0 var(--forest);display:inline-flex;gap:8px;align-items:center}
+.home .ar{font-weight:400;font-size:1rem}
+h1{font-family:var(--hand);font-size:clamp(2rem,6vw,2.6rem);margin:0;color:var(--forest);line-height:1.1}
+h1 .ar{display:block;font-size:1.6rem}
+.sous{margin:0;color:#4a5a54}
+.jeux{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.jeu{display:flex;gap:14px;align-items:center;text-decoration:none;color:var(--ink);background:var(--mist);border:3px solid var(--line);border-radius:20px;padding:16px 18px;min-height:96px}
+.jeu:hover,.jeu:focus-visible{border-color:var(--leaf);outline:none}
+.jeu .ic{font-size:2.2rem}
+.jeu b{display:block;font-family:var(--hand);font-size:1.45rem;color:var(--forest);line-height:1.15}
+.jeu .ar{font-size:1.1rem;color:var(--forest)}
+footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;color:#4a5a54}
+</style>
+<body>
+<div class="wrap">
+  <a class="home" id="home" href="../">🏠 ← Sommaire <span class="ar" lang="ar">الفهرس</span></a>
+  <header>
+    <h1>Jeux · Unité 1 <span class="ar" lang="ar">ألعاب · الوحدة ١</span></h1>
+    <p class="sous">Révise les mots de l’Unité 1 en jouant.</p>
+  </header>
+  <nav class="jeux" aria-label="Jeux">
+    <a class="jeu" href="relier/"><span class="ic" aria-hidden="true">🔗</span><span><b>Relier les mots</b><span class="ar" lang="ar">اربط الكلمات</span></span></a>
+    <a class="jeu" href="olivier/"><span class="ic" aria-hidden="true">🌱</span><span><b>Fais pousser l’olivier</b><span class="ar" lang="ar">ازرع شجرة الزيتون</span></span></a>
+    <a class="jeu" href="tu-ou-vous/"><span class="ic" aria-hidden="true">🤝</span><span><b>Tu ou vous ?</b><span class="ar" lang="ar">tu أم vous؟</span></span></a>
+    <a class="jeu" href="mots-meles/"><span class="ic" aria-hidden="true">🔠</span><span><b>Les mots mêlés</b><span class="ar" lang="ar">ابحث عن الكلمات</span></span></a>
+  </nav>
+  <footer>Graines de Palestine · Premiers pas en France · Unité 1</footer>
+</div>
+<script>
+if (new URLSearchParams(location.search).has('classe') || location.protocol === 'file:') document.getElementById('home').hidden = true;
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('../sw.js', { scope: '../' }).catch(function () {});
+</script>
+</body>
+</html>

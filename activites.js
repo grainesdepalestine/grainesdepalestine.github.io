@@ -21,10 +21,7 @@ window.ACTIVITES = [
     { titre: "À l’accueil de la mairie", ar: "في استقبال البلدية", lien: "accueil-mairie/", icone: "🏛️" },
     { titre: "Les sons (prononciation)", ar: "الأصوات والنطق", lien: "prononciation/", icone: "🔊" },
     { titre: "Exercices de l’Unité 1", ar: "تمارين الوحدة ١", lien: "unite1/", icone: "✏️" },
-    { titre: "Jeu : relier les mots", lien: "jeux/relier/", icone: "🔗" },
-    { titre: "Jeu : fais pousser l’olivier", lien: "jeux/olivier/", icone: "🌱" },
-    { titre: "Jeu : tu ou vous ?", lien: "jeux/tu-ou-vous/", icone: "🤝" },
-    { titre: "Jeu : les mots mêlés", lien: "jeux/mots-meles/", icone: "🔠" }
+    { titre: "Jeux", ar: "ألعاب", lien: "jeux/", icone: "🧩" }
   ] },
   { unite: "Unité 2", titre: "Quel jour ? Quelle heure ?", ar: "أيّ يوم؟ كم الساعة؟", activites: [] },
   { unite: "Unité 3", titre: "À l'aéroport", ar: "في المطار", activites: [] },

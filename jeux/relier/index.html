@@ -142,7 +142,7 @@ footer{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:
 </head>
 <body>
 <div class="wrap">
-<a class="home" id="home" href="../../">🏠 ← Sommaire <span class="ar" lang="ar" dir="rtl">الفهرس</span></a>
+<a class="home" id="home" href="../">🧩 ← Les jeux <span class="ar" lang="ar" dir="rtl">ألعاب</span></a>
 <header><span class="marque" id="marque"></span><h1 id="titre"></h1><div class="consigne-g" id="consigne"></div></header>
 <main id="main"></main>
 <footer id="pied"><a class="dl" id="dl" href="index.html" download="Graines_de_Palestine_relier.html">⬇ Télécharger pour utiliser sans internet <span class="ar" lang="ar" dir="rtl">حمّل التطبيق لاستعماله بدون إنترنت</span></a><span id="offline" hidden>Version téléchargée : fonctionne sans internet. <span class="ar" lang="ar" dir="rtl">نسخة محمّلة: تعمل بدون إنترنت.</span></span><span>Graines de Palestine · Premiers pas en France</span></footer>
@@ -157,7 +157,7 @@ footer{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:
 
   /* ---------- outils ---------- */
   function phrasesEnLignes(e, text) {
-    var parts = String(text).split(/(?<=[.!?])\s+(?=[A-ZÀ-ÖØ-Ý«])/);
+    var parts = String(text).split(/(?<=[a-zà-ÿ»)][.!?])\s+(?=[A-ZÀ-ÖØ-Ý«])/);
     parts.forEach(function (s, k) { if (k) e.appendChild(document.createElement('br')); e.appendChild(document.createTextNode(s)); });
   }
   function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) phrasesEnLignes(e, txt); return e; }
