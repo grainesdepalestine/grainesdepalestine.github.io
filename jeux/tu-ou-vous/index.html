@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="fr" translate="no" data-theme="graines">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google" content="notranslate">
+<title>Tu ou vous ?</title>
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Andika:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+<script>
+/* ====== LE JEU : modifier seulement cet objet ====== */
+window.JEU = {"theme": "graines", "type": "tri", "titre": "Tu ou vous ?", "consigne": "À qui je parle ? Range chaque situation : on dit « tu » ou « vous » ?", "colonnes": [{"t": "On dit « tu »", "ar": "أنتَ / أنتِ (مع صديق)"}, {"t": "On dit « vous »", "ar": "حضرتك / أنتم"}], "items": [{"t": "🤝 Tu parles à un ami.", "ar": "تتكلّم مع صديق.", "col": 0}, {"t": "🩺 Tu parles au médecin.", "ar": "تتكلّم مع الطبيب.", "col": 1}, {"t": "🏡 Tu parles à ton frère.", "ar": "تتكلّم مع أخيك.", "col": 0}, {"t": "🏛️ Tu parles à l’employée de la mairie.", "ar": "تتكلّم مع موظفة البلدية.", "col": 1}, {"t": "🏫 Tu parles au professeur.", "ar": "تتكلّم مع الأستاذ.", "col": 1}, {"t": "🏡 Tu parles à ton cousin.", "ar": "تتكلّم مع ابن عمّك.", "col": 0}]};
+</script>
+<style>/* Boîte à jeux : styles communs + deux habillages (Calamots, Graines de Palestine) */
+:root,[data-theme="calamots"]{
+  --fond:#EAF6FF;--page:#fff;--entete:#BDE6FF;--titre:#0B4F8A;--texte:#1D2B3A;
+  --carte:#FFF3D1;--bord:#FFC93C;--brun:#7A4B00;--bouton:#2BB673;--bouton-txt:#062B19;
+  --alt:#BDE6FF;--alt-txt:#0B4F8A;--ok:#1E8E57;--ok-bg:#E1F7EA;--ko:#C0392B;--ko-bg:#FDE7E3;
+  --accent:#F28C00;--pied:#2BB673;--pied-txt:#062B19;
+  --t-titre:'Baloo 2',sans-serif;--t-corps:Nunito,system-ui,sans-serif;--t-ar:'Noto Naskh Arabic',serif;
+}
+[data-theme="graines"]{
+  --fond:#eef4f1;--page:#fff;--entete:#1f3d33;--titre:#1f3d33;--texte:#151a18;
+  --carte:#ffffff;--bord:#d5e2dc;--brun:#1e6b59;--bouton:#2f8a6e;--bouton-txt:#fff;
+  --alt:#eef4f1;--alt-txt:#1f3d33;--ok:#1e6b59;--ok-bg:#e3f2ec;--ko:#c8213f;--ko-bg:#fbe6ea;
+  --accent:#c8213f;--pied:#1f3d33;--pied-txt:#fff;
+  --t-titre:Kalam,cursive;--t-corps:Andika,system-ui,sans-serif;--t-ar:'Noto Naskh Arabic',serif;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--t-corps);font-size:18px;line-height:1.5;color:var(--texte);background:var(--fond)}
+.wrap{max-width:760px;margin:0 auto;min-height:100vh;background:var(--page);display:flex;flex-direction:column}
+header{background:var(--entete);padding:16px 18px 14px}
+[data-theme="graines"] header{color:#fff}
+.marque{display:inline-block;border-radius:10px;padding:1px 12px;font-weight:800;font-size:15px;background:var(--titre);color:#fff}
+[data-theme="graines"] .marque{background:#c8213f}
+h1{margin:6px 0 0;font-family:var(--t-titre);font-weight:800;font-size:clamp(28px,7vw,42px);line-height:1.1;color:var(--titre)}
+[data-theme="graines"] h1{color:#fff}
+.consigne-g{font-weight:700;margin-top:4px}
+.ar{font-family:var(--t-ar);direction:rtl;unicode-bidi:isolate;font-size:1.05em}
+.sous-ar{display:block;opacity:.9;font-weight:400}
+main{padding:16px 18px;flex:1;display:flex;flex-direction:column;gap:14px}
+footer{background:var(--pied);color:var(--pied-txt);padding:8px 18px;font-size:14px;font-weight:700}
+.carte{background:var(--carte);border:3px solid var(--bord);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.lh{font-family:var(--t-titre);font-weight:800;font-size:22px;color:var(--brun)}
+.texte{background:#fff;border-radius:14px;padding:12px 14px;font-size:20px;line-height:2.3}
+[data-theme="graines"] .texte{border:2px solid var(--bord)}
+.go{font:inherit;font-family:var(--t-titre);font-weight:800;font-size:19px;min-height:50px;padding:6px 22px;border:0;border-radius:14px;background:var(--bouton);color:var(--bouton-txt);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.go.alt{background:var(--alt);color:var(--alt-txt)}
+.go:disabled{background:#D5DBE1;color:#5B6672;cursor:not-allowed}
+.acts{display:flex;gap:10px;flex-wrap:wrap}
+.opt{font:inherit;font-size:19px;font-weight:800;min-height:50px;min-width:90px;padding:8px 16px;border-radius:14px;border:3px solid var(--titre);background:#fff;color:var(--texte);cursor:pointer;text-align:left}
+.opt[aria-pressed="true"]{box-shadow:0 0 0 3px var(--accent)}
+.opt.ok{border-color:var(--ok);background:var(--ok-bg)}.opt.ko{border-color:var(--ko);background:var(--ko-bg)}
+.opts{display:flex;gap:10px;flex-wrap:wrap}
+.fb{border-radius:14px;padding:10px 14px;font-weight:700}
+.fb.ok{background:var(--ok-bg);color:var(--ok)}.fb.ko{background:var(--ko-bg);color:var(--ko)}
+.prog{height:10px;border-radius:6px;background:#E3EEF6;overflow:hidden}.prog i{display:block;height:100%;background:var(--bouton);transition:width .4s}
+button:focus-visible,a:focus-visible,[role=button]:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.son{font:inherit;border:0;background:var(--alt);color:var(--alt-txt);border-radius:10px;min-width:44px;min-height:44px;cursor:pointer;font-size:20px}
+/* fin */
+.medal{margin:0 auto;width:140px;height:140px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:8px solid var(--bouton);background:var(--ok-bg);color:var(--ok)}
+.medal.moyen{border-color:var(--accent);background:#FFF1DE;color:#7A3E00}
+.ms{font-family:var(--t-titre);font-weight:800;font-size:40px;line-height:1}.ml{font-weight:800;font-size:14px;text-align:center}
+.fin{text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
+/* marquer / chasse */
+.mk{cursor:pointer;border-radius:6px;padding:2px 0}
+.mk:hover{background:#FFF3D1}
+.mk.souligne{border-bottom:4px solid var(--c)}
+.mk.rond{outline:3px solid var(--c);outline-offset:1px;border-radius:14px;padding:2px 4px}
+.mk.manque{border-bottom-style:dashed;outline-style:dashed}
+.mk.faux{text-decoration:line-through;text-decoration-color:var(--ko);text-decoration-thickness:3px}
+.mk.pris{background:#FFD9B0;outline:3px solid var(--accent)}
+.mk.fausse{background:#FFF1DE;outline:3px solid #F28C00}
+.mk.erreur{color:var(--ko);text-decoration:line-through}
+.mk.manque.erreur{outline:3px dashed var(--ko)}
+.corr{display:inline-block;text-decoration:none;color:var(--ok);font-weight:800;border:2px solid var(--ok);background:var(--ok-bg);border-radius:6px;padding:0 5px;margin-left:3px;line-height:1.4}
+.corr.autre{color:#7A3E00;border-color:#F28C00;background:#FFF1DE}
+.barre{color:var(--ko);text-decoration:line-through;font-weight:700}
+/* mots mêlés */
+.mmliste{display:flex;flex-wrap:wrap;gap:8px}
+.mmmot{font-weight:800;background:#fff;border-radius:10px;padding:4px 10px;color:var(--titre);border:2px solid var(--bord)}
+.mmmot.ok{text-decoration:line-through;color:var(--ok);background:var(--ok-bg)}
+.mm{display:grid;gap:3px;max-width:560px;width:100%}
+.mmc{aspect-ratio:1;font:inherit;font-family:var(--t-titre);font-weight:800;font-size:clamp(13px,3.6vw,21px);border:2px solid var(--bord);border-radius:8px;background:#fff;color:var(--titre);min-width:0;padding:0;cursor:pointer}
+.mmc.sel{background:var(--accent);color:#fff}.mmc.ok{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+/* tri / relier / ordre */
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.col{border:3px dashed var(--bord);border-radius:16px;padding:10px;min-height:110px;background:#fff;display:flex;flex-direction:column;gap:8px;cursor:pointer;font:inherit;text-align:left;color:var(--texte)}
+.col .lh{font-size:20px}
+.jeton{font:inherit;font-weight:700;font-size:18px;background:#fff;border:2px solid var(--titre);border-radius:12px;padding:8px 12px;min-height:46px;cursor:pointer;text-align:left;color:var(--texte)}
+.jeton.sel{box-shadow:0 0 0 3px var(--accent);background:#FFF3D1}
+.jeton.ok{border-color:var(--ok);background:var(--ok-bg)}.jeton.ko{border-color:var(--ko);background:var(--ko-bg)}
+.jeton.fait{opacity:.35;pointer-events:none}
+.paires{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.paires .colp{display:flex;flex-direction:column;gap:8px}
+.phrase{min-height:56px;background:#fff;border:3px dashed var(--bord);border-radius:14px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+/* défi */
+.parch{position:relative;background:#FFFDF5;border:3px solid #C8873A;border-radius:16px;padding:12px 64px 12px 14px;min-height:84px}
+.pligne{font-family:var(--t-titre);font-weight:800;font-size:22px;color:var(--titre);line-height:1.5}
+.pm.vide{color:#C9CED4}.pm.rate{color:var(--ko)}
+.calame{position:absolute;right:8px;top:14px;width:64px;height:42px;object-fit:contain;animation:ecrit 1.2s ease-in-out infinite}
+@keyframes ecrit{50%{transform:translate(-4px,4px) rotate(-6deg)}}
+.olivier{display:block;margin:0 auto;width:min(260px,70vw);height:auto}
+.olivier .f{transform-box:fill-box;transform-origin:center;transition:transform .6s cubic-bezier(.34,1.4,.5,1),opacity .4s}
+.olivier .f.off{transform:scale(0);opacity:0}
+/* dictée */
+.dta{width:100%;min-height:160px;font:inherit;font-size:20px;line-height:1.7;padding:12px;border:3px solid var(--titre);border-radius:14px;background:#fff;color:var(--texte)}
+.etapes{display:flex;gap:6px;flex-wrap:wrap}.etapes span{font-weight:800;font-size:15px;padding:2px 12px;border-radius:10px;background:#E3EEF6;color:#5B6672}
+.etapes span.on{background:var(--accent);color:#fff}.etapes span.done{background:var(--ok-bg);color:var(--ok)}
+@media (prefers-reduced-motion:reduce){.calame{animation:none}.olivier .f{transition:none}}
+
+p,.consigne,.ll,.lh,.fb,.dfb,.dtitre,.enq-aide,.hintk{text-wrap:pretty}
+h1,h2,.lh,.dtitre{text-wrap:balance}
+
+/* défi (11/11/2026) : aéré, une seule chose à la fois */
+.defi-wrap{display:flex;flex-direction:column;gap:20px}
+.dvis{display:flex;justify-content:center}
+.olivier{width:min(320px,80vw);height:auto;background:radial-gradient(ellipse at 50% 60%,#eef4f1 0,#fff 70%);border-radius:24px}
+.olivier .f{transform-box:fill-box;transform-origin:center;transition:transform .7s cubic-bezier(.34,1.5,.5,1),opacity .5s}
+.olivier .f.off,.olivier .olives.off{transform:scale(0);opacity:0}
+.olivier .olives{transform-box:fill-box;transform-origin:center;transition:transform .8s,opacity .8s}
+.compte{font-weight:700;font-size:16px;color:#5B6672;text-align:center}
+.dquestion{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-size:22px;font-weight:700}
+.dq-ar{font-size:30px;font-weight:700;color:var(--titre)}
+.dopts{display:flex;flex-direction:column;gap:12px}
+.dopt{display:flex;align-items:center;justify-content:center;gap:12px;min-height:64px;padding:6px 12px;border-radius:16px;border:3px solid var(--titre);background:#fff;cursor:pointer}
+.dopt.fini{cursor:default}
+.dmot{font-family:var(--t-titre);font-weight:800;font-size:24px;color:var(--titre)}
+.dmot:disabled{cursor:default}
+.dson{font:inherit;font-size:20px;border:0;background:var(--alt);border-radius:12px;min-width:46px;min-height:46px;cursor:pointer}
+.dopt.ok{background:var(--ok-bg);border-color:var(--ok)}.dopt.ok .dmot{color:var(--ok)}
+.dopt.ko{background:var(--ko-bg);border-color:var(--ko)}.dopt.ko .dmot{color:var(--ko)}
+.dfb{border-radius:16px;padding:12px 16px;font-size:19px;font-weight:700;text-align:center}
+.dfb:empty{display:none}
+.dfb.ok{background:var(--ok-bg);color:var(--ok)}.dfb.ko{background:var(--ko-bg);color:var(--ko)}
+.dsuite{text-align:center}
+@media (prefers-reduced-motion:reduce){.olivier .f,.olivier .olives{transition:none}}
+.home{align-self:flex-start;text-decoration:none;font-size:1.15rem;font-weight:700;padding:12px 22px;border-radius:999px;background:#c8213f;color:#fff;box-shadow:0 3px 0 #1f3d33;display:inline-flex;gap:8px;align-items:center;margin:12px 18px 0}
+.home .ar{font-weight:400;font-size:1rem}
+.dl{text-decoration:none;font-weight:700;padding:9px 18px;border-radius:999px;border:2px solid #fff;color:#fff;display:inline-flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:4px 0}
+footer{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="home" id="home" href="../../">🏠 ← Sommaire <span class="ar" lang="ar" dir="rtl">الفهرس</span></a>
+<header><span class="marque" id="marque"></span><h1 id="titre"></h1><div class="consigne-g" id="consigne"></div></header>
+<main id="main"></main>
+<footer id="pied"><a class="dl" id="dl" href="index.html" download="Graines_de_Palestine_tu_ou_vous.html">⬇ Télécharger pour utiliser sans internet <span class="ar" lang="ar" dir="rtl">حمّل التطبيق لاستعماله بدون إنترنت</span></a><span id="offline" hidden>Version téléchargée : fonctionne sans internet. <span class="ar" lang="ar" dir="rtl">نسخة محمّلة: تعمل بدون إنترنت.</span></span><span>Graines de Palestine · Premiers pas en France</span></footer>
+</div>
+<script>/* Boîte à jeux (Calamots, Graines de Palestine) — un seul moteur, un jeu décrit par window.JEU.
+   Types : defi, marquer, chasse, motsmeles, tri, relier, ordre, dictee. Voir LISEZMOI.txt. */
+(function () {
+  var J = window.JEU, main = document.getElementById('main');
+  var L = 'A-Za-zÀ-ÖØ-öø-ÿŒœÆæ';
+  var MOT = new RegExp('[' + L + ']+(?:-[' + L + ']+)*|[^' + L + ']+', 'g');
+  var COUL = { vert: '#1E8E57', rouge: '#C0392B', bleu: '#0B6FC0', orange: '#D97000' };
+
+  /* ---------- outils ---------- */
+  function phrasesEnLignes(e, text) {
+    var parts = String(text).split(/(?<=[.!?])\s+(?=[A-ZÀ-ÖØ-Ý«])/);
+    parts.forEach(function (s, k) { if (k) e.appendChild(document.createElement('br')); e.appendChild(document.createTextNode(s)); });
+  }
+  function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) phrasesEnLignes(e, txt); return e; }
+  function ar(txt) { var s = el('span', 'ar', txt); s.lang = 'ar'; s.dir = 'rtl'; return s; }
+  function bi(fr, a, cls) { var d = el(cls || 'span'); d.appendChild(document.createTextNode(fr)); if (a) { d.appendChild(document.createTextNode(' ')); d.appendChild(ar(a)); } return d; }
+  function melange(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), x = a[i]; a[i] = a[j]; a[j] = x; } return a; }
+  var actx = null;
+  function bip(ok) {
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      (ok ? [[660, 0, .12], [880, .12, .2]] : [[220, 0, .28]]).forEach(function (n) {
+        var o = actx.createOscillator(), g = actx.createGain(), t = actx.currentTime + n[1];
+        o.type = ok ? 'sine' : 'square'; o.frequency.value = n[0];
+        g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(ok ? .18 : .07, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + n[2]);
+        o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t + n[2] + .02);
+      });
+    } catch (e) {}
+  }
+  function fanfare() { [523, 659, 784, 1047].forEach(function (f, i) { setTimeout(function () { try { actx = actx || new (window.AudioContext || window.webkitAudioContext)(); var o = actx.createOscillator(), g = actx.createGain(), t = actx.currentTime; o.frequency.value = f; g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.16, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + .3); o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t + .32); } catch (e) {} }, i * 140); }); }
+  function confettis() {
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var c = el('canvas'); c.setAttribute('aria-hidden', 'true'); c.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50'; document.body.appendChild(c);
+    var W = c.width = innerWidth, H = c.height = innerHeight, x = c.getContext('2d'), cols = ['#FFC93C', '#2BB673', '#0B4F8A', '#F28C00', '#c8213f', '#1e6b59'], ps = [];
+    for (var k = 0; k < 120; k++) ps.push({ x: Math.random() * W, y: -20 - Math.random() * H * .6, w: 6 + Math.random() * 7, h: 8 + Math.random() * 8, vy: 2 + Math.random() * 3.5, vx: -1.5 + Math.random() * 3, r: Math.random() * 6, c: cols[k % 6] });
+    var t0 = null; (function f(ts) { t0 = t0 || ts; x.clearRect(0, 0, W, H); ps.forEach(function (p) { p.x += p.vx; p.y += p.vy; p.r += .1; x.save(); x.translate(p.x, p.y); x.rotate(p.r); x.fillStyle = p.c; x.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); x.restore(); }); if (ts - t0 < 3500) requestAnimationFrame(f); else c.remove(); })(performance.now());
+  }
+  var lecteur = null;
+  function jouer(src, txt) {
+    try { if (lecteur) lecteur.pause(); speechSynthesis && speechSynthesis.cancel(); } catch (e) {}
+    function voix() { if (!txt || !('speechSynthesis' in window)) return; var u = new SpeechSynthesisUtterance(txt); u.lang = 'fr-FR'; u.rate = .8; speechSynthesis.speak(u); }
+    if (!src) return voix();
+    lecteur = new Audio(src); lecteur.onerror = voix; var p = lecteur.play(); if (p && p.catch) p.catch(voix);
+  }
+  function boutonSon(src, txt) { var b = el('button', 'son', '🔊'); b.type = 'button'; b.setAttribute('aria-label', 'Écouter'); b.onclick = function (e) { e.stopPropagation(); jouer(src, txt); }; return b; }
+  function boutons(l) { var a = el('div', 'acts'); l.forEach(function (b) { var x = el('button', 'go' + (b.alt ? ' alt' : ''), b.t); x.type = 'button'; x.onclick = b.f; a.appendChild(x); }); return a; }
+  function fin(score, total, unite, msgs) {
+    var box = el('div', 'fin'), bien = score >= Math.ceil(total * .8);
+    var m = el('div', 'medal' + (bien ? '' : ' moyen')); m.appendChild(el('div', 'ms', score + '/' + total)); m.appendChild(el('div', 'ml', unite || 'bonnes réponses')); box.appendChild(m);
+    box.appendChild(el('div', 'lh', score === total ? (msgs && msgs[0] || 'Parfait, bravo !') : bien ? (msgs && msgs[1] || 'Très bien !') : (msgs && msgs[2] || 'Continue, recommence pour progresser.')));
+    if (bien) { fanfare(); confettis(); }
+    box.appendChild(boutons([{ t: 'Recommencer', f: lancer }]));
+    return box;
+  }
+  function carte() { var c = el('div', 'carte'); main.appendChild(c); return c; }
+  function estMot(t) { return new RegExp('^[' + L + ']').test(t); }
+
+  /* ---------- 1. Défi à progression (QCM) : le calame écrit, ou l'olivier pousse ---------- */
+  function olivierSVG(n) {
+    /* bouquets de feuilles rangés dans le feuillage, du centre vers les bords */
+    var pos = [[150, 92], [122, 100], [178, 100], [150, 66], [104, 80], [196, 80], [128, 58], [172, 58], [86, 104], [214, 104], [150, 42], [106, 52], [194, 52], [70, 84], [230, 84], [150, 116]];
+    var g = '';
+    for (var k = 0; k < n; k++) {
+      var p = pos[k % pos.length], f = '';
+      for (var a = 0; a < 7; a++) {
+        var ang = -150 + a * 50 + (k % 3) * 8, col = ['#5E7A34', '#7F9A55', '#A9B98C'][(a + k) % 3];
+        f += '<ellipse cx="' + (p[0] + Math.cos(ang * Math.PI / 180) * 11).toFixed(1) + '" cy="' + (p[1] + Math.sin(ang * Math.PI / 180) * 7).toFixed(1) + '" rx="11" ry="3.4" fill="' + col + '" transform="rotate(' + ang + ' ' + (p[0] + Math.cos(ang * Math.PI / 180) * 11).toFixed(1) + ' ' + (p[1] + Math.sin(ang * Math.PI / 180) * 7).toFixed(1) + ')"/>';
+      }
+      g += '<g class="f off" data-k="' + k + '">' + f + '</g>';
+    }
+    var olives = [[132, 104], [168, 72], [110, 70], [190, 96], [150, 54], [92, 92], [208, 66]].map(function (o) { return '<ellipse cx="' + o[0] + '" cy="' + o[1] + '" rx="4.5" ry="6" fill="#4B3A5A"/><ellipse cx="' + (o[0] - 1.5) + '" cy="' + (o[1] - 2) + '" rx="1.4" ry="2" fill="#8C7AA0"/>'; }).join('');
+    return '<svg class="olivier" viewBox="0 0 300 250" aria-hidden="true">' +
+      '<ellipse cx="150" cy="236" rx="110" ry="9" fill="#D9CBA6"/>' +
+      '<path d="M138 236 C140 214 132 200 138 184 C144 168 134 156 140 140 C144 128 152 124 150 112 L160 112 C158 126 166 134 162 150 C158 166 168 176 164 194 C160 212 166 222 168 236 Z" fill="#7A5A3A"/>' +
+      '<path d="M146 200 C150 190 146 180 150 170 M156 210 C160 196 156 186 160 176" stroke="#5E4329" stroke-width="2" fill="none" stroke-linecap="round"/>' +
+      '<path d="M150 140 C128 128 110 112 96 98 M156 136 C178 124 196 110 210 96 M152 126 C150 104 150 80 150 56 M146 120 C132 100 120 82 112 64 M158 120 C172 100 182 82 190 64" stroke="#7A5A3A" stroke-width="4" fill="none" stroke-linecap="round"/>' +
+      '<g class="feuilles">' + g + '</g><g class="olives off">' + olives + '</g></svg>';
+  }
+  function defi() {
+    var qs = melange(J.questions).slice(0, J.nombre || J.questions.length), i = 0, rep = [];
+    var box = el('div', 'defi-wrap'); main.appendChild(box);
+    var olive = J.visuel === 'olivier', phrase = (J.phrase || '').split(' ');
+    var vis = el('div', 'dvis');
+    if (olive) vis.innerHTML = olivierSVG(qs.length);
+    function dessine(anime) {
+      if (olive) {
+        Array.prototype.forEach.call(vis.querySelectorAll('.f'), function (f, k) { f.classList.toggle('off', !(k < rep.length && rep[k])); });
+        var tout = rep.length === qs.length && rep.filter(Boolean).length >= qs.length - 2;
+        vis.querySelector('.olives').classList.toggle('off', !tout);
+        return;
+      }
+      vis.innerHTML = ''; var parch = el('div', 'parch'), ligne = el('div', 'pligne'); parch.appendChild(ligne); vis.appendChild(parch);
+      phrase.forEach(function (w, j) { ligne.appendChild(el('span', j < rep.length ? (rep[j] ? 'pm' : 'pm rate') : 'pm vide', j < rep.length ? (rep[j] ? w.replace(/_/g, ' ') : '…') : '_')); ligne.appendChild(document.createTextNode(' ')); });
+    }
+    function q() {
+      box.textContent = ''; box.appendChild(vis); dessine();
+      if (i >= qs.length) { var sc = rep.filter(Boolean).length; box.appendChild(fin(sc, qs.length, olive ? 'bouquets de feuilles' : 'mots écrits')); return; }
+      var x = qs[i], fini = false;
+      box.appendChild(el('div', 'compte', 'Question ' + (i + 1) + ' sur ' + qs.length));
+      var en = el('div', 'dquestion'); en.appendChild(el('div', null, x.q)); if (x.ar) { var a = ar(x.ar); a.className += ' dq-ar'; en.appendChild(a); }
+      if (x.a) en.appendChild(boutonSon(x.a));
+      box.appendChild(en);
+      var opts = el('div', 'dopts'), fb = el('div', 'dfb'), suite = el('div', 'dsuite');
+      melange(x.opts).forEach(function (o) {
+        var t = o.t || o, ligne = el('div', 'dopt');
+        ligne.tabIndex = 0; ligne.setAttribute('role', 'button');
+        ligne.appendChild(el('span', 'dmot', t));
+        if (o.a) { var sn = boutonSon(o.a, t); sn.className = 'dson'; ligne.appendChild(sn); }
+        function repondre() {
+          if (fini) return; fini = true; var ok = t === x.ans; rep.push(ok); bip(ok);
+          Array.prototype.forEach.call(opts.querySelectorAll('.dopt'), function (y) { y.classList.add('fini'); if (y.querySelector('.dmot').textContent === x.ans) y.classList.add('ok'); });
+          if (!ok) ligne.classList.add('ko');
+          fb.className = 'dfb ' + (ok ? 'ok' : 'ko'); fb.textContent = ok ? 'Bravo !' : 'La bonne réponse : ' + x.ans;
+          dessine();
+          var n = el('button', 'go', i === qs.length - 1 ? 'Voir le résultat' : 'Question suivante ▶'); n.type = 'button'; n.onclick = function () { i++; q(); window.scrollTo(0, 0); };
+          suite.appendChild(n);
+        }
+        ligne.onclick = repondre;
+        ligne.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); repondre(); } };
+        opts.appendChild(ligne);
+      });
+      box.appendChild(opts); box.appendChild(fb); box.appendChild(suite);
+    }
+    q();
+  }
+
+  /* ---------- 2. Marquer les mots d'un texte (2 crayons) ---------- */
+  function marquer() {
+    var c = carte(), actif = 0, fini = false, occ = 0, cibles = [];
+    if (J.titreTexte) c.appendChild(el('div', 'lh', J.titreTexte));
+    c.appendChild(el('div', null, 'Choisis ton crayon, puis clique sur les mots du texte.'));
+    var row = el('div', 'opts');
+    var bs = J.crayons.map(function (cr, k) { var b = el('button', 'opt', (cr.trait === 'rond' ? '⭕ ' : '✏️ ') + cr.t); b.type = 'button'; b.style.borderColor = COUL[cr.c]; b.setAttribute('aria-pressed', k ? 'false' : 'true'); b.onclick = function () { actif = k; bs.forEach(function (x, j) { x.setAttribute('aria-pressed', j === k ? 'true' : 'false'); }); }; row.appendChild(b); return b; });
+    c.appendChild(row);
+    var tx = el('div', 'texte');
+    (J.texte.match(MOT) || []).forEach(function (t) {
+      if (!estMot(t)) { tx.appendChild(document.createTextNode(t)); return; }
+      var s = el('span', 'mk', t); s.tabIndex = 0; s.setAttribute('role', 'button'); s.dataset.m = '';
+      var low = t.toLowerCase();
+      if (J.cibles.hasOwnProperty(low)) { var att = J.ordre ? J.ordre[occ] : J.cibles[low]; occ++; s.dataset.att = att; cibles.push(s); }
+      function clic() { if (fini) return; var m = s.dataset.m === String(actif) ? '' : String(actif); s.dataset.m = m; s.className = 'mk' + (m === '' ? '' : ' ' + J.crayons[+m].trait); s.style.setProperty('--c', m === '' ? 'transparent' : COUL[J.crayons[+m].c]); }
+      s.onclick = clic; s.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); clic(); } };
+      tx.appendChild(s);
+    });
+    c.appendChild(tx);
+    var fb = el('div'); c.appendChild(fb);
+    var v = el('button', 'go', 'Vérifier'); v.type = 'button'; c.appendChild(v);
+    v.onclick = function () {
+      fini = true; v.remove(); var bons = 0, faux = 0;
+      cibles.forEach(function (s) { var a = +s.dataset.att; if (s.dataset.m === String(a)) bons++; else s.classList.add('manque'); s.style.setProperty('--c', COUL[J.crayons[a].c]); s.classList.add(J.crayons[a].trait); });
+      Array.prototype.forEach.call(tx.querySelectorAll('.mk'), function (s) { if (s.dataset.m !== '' && s.dataset.att !== s.dataset.m) { faux++; s.classList.add('faux'); } });
+      var ok = bons === cibles.length && !faux; bip(ok); if (ok) { fanfare(); confettis(); }
+      fb.className = 'fb ' + (ok ? 'ok' : 'ko'); fb.textContent = ok ? 'Bravo, tout est juste !' : 'Trouvés : ' + bons + ' sur ' + cibles.length + (faux ? ' · erreurs (barrées) : ' + faux : '') + '. Les pointillés montrent les mots oubliés.';
+      c.appendChild(boutons([{ t: 'Recommencer', f: lancer }]));
+    };
+  }
+
+  /* ---------- 3. Chasse aux erreurs ---------- */
+  function chasse() {
+    var paires = {}; J.paires.forEach(function (p) { paires[p[0]] = p[1]; paires[p[1]] = p[0]; });
+    var toks = J.texte.match(MOT) || [], pos = [];
+    toks.forEach(function (t, i) { if (paires.hasOwnProperty(t.toLowerCase())) pos.push(i); });
+    var nb = Math.min(J.nombre || 4, pos.length), err = melange(pos).slice(0, nb), fini = false, spans = [];
+    var c = carte(); if (J.titreTexte) c.appendChild(el('div', 'lh', J.titreTexte));
+    c.appendChild(el('div', null, 'Il y a ' + nb + ' erreurs cachées. Clique sur chaque mot faux.' + (J.aide ? ' ' + J.aide : '')));
+    var tx = el('div', 'texte');
+    toks.forEach(function (t, i) {
+      if (!estMot(t)) { tx.appendChild(document.createTextNode(t)); return; }
+      var f = err.indexOf(i) > -1, autre = paires[t.toLowerCase()];
+      var aff = f ? (t[0] !== t[0].toLowerCase() ? autre[0].toUpperCase() + autre.slice(1) : autre) : t;
+      var s = el('span', 'mk', aff); s.tabIndex = 0; s.setAttribute('role', 'button'); s.dataset.j = t; s.dataset.f = f ? 1 : '';
+      function clic() { if (!fini) s.classList.toggle('pris'); }
+      s.onclick = clic; s.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); clic(); } };
+      spans.push(s); tx.appendChild(s);
+    });
+    c.appendChild(tx); var fb = el('div'); c.appendChild(fb);
+    var v = el('button', 'go', 'Vérifier'); v.type = 'button'; c.appendChild(v);
+    v.onclick = function () {
+      fini = true; v.remove(); var tr = 0, fa = 0;
+      spans.forEach(function (s) { var p = s.classList.contains('pris'); s.classList.remove('pris'); if (s.dataset.f) { if (p) tr++; else s.classList.add('manque'); s.classList.add('erreur'); s.appendChild(el('span', 'corr', s.dataset.j)); } else if (p) { fa++; s.classList.add('fausse'); } });
+      var ok = tr === nb && !fa; bip(ok); if (ok) { fanfare(); confettis(); }
+      fb.className = 'fb ' + (ok ? 'ok' : 'ko'); fb.textContent = 'Erreurs trouvées : ' + tr + ' sur ' + nb + '.' + (fa ? ' ' + fa + ' mot(s) étaient justes (en orange).' : '');
+      c.appendChild(boutons([{ t: 'Nouveau texte piégé', f: lancer }]));
+    };
+  }
+
+  /* ---------- 4. Mots mêlés ---------- */
+  function grille(mots) {
+    var n = Math.max(J.taille || 10, mots.reduce(function (a, w) { return Math.max(a, w.length); }, 0) + 1);
+    for (var e = 0; e < 200; e++) {
+      var g = [], ok = true, i, j;
+      for (i = 0; i < n; i++) { g.push([]); for (j = 0; j < n; j++) g[i].push(''); }
+      var dirs = J.diagonales === false ? [[0, 1], [1, 0]] : [[0, 1], [1, 0], [1, 1]], ordreDirs = melange(dirs);
+      mots.slice().sort(function (a, b) { return b.length - a.length; }).forEach(function (w, wi) {
+        if (!ok) return; var fait = false, pref = ordreDirs[wi % ordreDirs.length];
+        for (var t = 0; t < 150 && !fait; t++) {
+          var d = t < 100 ? pref : dirs[Math.floor(Math.random() * dirs.length)], r = Math.floor(Math.random() * (n - d[0] * (w.length - 1))), c = Math.floor(Math.random() * (n - d[1] * (w.length - 1))), lib = true;
+          for (var k = 0; k < w.length; k++) { var x = g[r + d[0] * k][c + d[1] * k]; if (x && x !== w[k]) { lib = false; break; } }
+          if (!lib) continue; for (k = 0; k < w.length; k++) g[r + d[0] * k][c + d[1] * k] = w[k]; fait = true;
+        }
+        if (!fait) ok = false;
+      });
+      if (ok) { var A = 'ABCDEFGHIJLMNOPRSTUV'; for (i = 0; i < n; i++) for (j = 0; j < n; j++) if (!g[i][j]) g[i][j] = A[Math.floor(Math.random() * A.length)]; return { g: g, n: n }; }
+    }
+  }
+  function motsmeles() {
+    var mots = J.mots.map(function (m) { return (m.w || m).toUpperCase(); }), G = grille(mots), tr = {}, deb = null;
+    var c = carte();
+    c.appendChild(el('div', null, 'Clique sur la première lettre d\'un mot, puis sur sa dernière lettre. Sens : → ↓' + (J.diagonales === false ? '' : ' ↘')));
+    var liste = el('div', 'mmliste'), it = {};
+    J.mots.forEach(function (m, k) { var s = el('span', 'mmmot', mots[k]); if (m.ar) { s.appendChild(document.createTextNode(' ')); s.appendChild(ar(m.ar)); } it[mots[k]] = s; liste.appendChild(s); });
+    c.appendChild(liste);
+    var tab = el('div', 'mm'); tab.style.gridTemplateColumns = 'repeat(' + G.n + ',1fr)'; var cs = [];
+    for (var i = 0; i < G.n; i++) { cs.push([]); for (var j = 0; j < G.n; j++) { var b = el('button', 'mmc', G.g[i][j]); b.type = 'button'; b.dataset.r = i; b.dataset.c = j; b.onclick = function () { clic(+this.dataset.r, +this.dataset.c, this); }; cs[i].push(b); tab.appendChild(b); } }
+    c.appendChild(tab); var fb = el('div', 'fb'); c.appendChild(fb);
+    function clic(r, col, b) {
+      if (!deb) { deb = { r: r, c: col, b: b }; b.classList.add('sel'); return; }
+      deb.b.classList.remove('sel');
+      var dr = Math.sign(r - deb.r), dc = Math.sign(col - deb.c), n = Math.max(Math.abs(r - deb.r), Math.abs(col - deb.c)) + 1, s = '', cc = [];
+      if (r === deb.r || col === deb.c || Math.abs(r - deb.r) === Math.abs(col - deb.c)) for (var k = 0; k < n; k++) { cc.push(cs[deb.r + dr * k][deb.c + dc * k]); s += G.g[deb.r + dr * k][deb.c + dc * k]; }
+      deb = null; var inv = s.split('').reverse().join(''), m = mots.indexOf(s) > -1 ? s : mots.indexOf(inv) > -1 ? inv : null;
+      if (m && !tr[m]) { tr[m] = 1; cc.forEach(function (x) { x.classList.add('ok'); }); it[m].classList.add('ok'); bip(true); var reste = mots.length - Object.keys(tr).length; fb.className = 'fb ok'; fb.textContent = reste ? 'Bravo ! Encore ' + reste + '.' : 'Tous les mots sont trouvés !'; if (!reste) { fanfare(); confettis(); } }
+      else { bip(false); fb.className = 'fb ko'; fb.textContent = 'Ce n\'est pas un mot de la liste.'; }
+    }
+    c.appendChild(boutons([{ t: 'Nouvelle grille', f: lancer }]));
+  }
+
+  /* ---------- 5. Trier dans des colonnes ---------- */
+  function tri() {
+    var items = melange(J.items), sel = null, place = 0, bons = 0, c = carte();
+    c.appendChild(el('div', null, 'Clique sur une étiquette, puis sur la bonne colonne.'));
+    var pile = el('div', 'opts'); c.appendChild(pile);
+    var cols = el('div', 'cols'), fb = el('div');
+    var zones = J.colonnes.map(function (co, k) {
+      var z = el('button', 'col'); z.type = 'button'; z.appendChild(bi(co.t, co.ar, 'div')); z.firstChild.className = 'lh';
+      z.onclick = function () {
+        if (!sel) return; var it = sel.it, ok = it.col === k; bip(ok);
+        if (ok) { bons += sel.essai ? 0 : 1; var j = el('div', 'jeton ok'); j.appendChild(bi(it.t, it.ar)); z.appendChild(j); sel.b.classList.add('fait'); sel.b.classList.remove('sel'); sel = null; place++; fb.className = 'fb ok'; fb.textContent = it.why || 'Oui !'; if (place === items.length) termine(); }
+        else { sel.essai = 1; sel.b.classList.add('ko'); fb.className = 'fb ko'; fb.textContent = 'Pas dans cette colonne. ' + (it.ind || 'Essaie encore.'); }
+      };
+      cols.appendChild(z); return z;
+    });
+    items.forEach(function (it) {
+      var b = el('button', 'jeton'); b.type = 'button'; b.appendChild(bi(it.t, it.ar)); if (it.a) b.appendChild(boutonSon(it.a));
+      b.onclick = function () { if (sel) sel.b.classList.remove('sel'); b.classList.remove('ko'); sel = { b: b, it: it }; b.classList.add('sel'); if (it.a) jouer(it.a); };
+      pile.appendChild(b);
+    });
+    c.appendChild(cols); c.appendChild(fb);
+    function termine() { c.appendChild(fin(bons, items.length, 'du premier coup')); }
+  }
+
+  /* ---------- 6. Relier (paires) ---------- */
+  function relier() {
+    var ps = melange(J.paires).slice(0, J.nombre || 8), g = null, d = null, faits = 0, bons = 0, ess = {}, c = carte();
+    c.appendChild(el('div', null, 'Clique sur un élément à gauche, puis sur celui qui va avec à droite.'));
+    var box = el('div', 'paires'), cg = el('div', 'colp'), cd = el('div', 'colp'), fb = el('div');
+    ps.forEach(function (p, k) { var b = el('button', 'jeton'); b.type = 'button'; b.appendChild(bi(p.g, p.gar)); if (p.a) b.appendChild(boutonSon(p.a)); b.onclick = function () { if (g) g.b.classList.remove('sel'); g = { b: b, k: k }; b.classList.add('sel'); if (p.a) jouer(p.a); essai(); }; cg.appendChild(b); });
+    melange(ps.map(function (p, k) { return { p: p, k: k }; })).forEach(function (x) { var b = el('button', 'jeton'); b.type = 'button'; b.appendChild(bi(x.p.d, x.p.dar)); b.onclick = function () { if (d) d.b.classList.remove('sel'); d = { b: b, k: x.k }; b.classList.add('sel'); essai(); }; cd.appendChild(b); });
+    function essai() {
+      if (!g || !d) return; var ok = g.k === d.k; bip(ok);
+      if (ok) { if (!ess[g.k]) bons++; [g.b, d.b].forEach(function (b) { b.classList.remove('sel'); b.classList.add('ok', 'fait'); }); faits++; fb.className = 'fb ok'; fb.textContent = 'Oui !'; if (faits === ps.length) c.appendChild(fin(bons, ps.length, 'du premier coup')); }
+      else { ess[g.k] = 1; fb.className = 'fb ko'; fb.textContent = 'Ça ne va pas ensemble. Essaie encore.'; g.b.classList.remove('sel'); d.b.classList.remove('sel'); }
+      g = d = null;
+    }
+    box.appendChild(cg); box.appendChild(cd); c.appendChild(box); c.appendChild(fb);
+  }
+
+  /* mélange sans laisser deux mots voisins dans le bon ordre, ni le 1er mot en 1er */
+  function melangeBien(a) {
+    var best = null, bs = 1e9;
+    for (var t = 0; t < 300; t++) {
+      var m = melange(a), mauvais = (m[0].k === 0 ? 2 : 0);
+      for (var i = 0; i + 1 < m.length; i++) if (m[i + 1].k === m[i].k + 1) mauvais++;
+      if (mauvais < bs) { bs = mauvais; best = m; } if (!mauvais) break;
+    }
+    return best;
+  }
+  /* ---------- 7. Remettre les mots dans l'ordre ---------- */
+  function ordre() {
+    var ps = melange(J.phrases).slice(0, J.nombre || J.phrases.length), i = 0, bons = 0, c = carte();
+    function q() {
+      c.textContent = '';
+      if (i >= ps.length) { c.appendChild(fin(bons, ps.length, 'du premier coup')); return; }
+      var p = ps[i], mots = p.p.split(' '), choisi = [], essai = 0;
+      c.appendChild(el('div', null, 'Phrase ' + (i + 1) + ' sur ' + ps.length + ' : clique sur les mots dans le bon ordre.'));
+      if (p.ar || p.a) { var h = bi('', p.ar, 'div'); if (p.a) h.appendChild(boutonSon(p.a, p.p)); c.appendChild(h); }
+      var ligne = el('div', 'phrase'), pile = el('div', 'opts'), fb = el('div');
+      var bs = melangeBien(mots.map(function (m, k) { return { m: m, k: k }; })).map(function (x) {
+        var b = el('button', 'jeton', x.m); b.type = 'button';
+        b.onclick = function () { if (b.classList.contains('fait')) return; choisi.push(x); b.classList.add('fait'); var j = el('button', 'jeton', x.m); j.type = 'button'; j.onclick = function () { choisi.splice(choisi.indexOf(x), 1); j.remove(); b.classList.remove('fait'); }; ligne.appendChild(j); };
+        pile.appendChild(b); return b;
+      });
+      var v = el('button', 'go', 'Vérifier'); v.type = 'button';
+      v.onclick = function () {
+        var s = choisi.map(function (x) { return x.m; }).join(' '), ok = s === p.p; bip(ok);
+        if (ok) { if (!essai) bons++; fb.className = 'fb ok'; fb.textContent = 'Bravo : « ' + p.p + ' »'; v.replaceWith(boutons([{ t: i === ps.length - 1 ? 'Voir le résultat' : 'Phrase suivante', f: function () { i++; q(); } }])); }
+        else { essai++; fb.className = 'fb ko'; fb.textContent = essai >= 3 ? 'La bonne phrase : « ' + p.p + ' »' : 'Pas encore. Change l\'ordre des mots.'; if (essai >= 3) v.replaceWith(boutons([{ t: 'Phrase suivante', f: function () { i++; q(); } }])); }
+      };
+      c.appendChild(ligne); c.appendChild(pile); c.appendChild(v); c.appendChild(fb);
+    }
+    q();
+  }
+
+  /* ---------- 8. Dictée (écoute, morceaux lus 2 fois, relecture, correction mot à mot) ---------- */
+  function lev(a, b) { var p = [], r, i, j; for (j = 0; j <= b.length; j++) p[j] = j; for (i = 1; i <= a.length; i++) { r = [i]; for (j = 1; j <= b.length; j++) r[j] = Math.min(p[j] + 1, r[j - 1] + 1, p[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); p = r; } return p[b.length]; }
+  function lo(t) { return t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+  function proche(a, b) { var x = lo(a), y = lo(b); if (x === y) return true; if (/^[.,;:!?]$/.test(a + b)) return false; return lev(x, y) <= (Math.max(x.length, y.length) >= 6 ? 2 : 1); }
+  var TOK = new RegExp('[' + L + ']+(?:-[' + L + ']+)*\'?|[.,;:!?]', 'g');
+  function toks(s) { return s.normalize('NFC').replace(/[’‘]/g, "'").match(TOK) || []; }
+  function aligne(R, H) {
+    var n = R.length, m = H.length, dp = [], i, j; for (i = 0; i <= n; i++) { dp[i] = []; for (j = 0; j <= m; j++) dp[i][j] = 0; }
+    for (i = 1; i <= n; i++) for (j = 1; j <= m; j++) dp[i][j] = proche(R[i - 1], H[j - 1]) ? dp[i - 1][j - 1] + 1 : Math.max(dp[i - 1][j], dp[i][j - 1]);
+    var o = []; i = n; j = m;
+    while (i > 0 || j > 0) { if (i > 0 && j > 0 && proche(R[i - 1], H[j - 1]) && dp[i][j] === dp[i - 1][j - 1] + 1) { o.unshift([i - 1, j - 1]); i--; j--; } else if (j > 0 && (i === 0 || dp[i][j - 1] >= dp[i - 1][j])) { o.unshift([-1, j - 1]); j--; } else { o.unshift([i - 1, -1]); i--; } }
+    return o;
+  }
+  function dictee() {
+    var gs = J.morceaux, st = 0, gi = 0, tape = '', A = J.audio || {}, cib = (J.cibles || []).map(function (x) { return x.toLowerCase(); });
+    function dit(g) { return g.replace(/,$/, ', virgule.').replace(/\.$/, ', point.').replace(/\?$/, ', point d\'interrogation.').replace(/!$/, ', point d\'exclamation.'); }
+    function draw() {
+      main.textContent = ''; var et = el('div', 'etapes'); ['Écoute', 'Écris', 'Relis', 'Corrige'].forEach(function (n, k) { et.appendChild(el('span', k === st ? 'on' : k < st ? 'done' : '', (k + 1) + '. ' + n)); }); main.appendChild(et);
+      var c = carte();
+      function zone() { var t = el('textarea', 'dta'); t.value = tape; t.spellcheck = false; t.setAttribute('autocomplete', 'off'); t.setAttribute('autocapitalize', 'off'); t.oninput = function () { tape = t.value; }; t.setAttribute('aria-label', 'Ma dictée'); return t; }
+      if (st === 0) { c.appendChild(el('div', 'lh', 'Écoute toute la dictée, sans écrire.')); c.appendChild(boutons([{ t: '▶ Écouter', f: function () { jouer(A.full, J.texte); } }, { t: 'Commencer à écrire', f: function () { st = 1; draw(); }, alt: 1 }])); }
+      else if (st === 1) {
+        c.appendChild(el('div', 'lh', 'Morceau ' + (gi + 1) + ' sur ' + gs.length));
+        c.appendChild(boutons([{ t: '▶ Réécouter', f: function () { jouer(A[gi], dit(gs[gi])); }, alt: 1 }]));
+        c.appendChild(zone());
+        c.appendChild(boutons([{ t: gi < gs.length - 1 ? 'Morceau suivant ▶' : 'J\'ai fini', f: function () { if (gi < gs.length - 1) gi++; else st = 2; draw(); } }]));
+        jouer(A[gi], dit(gs[gi])); setTimeout(function () { if (st === 1) jouer(A[gi], dit(gs[gi])); }, 4500);
+      } else if (st === 2) { c.appendChild(el('div', 'lh', 'Relis-toi en écoutant une dernière fois.')); c.appendChild(boutons([{ t: '▶ Écouter', f: function () { jouer(A.full, J.texte); }, alt: 1 }])); c.appendChild(zone()); c.appendChild(boutons([{ t: 'Voir la correction', f: function () { st = 3; draw(); } }])); }
+      else {
+        var R = toks(J.texte), H = toks(tape), out = el('div', 'texte'), ok = 0, tot = 0, autres = 0, prev = '';
+        aligne(R, H).forEach(function (p) {
+          var r = p[0] > -1 ? R[p[0]] : null, h = p[1] > -1 ? H[p[1]] : null, nd;
+          if (r === null) { nd = el('span', 'barre', h); autres++; }
+          else { var c2 = cib.indexOf(r.toLowerCase()) > -1; if (c2) tot++; if (h === r) { if (c2) ok++; nd = c2 ? el('span', 'corr', r) : document.createTextNode(r); } else { if (!c2) autres++; nd = el('span'); if (h) nd.appendChild(el('span', 'barre', h)); nd.appendChild(el('span', 'corr' + (c2 ? '' : ' autre'), r)); } }
+          var t = r || h; if (out.childNodes.length && !/^[.,;:!?]/.test(t) && !/'$/.test(prev)) out.appendChild(document.createTextNode(' ')); prev = t; out.appendChild(nd);
+        });
+        c.appendChild(el('div', 'lh', tot ? 'Mots importants justes : ' + ok + ' sur ' + tot + ' · autres fautes : ' + autres : 'Fautes : ' + autres));
+        c.appendChild(out); if (!autres && ok === tot) { fanfare(); confettis(); }
+        c.appendChild(boutons([{ t: 'Refaire la dictée', f: function () { st = 0; gi = 0; tape = ''; draw(); } }]));
+      }
+    }
+    draw();
+  }
+
+  var TYPES = { defi: defi, marquer: marquer, chasse: chasse, motsmeles: motsmeles, tri: tri, relier: relier, ordre: ordre, dictee: dictee };
+  function lancer() { main.textContent = ''; window.scrollTo(0, 0); TYPES[J.type](); }
+  document.documentElement.dataset.theme = J.theme || 'calamots';
+  document.getElementById('marque').textContent = J.marque || (J.theme === 'graines' ? 'Graines de Palestine' : 'Calamots');
+  document.getElementById('titre').textContent = J.titre;
+  var cg = document.getElementById('consigne'); cg.appendChild(document.createTextNode(J.consigne || '')); if (J.consigneAr) { cg.appendChild(el('br')); cg.appendChild(ar(J.consigneAr)); }
+  document.title = J.titre;
+  lancer();
+})();
+</script>
+<script>
+(function(){
+  var qs = new URLSearchParams(location.search), home = document.getElementById('home'), dl = document.getElementById('dl');
+  if (qs.has('classe')) home.hidden = true;
+  if (location.protocol === 'file:') { dl.hidden = true; home.hidden = true; document.getElementById('offline').hidden = false; }
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('../../sw.js', { scope: '../../' }).catch(function(){});
+})();
+</script>
+</body>
+</html>
