@@ -99,49 +99,55 @@ window.MOTS = {
       "fr": "Moi aussi !",
       "ar": "وأنا أيضًا!",
       "ic": ""
-     },
-     {
-      "a": "unite1/audio/19-comment-vous.mp3",
-      "fr": "Bonjour. Comment vous appelez-vous ?",
-      "ar": "مرحبًا. ما اسم حضرتك؟",
-      "ic": ""
-     },
-     {
-      "a": "unite1/audio/21-comment-ca-s-ecrit.mp3",
-      "fr": "Pouvez-vous épeler votre nom ?",
-      "ar": "هل يمكنك أن تتهجّى اسمك؟",
-      "ic": ""
-     },
-     {
-      "a": "unite1/audio/22-merci-au-revoir.mp3",
-      "fr": "Merci. Prenez un ticket et veuillez patienter.",
-      "ar": "شكرًا. خذ تذكرة وانتظر من فضلك.",
-      "ic": ""
-     },
-     {
-      "a": "unite1/audio/23-au-revoir-madame.mp3",
-      "fr": "D’accord. Merci, madame !",
-      "ar": "حسنًا. شكرًا، سيدتي!",
-      "ic": ""
      }
     ]
    },
    {
-    "e": "tuvous",
-    "t": "Tu ou vous ?",
-    "tar": "tu أم vous؟",
+    "e": "cava",
+    "t": "Comment vas-tu ?",
+    "tar": "كيف حالك؟",
     "m": [
      {
-      "a": "unite1/audio/39-tu.mp3",
-      "fr": "tu",
-      "ar": "أنتَ / أنتِ (مع صديق)",
+      "a": "unite1/audio/43-comment-vas-tu.mp3",
+      "fr": "Comment vas-tu ?",
+      "ar": "كيف حالك؟",
       "ic": ""
      },
      {
-      "a": "unite1/audio/38-vous.mp3",
-      "fr": "vous",
-      "ar": "حضرتك / أنتم",
+      "a": "unite1/audio/44-ca-va.mp3",
+      "fr": "Ça va ?",
+      "ar": "كيف الحال؟ (في الكلام)",
       "ic": ""
+     },
+     {
+      "a": "unite1/audio/45-ca-va-bien.mp3",
+      "fr": "Ça va bien.",
+      "ar": "بخير.",
+      "ic": "👍"
+     },
+     {
+      "a": "unite1/audio/46-ca-va-mal.mp3",
+      "fr": "Ça va mal.",
+      "ar": "لستُ بخير.",
+      "ic": "👎"
+     },
+     {
+      "a": "unite1/audio/48-je-suis-fatigue.mp3",
+      "fr": "Je suis fatigué.",
+      "ar": "أنا متعب.",
+      "ic": "🚹"
+     },
+     {
+      "a": "unite1/audio/42-amal-fatiguee.mp3",
+      "fr": "Je suis fatiguée.",
+      "ar": "أنا متعبة.",
+      "ic": "🚺"
+     },
+     {
+      "a": "unite1/audio/47-je-suis-malade.mp3",
+      "fr": "Je suis malade.",
+      "ar": "أنا مريض / مريضة.",
+      "ic": "🌡️"
      }
     ]
    },
@@ -408,6 +414,56 @@ window.MOTS = {
       "fr": "soixante",
       "ar": "٦٠",
       "ic": "60"
+     }
+    ]
+   },
+   {
+    "e": "mairie",
+    "t": "À la mairie",
+    "tar": "في البلدية",
+    "m": [
+     {
+      "a": "unite1/audio/19-comment-vous.mp3",
+      "fr": "Bonjour. Comment vous appelez-vous ?",
+      "ar": "مرحبًا. ما اسم حضرتك؟",
+      "ic": ""
+     },
+     {
+      "a": "unite1/audio/21-comment-ca-s-ecrit.mp3",
+      "fr": "Pouvez-vous épeler votre nom ?",
+      "ar": "هل يمكنك أن تتهجّى اسمك؟",
+      "ic": ""
+     },
+     {
+      "a": "unite1/audio/22-merci-au-revoir.mp3",
+      "fr": "Merci. Prenez un ticket et veuillez patienter.",
+      "ar": "شكرًا. خذ تذكرة وانتظر من فضلك.",
+      "ic": ""
+     },
+     {
+      "a": "unite1/audio/23-au-revoir-madame.mp3",
+      "fr": "D’accord. Merci, madame !",
+      "ar": "حسنًا. شكرًا، سيدتي!",
+      "ic": ""
+     }
+    ]
+   },
+   {
+    "e": "tuvous",
+    "t": "Tu ou vous ?",
+    "tar": "tu أم vous؟",
+    "m": [
+     {
+      "a": "unite1/audio/39-tu.mp3",
+      "fr": "tu",
+      "ar": "أنتَ / أنتِ (مع صديق)",
+      "ic": ""
+     },
+     {
+      "a": "unite1/audio/38-vous.mp3",
+      "fr": "vous",
+      "ar": "حضرتك / أنتم",
+      "ic": ""
      }
     ]
    },
