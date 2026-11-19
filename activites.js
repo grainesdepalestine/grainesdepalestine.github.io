@@ -7,6 +7,9 @@
 //   ses mots n'apparaissent ni dans « Mes mots » ni dans « Je révise ».
 // « suivi » = où l'appli d'exercices de l'unité enregistre les étapes finies (cercle de progression).
 window.ACTIVITES = [
+  { unite: "Devoirs", ouverte: true, uniteAr: "الواجب", badge: "📝", titre: "Mes devoirs", ar: "واجباتي", activites: [
+    { titre: "Devoirs du cours 2 (19 novembre)", ar: "واجب الدرس الثاني", lien: "devoirs/cours2/", icone: "📝" }
+  ] },
   { unite: "Le livre", ouverte: true, uniteAr: "الكتاب", badge: "📖", titre: "Premiers pas en France", ar: "خطواتي الأولى في فرنسا", activites: [
     { titre: "Le livre de l’élève (PDF)", ar: "كتاب الطالب", lien: "livre/", icone: "📖" }
   ] },
