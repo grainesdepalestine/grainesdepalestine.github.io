@@ -275,9 +275,12 @@ footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;color:#
     if (reste.length < 8) reste = reste.concat(shuffle(ALPHA.filter(function(l){ return reste.indexOf(l) < 0; })).slice(0, 8 - reste.length));
     return reste.slice(0, 8).map(function(l){ return { son: l, ok: l, opts: [l].concat(PROCHES[l].split("")) }; });
   }
+  // pas de son à l’ouverture : la lettre suivante ne se joue seule qu’après un clic de l’élève dans l’exercice
+  var lettresActif = false;
+  document.getElementById("jeuLettres").addEventListener("click", function(){ lettresActif = true; });
   quiz(document.getElementById("jeuLettres"), "lettres", lettresPartie, function(box, Q){
     var b = el("button", "ecouter", "🔊 Écoute"); b.onclick = function(){ jouer("data:audio/mpeg;base64," + SND[Q.son]); };
-    box.appendChild(b); setTimeout(function(){ b.click(); }, 300);
+    box.appendChild(b); if (lettresActif) setTimeout(function(){ b.click(); }, 300);
     var g = el("div", "choix lettres"); box.appendChild(g); return g;
   }, function(qs){
     var vues = R.lettresVues || [];
