@@ -56,6 +56,8 @@ a.tile:focus-visible{outline:3px solid var(--forest);outline-offset:3px}
 .tile.soon{background:var(--mist);color:#56645e;box-shadow:none;animation:none;cursor:default}
 .tile.soon .ar{color:#56645e}
 .tile small{font-size:.85rem;font-weight:400}
+.tile.devoirs{background:linear-gradient(100deg,#1e5aa8,#3d7fd6);box-shadow:0 4px 0 #123a6e;animation:pulseB 2.4s ease-in-out infinite}
+@keyframes pulseB{0%,100%{box-shadow:0 4px 0 #123a6e,0 0 0 0 rgba(30,90,168,.45)}50%{box-shadow:0 4px 0 #123a6e,0 0 0 10px rgba(30,90,168,0)}}
 @keyframes pulse{0%,100%{box-shadow:0 4px 0 #8f1229,0 0 0 0 rgba(200,33,63,.45)}50%{box-shadow:0 4px 0 #8f1229,0 0 0 10px rgba(200,33,63,0)}}
 .unit.locked .ring{background:#d9dfdc}
 .unit.locked .disc{background:#9aa8a2}
@@ -132,7 +134,7 @@ footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;text-al
       if (!open) { html += `</section>`; continue; }
       html += list.length
         ? `<div class="grid">` + list.map(a => a.lien
-            ? `<a class="tile" href="${esc(a.lien)}"><span class="icon">${esc(a.icone || "📘")}</span><span class="txt">${esc(a.titre)}${a.ar ? `<span class="ar">${esc(a.ar)}</span>` : ""}</span><span class="go" aria-hidden="true">→</span></a>`
+            ? `<a class="tile${a.couleur ? " " + esc(a.couleur) : ""}" href="${esc(a.lien)}"><span class="icon">${esc(a.icone || "📘")}</span><span class="txt">${esc(a.titre)}${a.ar ? `<span class="ar">${esc(a.ar)}</span>` : ""}</span><span class="go" aria-hidden="true">→</span></a>`
             : `<div class="tile soon"><span class="icon">${esc(a.icone || "📘")}</span><span class="txt">${esc(a.titre)}${a.ar ? `<span class="ar">${esc(a.ar)}</span>` : ""}<small>Bientôt · <span class="ar">قريبًا</span></small></span></div>`
           ).join("") + `</div>`
         : `<div class="empty">Bientôt disponible · <span class="ar">قريبًا</span></div>`;

@@ -17,7 +17,7 @@ window.ACTIVITES = [
     { titre: "Épeler en français", ar: "التهجئة بالفرنسية", lien: "epeler/", icone: "🔤" }
   ] },
   { unite: "Unité 1", ouverte: true, suivi: { cle: "gdp-u1-done", etapes: ["mots", "dialogues", "cava", "presenter", "mairie", "tuvous", "grammaire", "sons", "revisions"] }, titre: "Bonjour !", ar: "مرحبًا!", activites: [
-    { titre: "Mes devoirs", ar: "واجباتي", lien: "devoirs/", icone: "📝" },
+    { titre: "Mes devoirs", ar: "واجباتي", lien: "devoirs/", icone: "📝", couleur: "devoirs" },
     { titre: "La BD : Karim et Youssef", ar: "قصة مصوّرة: كريم ويوسف", lien: "karim-youssef/", icone: "💬" },
     { titre: "À l’accueil de la mairie", ar: "في استقبال البلدية", lien: "accueil-mairie/", icone: "🏛️" },
     { titre: "Les sons (prononciation)", ar: "الأصوات والنطق", lien: "prononciation/", icone: "🔊" },
