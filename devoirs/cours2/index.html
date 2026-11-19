@@ -354,12 +354,12 @@ footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;color:#
   // 5. traduire (arabe → français, à écrire)
   var TRAD = [
     { ar: "يوم الخميس", pic: "📅", ok: ["jeudi", "lejeudi"], rep: "jeudi" },
-    { ar: "شكرًا", pic: "🙏", ok: ["merci"], rep: "merci" },
-    { ar: "مرحبًا", pic: "👋", ok: ["bonjour", "salut"], rep: "Bonjour / Salut" },
-    { ar: "مع السلامة", pic: "👋", ok: ["aurevoir"], rep: "Au revoir" },
+    { ar: "شكرًا", pic: "🌷", ok: ["merci", "mercibeaucoup"], rep: "merci" },
+    { ar: "مرحبًا", pic: "👋", ok: ["bonjour", "salut", "bonsoir", "bonjourmadame", "bonjourmonsieur"], rep: "Bonjour / Salut" },
+    { ar: "مع السلامة", pic: "👋", ok: ["aurevoir", "aurevoirmadame", "aurevoirmonsieur"], rep: "Au revoir" },
     { ar: "أنا مريضة.", pic: "🌡️", ok: ["jesuismalade"], rep: "Je suis malade." },
     { ar: "أنا متعبة.", pic: "💤", ok: ["jesuisfatiguee"], rep: "Je suis fatiguée." },
-    { ar: "كيف حالكِ؟", pic: "❓", ok: ["commentvastu", "cava"], rep: "Comment vas-tu ?" }
+    { ar: "كيف حالكِ؟", pic: "❓", ok: ["commentvastu", "commentcava", "commentallezvous", "cava", "commenttuvas", "commentvas", "salutcava", "bonjourcava", "commentcavas"], rep: "Comment vas-tu ? / Comment ça va ? / Comment allez-vous ? / Ça va ?" }
   ];
   (function(){
     var box = document.getElementById("jeuTrad");
@@ -385,9 +385,9 @@ footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;color:#
           if (fini) return;
           var v = norm(inp.value); if (!v) return;
           essais++;
-          if (Q.ok.indexOf(v) >= 0){ inp.className = "ecrire bon"; bip(true); score++; return suite(900); }
+          if (Q.ok.indexOf(v) >= 0){ inp.className = "ecrire bon"; bip(true); score++; if (Q.rep.indexOf(" / ") > 0){ aide.innerHTML = "✓ " + Q.rep.split(" / ").join(" · "); return suite(2600); } return suite(900); }
           inp.className = "ecrire faux"; bip(false);
-          if (essais >= 3){ inp.value = Q.rep; inp.className = "ecrire bon"; return suite(2200); }
+          if (essais >= 3){ inp.value = Q.rep.split(" / ")[0]; inp.className = "ecrire bon"; if (Q.rep.indexOf(" / ") > 0) aide.innerHTML = "✓ " + Q.rep.split(" / ").join(" · "); return suite(Q.rep.indexOf(" / ") > 0 ? 3500 : 2200); }
           var indice = Q.rep.split(" / ")[0].replace(/[A-Za-zÀ-ÿ]/g, function(c, k){ return k === 0 ? c : "_"; });
           aide.innerHTML = "Essaie encore. " + (essais === 2 ? "( " + indice + " ) " : "") + '<span class="ar" lang="ar">حاولي مرة أخرى.</span>';
         }
