@@ -52,6 +52,7 @@ body.prof main{max-width:1200px}
 .theme{background:#c8213f;color:#fff;border-radius:14px;padding:12px 16px;font-size:26px;font-weight:700;margin:0 0 12px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px}.theme .ar{font-weight:400}
 .mien{color:#5b6b65;font-size:19px;margin-top:10px}
 .bonne{font-size:30px}
+.man{margin-top:14px}.man summary{cursor:pointer;font-weight:700;color:#1f3d33;font-size:19px;padding:6px 0}.man img{width:100%;border-radius:10px;border:1px solid #d6e2dc;margin-top:6px}
 .dire{background:var(--jaune);border-radius:12px;padding:8px 12px;font-size:20px;margin-top:8px}
 table{border-collapse:collapse;width:100%;font-size:22px}td{padding:6px 8px;border-bottom:1px solid #e3ebe7}
 </style>
@@ -167,6 +168,8 @@ var THEMES = [
   ['p. 10', '🏛️ À l’accueil de la mairie', 'في استقبال البلدية'],
   ['Questions libres', '✏️ Question du professeur', 'سؤال المعلّمة']];
 function themeDe(g){ for (var i = 0; i < THEMES.length; i++) if (String(g).indexOf(THEMES[i][0]) === 0) return { fr: THEMES[i][1], ar: THEMES[i][2] }; return { fr: g, ar: '' }; }
+function pageDe(g){ var m = /^p\. (\d+)/.exec(g || ''); return m ? +m[1] : 0; }
+function manuel(n, ouvert){ return n ? '<details class="man"' + (ouvert ? ' open' : '') + '><summary>📖 Manuel page ' + n + ' · <span class="ar">الكتاب صفحة ' + n + '</span></summary><img src="manuel/p' + n + '.jpg" alt="Manuel page ' + n + '" loading="lazy"></details>' : ''; }
 function bandeau(th){ return th ? '<div class="theme">' + esc(th.fr) + (th.ar ? '<span class="ar">' + esc(th.ar) + '</span>' : '') + '</div>' : ''; }
 
 /* ═════════ PAGE DE L'ENSEIGNANTE (?prof) */
@@ -178,7 +181,7 @@ function prof(){
   var eleves = {}, cur = null, reps = {}, faites = {}, points = {}, montre = false, qid = 0, libres = [];
   function nomsEleves(){ var st = ch.presenceState(), o = {}; Object.keys(st).forEach(function(k){ if(k!=='prof' && st[k][0]) o[k] = st[k][0].nom; }); eleves = o; }
   function envoyer(ev, p){ ch.send({ type:'broadcast', event:ev, payload:p }); }
-  function payloadQ(){ return cur ? { id:cur.id, theme:themeDe(cur.q.g), consigne:cur.q.consigne, texte:cur.q.texte, choix:cur.q.choix||null } : null; }
+  function payloadQ(){ return cur ? { id:cur.id, page:pageDe(cur.q.g), theme:themeDe(cur.q.g), consigne:cur.q.consigne, texte:cur.q.texte, choix:cur.q.choix||null } : null; }
   var derCorr = null; setInterval(function(){ if (cur && montre && derCorr && derCorr.id === cur.id) envoyer('corr', derCorr); else if (cur && !montre) envoyer('q', payloadQ()); }, 4000);
   function lancer(i, q){ qid++; cur = { id: qid, i: i, q: q }; reps = {}; montre = false; faites[i] = 1; envoyer('q', payloadQ()); rendu(); }
   function corriger(){
@@ -215,6 +218,7 @@ function prof(){
         h += '<div class="rep ' + r.j + '" data-s="' + s + '"><b>' + esc(r.nom) + '</b><span class="r">' + esc(r.txt) + '</span><span>' + (r.j==='ok'?'✅':r.j==='presque'?'🟡 presque':'❌') + '</span></div>'; });
       if (montre) h += '<div class="podium">⚡ Les plus rapides<div>' + (cur.podium && cur.podium.length ? cur.podium.map(function(x, i){ return '<span>' + ['🥇','🥈','🥉'][i] + ' ' + esc(x[0]) + ' <small>+' + x[1] + ' ⭐</small></span>'; }).join('') : '<span>Personne cette fois !</span>') + '</div></div>';
       if (nr && !montre) h += '<div class="petit">Une réponse mal jugée ? Clique dessus pour la changer (avant « Montrer la réponse »).</div>';
+      h += manuel(pageDe(cur.q.g), true);
       h += '<div class="barre"><button id="corr">✅ Montrer la réponse</button><button id="suiv" class="sec">➡️ Question suivante</button><button id="pause" class="sec">⏸️ Écran d’attente</button><button id="clas" class="sec">🏆 Classement</button></div>';
     }
     h += '<div id="classement"></div></div></div>';
@@ -267,7 +271,7 @@ function eleve(){
       var h = '<div class="carte">' + bandeau(q.theme) + '<p class="consigne">' + esc(q.consigne) + '</p><div class="texte' + (isAr(q.texte) ? ' ar' : '') + '">' + q.texte + '</div>';
       if (q.choix) h += '<div class="choix">' + q.choix.map(function(c, i){ return '<button data-c="' + i + '">' + esc(c) + '</button>'; }).join('') + '</div>';
       else h += '<input id="t" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="…"><button class="gros" id="env">Envoyer · <span class="ar">أرسلي</span></button>';
-      el(h + '</div>');
+      el(h + manuel(q.page, true) + '</div>');
       function envoyer(txt){ if (envoye || !txt.trim()) return; envoye = true; mien = txt.trim(); ch.send({ type:'broadcast', event:'r', payload:{ id:q.id, sid:sid, nom:nom, txt:txt.trim() } });
         attente('✅ Envoyé ! · <span class="ar">تم الإرسال</span><br><br>⏳ <span class="ar">انتظري…</span>'); }
       if (q.choix) app.querySelectorAll('.choix button').forEach(function(b){ b.onclick = function(){ b.classList.add('pris'); setTimeout(function(){ envoyer(q.choix[+b.dataset.c]); }, 150); }; });
@@ -284,7 +288,7 @@ function eleve(){
         else h = '';
         h += (mien ? '<div class="mien">Ta réponse · <span class="ar">جوابكِ</span> : ' + esc(mien) + '</div>' : '')
           + '<div class="msg ok">✅ La bonne réponse · <span class="ar">الجواب الصحيح</span><br><b class="bonne">' + esc(p.rep) + '</b></div>';
-        el('<div class="carte">' + bandeau(q.theme) + '<p class="consigne">' + esc(q.consigne) + '</p><div class="texte' + (isAr(q.texte) ? ' ar' : '') + '">' + q.texte + '</div>' + h + '</div><p class="attente">⏳ <span class="ar">انتظري السؤال التالي…</span></p>'); })
+        el('<div class="carte">' + bandeau(q.theme) + '<p class="consigne">' + esc(q.consigne) + '</p><div class="texte' + (isAr(q.texte) ? ' ar' : '') + '">' + q.texte + '</div>' + h + manuel(q.page, false) + '</div><p class="attente">⏳ <span class="ar">انتظري السؤال التالي…</span></p>'); })
       .on('presence', { event:'sync' }, function(){ profVu = !!ch.presenceState().prof; })
       .subscribe(function(st){
         if (st === 'SUBSCRIBED') { ch.track({ nom:nom }); ch.send({ type:'broadcast', event:'hello', payload:{} });
