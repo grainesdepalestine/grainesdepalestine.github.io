@@ -166,7 +166,7 @@ footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;color:#
 
   <section class="carte" data-k="lettres">
     <h2><span class="n">5</span><span>🔤 Écoute et clique sur la lettre.<span class="ar" lang="ar">استمعي واضغطي على الحرف.</span></span></h2>
-    <p class="consigne ar" lang="ar">لكِ ٣ محاولات لكل حرف. اضغطي على «Recommencer» لتتدرّبي على حروف جديدة، حتى تنهي كل الحروف.</p>
+    <p class="consigne ar" lang="ar">الحروف الـ ٢٦ كلها، واحدًا بعد واحد. اضغطي على 🔊 ثم اختاري الحرف الذي سمعتِه. لكِ ٣ محاولات لكل حرف.</p>
     <div class="jeu" id="jeuLettres"></div>
   </section>
 
@@ -307,21 +307,13 @@ footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;color:#
     return shuffle(l).map(function(n){ return { n: n, ok: n, opts: [n].concat(voisins(n)) }; });
   }, function(box, Q){ bouton(box, NB[Q.n], a40); }, "nombres");
 
-  // 4. lettres (repris des devoirs précédents) : 8 nouvelles lettres à chaque partie jusqu’aux 26
+  // 4. lettres : les 26 à la suite, une seule partie, score sur 26 (Alice 26/11 : « 8/26 » n’était pas clair)
   var PROCHES = {A:"ERH",B:"DPV",C:"SGZ",D:"BTP",E:"IAU",F:"SLX",G:"JKQ",H:"AKR",I:"EYJ",J:"GIY",K:"QCH",L:"NFM",M:"NLE",N:"MLA",
     O:"UAE",P:"BTD",Q:"KUC",R:"HAE",S:"CFX",T:"DPB",U:"OEQ",V:"BFW",W:"VYD",X:"SZK",Y:"IJG",Z:"SXC"};
   var ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""), aL = actif("jeuLettres");
-  quiz(document.getElementById("jeuLettres"), "lettres", function(){
-    var vues = R.lettresVues || [];
-    var reste = shuffle(ALPHA.filter(function(l){ return vues.indexOf(l) < 0; }));
-    if (reste.length < 8) reste = reste.concat(shuffle(ALPHA.filter(function(l){ return reste.indexOf(l) < 0; })).slice(0, 8 - reste.length));
-    return reste.slice(0, 8).map(function(l){ return { son: l, ok: l, opts: [l].concat(PROCHES[l].split("")) }; });
-  }, function(box, Q){ bouton(box, SND[Q.son], aL); }, "lettres", function(qs){
-    var vues = R.lettresVues || [];
-    if (vues.length >= 26) vues = [];
-    qs.forEach(function(q){ if (vues.indexOf(q.son) < 0) vues.push(q.son); });
-    R.lettresVues = vues;
-  }, function(){ var n = (R.lettresVues || []).length; return n >= 26 ? "tout l’alphabet ✓" : n + " / 26 lettres"; });
+  quiz(document.getElementById("jeuLettres"), "lettres26", function(){
+    return shuffle(ALPHA).map(function(l){ return { son: l, ok: l, opts: [l].concat(PROCHES[l].split("")) }; });
+  }, function(box, Q){ bouton(box, SND[Q.son], aL); }, "lettres");
 
   // 5. petit quiz : 10 questions tirées dans tout ce qui a été vu
   quiz(document.getElementById("jeuQuiz"), "quiz", function(){
@@ -336,9 +328,8 @@ footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;color:#
   function texte(){
     var q = function(k){ return R[k] && R[k].fini ? "fait ✓ (" + R[k].score + "/" + R[k].total + ")" : "pas fait"; };
     var c = function(k){ return R[k] ? "fait ✓" : "pas fait"; };
-    var nl = (R.lettresVues || []).length;
     return "1. Nombres appris : " + c("apprendre") + "\n2. Je ne sais pas / Peux-tu répéter ? : " + c("phrases") + "\n3. Écoute 1 à 10 : " + q("ecoute10") + "\n4. Écoute 17 à 40 : " + q("ecoute40") +
-      "\n5. Lettres : " + (nl >= 26 ? "fait ✓ (tout l’alphabet)" : nl ? "pas fini (" + nl + "/26 lettres)" : "pas fait") + "\n6. Petit quiz : " + q("quiz");
+      "\n5. Lettres : " + q("lettres26") + "\n6. Petit quiz : " + q("quiz");
   }
   function majEnvoi(){
     var p = prenom.value.trim(), t = texte();
@@ -352,7 +343,7 @@ footer{border-top:1px solid var(--line);padding-top:12px;font-size:.9rem;color:#
   function maj(){
     var cartes = [].slice.call(document.querySelectorAll(".carte")), n = 0;
     cartes.forEach(function(c){
-      var k = c.dataset.k, f = k === "lettres" ? (R.lettresVues || []).length >= 26 : !!(R[k] && (R[k] === true || R[k].fini));
+      var k = c.dataset.k, kk = k === "lettres" ? "lettres26" : k, f = !!(R[kk] && (R[kk] === true || R[kk].fini));
       c.classList.toggle("fait", f); if (f) n++;
       var ok = c.querySelector(".ok"); if (ok && ok.dataset.html) ok.innerHTML = f ? '✓ C’est fait !<span lang="ar">أحسنتِ!</span>' : ok.dataset.html;
     });
