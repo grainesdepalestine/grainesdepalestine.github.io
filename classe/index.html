@@ -187,7 +187,7 @@ function prof(){
   var eleves = {}, cur = null, reps = {}, faites = {}, points = {}, montre = false, qid = 0, libres = [];
   function nomsEleves(){ var st = ch.presenceState(), o = {}; Object.keys(st).forEach(function(k){ if(k!=='prof' && st[k][0]) o[k] = st[k][0].nom; }); eleves = o; }
   function envoyer(ev, p){ ch.send({ type:'broadcast', event:ev, payload:p }); }
-  window.voirDire = function(b){ if (!cur || !cur.q.dire) return; b.innerHTML = '🗣️ Dis 2 fois : <b>« ' + esc(cur.q.dire) + ' »</b>'; clearTimeout(window.__dt); window.__dt = setTimeout(function(){ b.innerHTML = '🙈 Clique pour voir ce que tu dois dire (caché pour Zoom)'; }, 5000); };
+  window.voirDire = function(b){ if (!cur || !cur.q.dire) return; b.innerHTML = '💬 Dis 2 fois : <b>« ' + esc(cur.q.dire) + ' »</b>'; clearTimeout(window.__dt); window.__dt = setTimeout(function(){ b.innerHTML = '🙈 Clique pour voir ce que tu dois dire (caché pour Zoom)'; }, 5000); };
   function apercu(){
     var x = '';
     if (!cur) x = '<h1>Bonjour !</h1><div class="carte attente">⏳ Attends la question… · <span class="ar">انتظري السؤال…</span></div>';
@@ -224,7 +224,7 @@ function prof(){
     var g = '';
     QUESTIONS.concat(libres).forEach(function(q, i){
       if (q.g !== g){ g = q.g; h += '<div class="petit" style="margin-top:10px">' + esc(g) + '</div>'; }
-      h += '<button data-i="' + i + '" class="' + (cur && cur.i === i ? 'active' : faites[i] ? 'faite' : '') + '"><span class="t">' + (i+1) + '.</span> ' + q.texte.replace(/<br>.*/,'') + (q.dire ? ' <span class="petit">🗣️</span>' : '') + '</button>';
+      h += '<button data-i="' + i + '" class="' + (cur && cur.i === i ? 'active' : faites[i] ? 'faite' : '') + '"><span class="t">' + (i+1) + '.</span> ' + q.texte.replace(/<br>.*/,'') + (q.dire ? ' <span class="petit">💬</span>' : '') + '</button>';
     });
     h += '<div class="petit" style="margin-top:12px">Question libre (réponses acceptées séparées par /)</div>'
       + '<input id="lq" placeholder="Phrase ou mot à traduire" style="font-size:17px;margin-top:4px"><input id="lr" placeholder="Réponse 1 / réponse 2" style="font-size:17px;margin-top:6px">'
@@ -233,7 +233,7 @@ function prof(){
     if (!cur) h += '<p class="attente">Clique sur une question à gauche pour l’envoyer sur les téléphones.</p>';
     else {
       h += bandeau(themeDe(cur.q.g)) + '<p class="consigne">' + esc(cur.q.consigne) + '</p><div class="texte' + (isAr(cur.q.texte) ? ' ar' : '') + '">' + cur.q.texte + '</div>'
-        + (cur.q.dire ? '<div class="dire">🗣️ Dis à voix haute, 2 fois : <b>« ' + esc(cur.q.dire) + ' »</b></div>' : '')
+        + (cur.q.dire ? '<div class="dire">💬 Dis à voix haute, 2 fois : <b>« ' + esc(cur.q.dire) + ' »</b></div>' : '')
         + '<p><b>Réponses : ' + nr + ' / ' + n + '</b>' + (montre ? ' · Bonne réponse : <b>' + esc(cur.q.rep) + '</b>' : '') + '</p>';
       Object.keys(reps).forEach(function(s){ var r = reps[s];
         h += '<div class="rep ' + r.j + '" data-s="' + s + '"><b>' + esc(r.nom) + '</b><span class="r">' + esc(r.txt) + '</span><span>' + (r.j==='ok'?'✅':r.j==='presque'?'🟡 presque':'❌') + '</span></div>'; });
