@@ -49,6 +49,9 @@ body.prof main{max-width:1200px}
 .barre button{background:var(--fonce);color:#fff;font-size:18px}
 .barre button.sec{background:#e3ebe7;color:var(--fonce)}
 .podium{background:#1f3d33;color:#fff;border-radius:16px;padding:14px 18px;margin:12px 0;font-size:22px;font-weight:700}.podium div{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px}.podium span{background:rgba(255,255,255,.12);border-radius:12px;padding:8px 14px;font-size:30px}.podium small{font-size:20px;color:#ffd76a}
+.theme{background:#c8213f;color:#fff;border-radius:14px;padding:12px 16px;font-size:26px;font-weight:700;margin:0 0 12px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px}.theme .ar{font-weight:400}
+.mien{color:#5b6b65;font-size:19px;margin-top:10px}
+.bonne{font-size:30px}
 .dire{background:var(--jaune);border-radius:12px;padding:8px 12px;font-size:20px;margin-top:8px}
 table{border-collapse:collapse;width:100%;font-size:22px}td{padding:6px 8px;border-bottom:1px solid #e3ebe7}
 </style>
@@ -85,71 +88,86 @@ var QUESTIONS = [
   {g:'p. 3 · Saluer (ex. 1)', consigne:'Bonjour ou Bonsoir ? Regarde l’heure · انظري إلى الساعة', texte:'☀️ 14 h', choix:['Bonsoir !','Bonjour !'], ok:['Bonjour !'], rep:'Bonjour !'},
   {g:'p. 3 · Saluer (ex. 1)', consigne:'Bonjour ou Bonsoir ? Regarde l’heure · انظري إلى الساعة', texte:'🌙 21 h', choix:['Bonsoir !','Bonjour !'], ok:['Bonsoir !'], rep:'Bonsoir !'},
   {g:'p. 3 · Saluer', consigne:QCM, texte:'✋ Avec une amie, je dis…', choix:['Merci !','Salut !','Pardon ?'], ok:['Salut !'], rep:'Salut !'},
-  {g:'p. 3 · Saluer', consigne:TR, texte:'مع السلامة', ok:['au revoir'], rep:'Au revoir !'},
-  {g:'p. 3 · Saluer', consigne:TR, texte:'شكرًا', ok:['merci'], rep:'Merci !'},
-  {g:'p. 3 · Saluer', consigne:TR, texte:'من فضلك', ok:['s\'il vous plait','s\'il te plait'], rep:'S’il vous plaît'},
-  {g:'p. 3 · Saluer', consigne:TR, texte:'عفوًا؟ لم أفهم.', ok:['pardon'], rep:'Pardon ?'},
-  {g:'p. 3 · Saluer', consigne:TR, texte:'تشرّفنا!', ok:['enchante','enchantee'], rep:'Enchanté !'},
+  {g:'p. 3 · Saluer', consigne:'Clique sur la bonne traduction · اختاري الترجمة الصحيحة', texte:'مع السلامة', choix:['Merci !','Au revoir !','Bonjour !'], ok:['Au revoir !'], rep:'Au revoir !'},
+  {g:'p. 3 · Saluer', consigne:'Clique sur la bonne traduction · اختاري الترجمة الصحيحة', texte:'شكرًا', choix:['Merci !','Pardon ?','Salut !'], ok:['Merci !'], rep:'Merci !'},
+  {g:'p. 3 · Saluer', consigne:'Clique sur la bonne traduction · اختاري الترجمة الصحيحة', texte:'من فضلك', choix:['Pardon ?','Enchanté !','S’il vous plaît'], ok:['S’il vous plaît'], rep:'S’il vous plaît'},
+  {g:'p. 3 · Saluer', consigne:'Clique sur la bonne traduction · اختاري الترجمة الصحيحة', texte:'عفوًا؟ لم أفهم.', choix:['Pardon ?','Merci !','Au revoir !'], ok:['Pardon ?'], rep:'Pardon ?'},
+  {g:'p. 3 · Saluer', consigne:'Clique sur la bonne traduction · اختاري الترجمة الصحيحة', texte:'تشرّفنا!', choix:['Bonsoir !','Enchanté !','Merci !'], ok:['Enchanté !'], rep:'Enchanté !'},
   /* p. 4 : Karim et Youssef, exercice 2 */
   {g:'p. 4 · Le dialogue (ex. 2)', consigne:COMP, texte:'Omar : Bonjour ! Je ……… Omar.', choix:['toi','m’appelle','Enchanté'], ok:['m’appelle'], rep:'Je m’appelle Omar.'},
   {g:'p. 4 · Le dialogue (ex. 2)', consigne:COMP, texte:'Omar : Et ……… ?', choix:['m’appelle','Enchanté','toi'], ok:['toi'], rep:'Et toi ?'},
   {g:'p. 4 · Le dialogue (ex. 2)', consigne:COMP, texte:'Sami : Je m’appelle Sami.<br>Omar : ……… !', choix:['Enchanté','toi','m’appelle'], ok:['Enchanté'], rep:'Enchanté !'},
   /* p. 5 : le dialogue */
-  {g:'p. 5 · Comment tu t’appelles ?', consigne:TR, texte:'ما اسمكِ؟', ok:['comment tu t\'appelles','comment t\'appelles tu','tu t\'appelles comment'], rep:'Comment tu t’appelles ?'},
-  {g:'p. 5 · Comment tu t’appelles ?', consigne:TR, texte:'اسمي …', ok:['je m\'appelle'], rep:'Je m’appelle …'},
+  {g:'p. 5 · Comment tu t’appelles ?', consigne:'Clique sur la bonne traduction · اختاري الترجمة الصحيحة', texte:'ما اسمكِ؟', choix:['Comment vas-tu ?','Tu as quel âge ?','Comment tu t’appelles ?'], ok:['Comment tu t’appelles ?'], rep:'Comment tu t’appelles ?'},
+  {g:'p. 5 · Comment tu t’appelles ?', consigne:'Clique sur la bonne traduction · اختاري الترجمة الصحيحة', texte:'اسمي …', choix:['Je m’appelle …','J’ai … ans.','Je suis …'], ok:['Je m’appelle …'], rep:'Je m’appelle …'},
   {g:'p. 5 · Comment tu t’appelles ?', consigne:QCM, texte:'Enchanté ! → … ?', choix:['Au revoir !','Moi aussi !','Merci !'], ok:['Moi aussi !'], rep:'Moi aussi !'},
   {g:'p. 5 · Comment tu t’appelles ?', consigne:QCM, texte:'Youssef Haddad<br>Le prénom = ?', choix:['Haddad','Youssef'], ok:['Youssef'], rep:'Youssef = le prénom · Haddad = le nom'},
   {g:'p. 5 · Comment tu t’appelles ?', consigne:QCM, texte:'🏛️ À la mairie, je dis…', choix:['le prénom','le prénom + le nom'], ok:['le prénom + le nom'], rep:'À la mairie : le prénom + le nom'},
   /* p. 6 : épeler son nom */
-  {g:'p. 6 · Épeler (ex. 4)', consigne:EPE, texte:'🎧 🔤', dire:'S – A – M – I', ok:['sami'], rep:'SAMI'},
-  {g:'p. 6 · Épeler (ex. 4)', consigne:EPE, texte:'🎧 🔤', dire:'A – M – A – L', ok:['amal'], rep:'AMAL'},
-  {g:'p. 6 · Épeler (ex. 4)', consigne:EPE, texte:'🎧 🔤', dire:'K – A – R – I – M', ok:['karim'], rep:'KARIM'},
-  {g:'p. 6 · Épeler (ex. 4)', consigne:EPE, texte:'🎧 🔤', dire:'Y – O – U – double S – E – F', ok:['youssef'], rep:'YOUSSEF'},
+  {g:'p. 6 · Épeler (ex. 4)', consigne:'🎧 Écoute et clique sur le prénom · استمعي واختاري الاسم', texte:'🎧 🔤', dire:'S – A – M – I', choix:['SANA','SAMI','SALIM'], ok:['SAMI'], rep:'SAMI'},
+  {g:'p. 6 · Épeler (ex. 4)', consigne:'🎧 Écoute et clique sur le prénom · استمعي واختاري الاسم', texte:'🎧 🔤', dire:'A – M – A – L', choix:['AMAL','AMAR','AMEL'], ok:['AMAL'], rep:'AMAL'},
+  {g:'p. 6 · Épeler (ex. 4)', consigne:'🎧 Écoute et clique sur le prénom · استمعي واختاري الاسم', texte:'🎧 🔤', dire:'K – A – R – I – M', choix:['KARINE','KAMIL','KARIM'], ok:['KARIM'], rep:'KARIM'},
+  {g:'p. 6 · Épeler (ex. 4)', consigne:'🎧 Écoute et clique sur le prénom · استمعي واختاري الاسم', texte:'🎧 🔤', dire:'Y – O – U – double S – E – F', choix:['YOUSSEF','YOUNES','YOUSRA'], ok:['YOUSSEF'], rep:'YOUSSEF'},
   {g:'p. 6 · Les lettres pièges', consigne:'🎧 Écoute la lettre et clique dessus · استمعي واختاري الحرف', texte:'🎧 🔤', dire:'E', choix:['I','E','A'], ok:['E'], rep:'E'},
   {g:'p. 6 · Les lettres pièges', consigne:'🎧 Écoute la lettre et clique dessus · استمعي واختاري الحرف', texte:'🎧 🔤', dire:'I', choix:['E','Y','I'], ok:['I'], rep:'I'},
   {g:'p. 6 · Les lettres pièges', consigne:'🎧 Écoute la lettre et clique dessus · استمعي واختاري الحرف', texte:'🎧 🔤', dire:'G', choix:['G','J'], ok:['G'], rep:'G'},
   {g:'p. 6 · Les lettres pièges', consigne:'🎧 Écoute la lettre et clique dessus · استمعي واختاري الحرف', texte:'🎧 🔤', dire:'J', choix:['G','J'], ok:['J'], rep:'J'},
   /* p. 7 : Comment vas-tu ? */
-  {g:'p. 7 · Comment vas-tu ? (ex. 5)', consigne:'Comment vas-tu ? Regarde l’image et réponds · انظري إلى الصورة وأجيبي', texte:'🌡️', ok:['je suis malade'], rep:'Je suis malade.'},
-  {g:'p. 7 · Comment vas-tu ? (ex. 5)', consigne:'Comment vas-tu ? Regarde l’image et réponds · انظري إلى الصورة وأجيبي', texte:'👍', ok:['ca va bien','ca va','je vais bien','ca va bien merci','je vais bien merci'], rep:'Ça va bien.'},
-  {g:'p. 7 · Comment vas-tu ? (ex. 5)', consigne:'Comment vas-tu ? Regarde l’image et réponds · انظري إلى الصورة وأجيبي', texte:'💤', ok:['je suis fatiguee','je suis fatigue'], rep:'Je suis fatiguée.'},
-  {g:'p. 7 · Comment vas-tu ? (ex. 5)', consigne:'Comment vas-tu ? Regarde l’image et réponds · انظري إلى الصورة وأجيبي', texte:'👎', ok:['ca va mal','je ne vais pas bien'], rep:'Ça va mal.'},
-  {g:'p. 7 · Comment vas-tu ?', consigne:TR, texte:'كيف حالكِ؟', ok:['comment vas-tu','comment vas tu','ca va','comment ca va','comment tu vas'], rep:'Comment vas-tu ?'},
-  {g:'p. 7 · Comment vas-tu ?', consigne:TR, texte:'بخير، شكرًا. وأنتِ؟', ok:['ca va bien merci et toi','je vais bien merci et toi','ca va merci et toi'], rep:'Ça va bien, merci. Et toi ?'},
+  {g:'p. 7 · Comment vas-tu ? (ex. 5)', consigne:'Comment vas-tu ? Regarde l’image et clique · انظري إلى الصورة واختاري', texte:'🌡️', choix:['Ça va bien.','Je suis malade.','Je suis fatiguée.'], ok:['Je suis malade.'], rep:'Je suis malade.'},
+  {g:'p. 7 · Comment vas-tu ? (ex. 5)', consigne:'Comment vas-tu ? Regarde l’image et clique · انظري إلى الصورة واختاري', texte:'👍', choix:['Ça va bien.','Ça va mal.','Je suis malade.'], ok:['Ça va bien.'], rep:'Ça va bien.'},
+  {g:'p. 7 · Comment vas-tu ? (ex. 5)', consigne:'Comment vas-tu ? Regarde l’image et clique · انظري إلى الصورة واختاري', texte:'💤', choix:['Ça va mal.','Ça va bien.','Je suis fatiguée.'], ok:['Je suis fatiguée.'], rep:'Je suis fatiguée.'},
+  {g:'p. 7 · Comment vas-tu ? (ex. 5)', consigne:'Comment vas-tu ? Regarde l’image et clique · انظري إلى الصورة واختاري', texte:'👎', choix:['Je suis fatiguée.','Ça va mal.','Ça va bien.'], ok:['Ça va mal.'], rep:'Ça va mal.'},
+  {g:'p. 7 · Comment vas-tu ?', consigne:'Clique sur la bonne traduction · اختاري الترجمة الصحيحة', texte:'كيف حالكِ؟', choix:['Comment vas-tu ?','Comment tu t’appelles ?','Au revoir !'], ok:['Comment vas-tu ?'], rep:'Comment vas-tu ?'},
+  {g:'p. 7 · Comment vas-tu ?', consigne:'Clique sur la bonne traduction · اختاري الترجمة الصحيحة', texte:'بخير، شكرًا. وأنتِ؟', choix:['Je suis malade. Et toi ?','Ça va bien, merci. Et toi ?','Je m’appelle Amal.'], ok:['Ça va bien, merci. Et toi ?'], rep:'Ça va bien, merci. Et toi ?'},
   /* p. 8 : les nombres */
   {g:'p. 8 · Les nombres', consigne:QCM, texte:'7 = ?', choix:['six','sept','cinq'], ok:['sept'], rep:'sept'},
   {g:'p. 8 · Les nombres', consigne:LET, texte:'4', ok:['quatre'], rep:'quatre'},
-  {g:'p. 8 · Les nombres', consigne:LET, texte:'9', ok:['neuf'], rep:'neuf'},
-  {g:'p. 8 · Les nombres', consigne:ECO, texte:'🎧', dire:'huit', ok:['8','huit'], rep:'8 (huit)'},
-  {g:'p. 8 · Les nombres', consigne:ECO, texte:'🎧', dire:'dix', ok:['10','dix'], rep:'10 (dix)'},
+  {g:'p. 8 · Les nombres', consigne:'Clique sur le bon mot · اختاري الكلمة الصحيحة', texte:'9', choix:['six','dix','neuf'], ok:['neuf'], rep:'neuf'},
+  {g:'p. 8 · Les nombres', consigne:'🎧 Écoute et clique sur le nombre · استمعي واختاري الرقم', texte:'🎧', dire:'huit', choix:['8','7','18'], ok:['8'], rep:'8 (huit)'},
+  {g:'p. 8 · Les nombres', consigne:'🎧 Écoute et clique sur le nombre · استمعي واختاري الرقم', texte:'🎧', dire:'dix', choix:['6','10','2'], ok:['10'], rep:'10 (dix)'},
   {g:'p. 8 · Les nombres', consigne:'🎧 Écoute le calcul. Écris la réponse en chiffres · استمعي واكتبي الجواب', texte:'🎧 ➕', dire:'deux plus trois, égal ?', ok:['5','cinq'], rep:'2 + 3 = 5'},
   {g:'p. 8 · Les nombres', consigne:QCM, texte:'19 = ?', choix:['dix-neuf','neuf','vingt-neuf'], ok:['dix-neuf'], rep:'dix-neuf'},
-  {g:'p. 8 · Les nombres (ex. 6)', consigne:LET, texte:'12', ok:['douze'], rep:'douze'},
-  {g:'p. 8 · Les nombres (ex. 6)', consigne:LET, texte:'15', ok:['quinze'], rep:'quinze'},
-  {g:'p. 8 · Les nombres (ex. 6)', consigne:LET, texte:'20', ok:['vingt'], rep:'vingt'},
-  {g:'p. 8 · Les nombres (ex. 6)', consigne:LET, texte:'25', ok:['vingt-cinq','vingt cinq'], rep:'vingt-cinq'},
-  {g:'p. 8 · Les nombres (ex. 7)', consigne:ECO, texte:'🎧 1', dire:'dix-sept', ok:['17','dix-sept'], rep:'17 (dix-sept)'},
-  {g:'p. 8 · Les nombres (ex. 7)', consigne:ECO, texte:'🎧 2', dire:'six', ok:['6','six'], rep:'6 (six)'},
-  {g:'p. 8 · Les nombres (ex. 7)', consigne:ECO, texte:'🎧 3', dire:'vingt-deux', ok:['22','vingt-deux'], rep:'22 (vingt-deux)'},
-  {g:'p. 8 · Les nombres (ex. 7)', consigne:ECO, texte:'🎧 4', dire:'trente', ok:['30','trente'], rep:'30 (trente)'},
-  {g:'p. 8 · Tu as quel âge ? (ex. 8)', consigne:'Tu as quel âge ? Écris ton âge en lettres · كم عمركِ؟ اكتبي بالحروف', texte:'J’ai … ans.', libre:true, ok:[], rep:'J’ai … ans. (exemple : J’ai vingt ans.)'},
-  {g:'p. 8 · Tu as quel âge ?', consigne:TR, texte:'كم عمركِ؟', ok:['tu as quel age','quel age as-tu','quel age as tu','quel age tu as'], rep:'Tu as quel âge ?'},
-  {g:'p. 8 · Tu as quel âge ?', consigne:TR, texte:'عمري ٢٠ سنة.', ok:['j\'ai vingt ans','j\'ai 20 ans'], rep:'J’ai vingt ans.'},
+  {g:'p. 8 · Les nombres (ex. 6)', consigne:'Clique sur le bon mot · اختاري الكلمة الصحيحة', texte:'12', choix:['douze','deux','onze'], ok:['douze'], rep:'douze'},
+  {g:'p. 8 · Les nombres (ex. 6)', consigne:'Clique sur le bon mot · اختاري الكلمة الصحيحة', texte:'15', choix:['quatorze','cinq','quinze'], ok:['quinze'], rep:'quinze'},
+  {g:'p. 8 · Les nombres (ex. 6)', consigne:'Clique sur le bon mot · اختاري الكلمة الصحيحة', texte:'20', choix:['vingt','deux','dix'], ok:['vingt'], rep:'vingt'},
+  {g:'p. 8 · Les nombres (ex. 6)', consigne:'Clique sur le bon mot · اختاري الكلمة الصحيحة', texte:'25', choix:['vingt-six','vingt-cinq','quinze'], ok:['vingt-cinq'], rep:'vingt-cinq'},
+  {g:'p. 8 · Les nombres (ex. 7)', consigne:'🎧 Écoute et clique sur le nombre · استمعي واختاري الرقم', texte:'🎧 1', dire:'dix-sept', choix:['17','7','27'], ok:['17'], rep:'17 (dix-sept)'},
+  {g:'p. 8 · Les nombres (ex. 7)', consigne:'🎧 Écoute et clique sur le nombre · استمعي واختاري الرقم', texte:'🎧 2', dire:'six', choix:['10','16','6'], ok:['6'], rep:'6 (six)'},
+  {g:'p. 8 · Les nombres (ex. 7)', consigne:'🎧 Écoute et clique sur le nombre · استمعي واختاري الرقم', texte:'🎧 3', dire:'vingt-deux', choix:['22','12','2'], ok:['22'], rep:'22 (vingt-deux)'},
+  {g:'p. 8 · Les nombres (ex. 7)', consigne:'🎧 Écoute et clique sur le nombre · استمعي واختاري الرقم', texte:'🎧 4', dire:'trente', choix:['13','30','3'], ok:['30'], rep:'30 (trente)'},
+  {g:'p. 8 · Tu as quel âge ?', consigne:'Clique sur la bonne traduction · اختاري الترجمة الصحيحة', texte:'كم عمركِ؟', choix:['Tu as quel âge ?','Comment vas-tu ?','Comment tu t’appelles ?'], ok:['Tu as quel âge ?'], rep:'Tu as quel âge ?'},
+  {g:'p. 8 · Tu as quel âge ?', consigne:'Clique sur la bonne traduction · اختاري الترجمة الصحيحة', texte:'عمري ٢٠ سنة.', choix:['Je suis vingt ans.','J’ai vingt ans.','J’ai deux ans.'], ok:['J’ai vingt ans.'], rep:'J’ai vingt ans.'},
   /* p. 9 : me présenter */
   {g:'p. 9 · Me présenter', consigne:QCM, texte:'Quelle phrase est juste ?<br>أيّ جملة صحيحة؟', choix:['Je suis 18 ans.','J’ai 18 ans.'], ok:['J’ai 18 ans.'], rep:'J’ai 18 ans.'},
-  {g:'p. 9 · Me présenter', consigne:TR, texte:'أنا فلسطينية.', ok:['je suis palestinienne'], rep:'Je suis palestinienne.'},
-  {g:'p. 9 · Me présenter', consigne:TR, texte:'أتكلّم العربية.', ok:['je parle arabe','je parle l\'arabe'], rep:'Je parle arabe.'},
-  {g:'p. 9 · Me présenter', consigne:TR, texte:'أتعلّم الفرنسية.', ok:['j\'apprends le francais'], rep:'J’apprends le français.'},
+  {g:'p. 9 · Me présenter', consigne:'Clique sur la bonne traduction · اختاري الترجمة الصحيحة', texte:'أنا فلسطينية.', choix:['Je parle arabe.','Je suis palestinienne.','J’apprends le français.'], ok:['Je suis palestinienne.'], rep:'Je suis palestinienne.'},
+  {g:'p. 9 · Me présenter', consigne:'Clique sur la bonne traduction · اختاري الترجمة الصحيحة', texte:'أتكلّم العربية.', choix:['Je parle arabe.','J’apprends le français.','Je suis palestinienne.'], ok:['Je parle arabe.'], rep:'Je parle arabe.'},
+  {g:'p. 9 · Me présenter', consigne:'Clique sur la bonne traduction · اختاري الترجمة الصحيحة', texte:'أتعلّم الفرنسية.', choix:['Je suis palestinienne.','Je parle arabe.','J’apprends le français.'], ok:['J’apprends le français.'], rep:'J’apprends le français.'},
   {g:'p. 9 · Me présenter', consigne:QCM, texte:'Karim est un garçon. Il dit : Je suis…', choix:['palestinienne','palestinien'], ok:['palestinien'], rep:'Je suis palestinien. (une fille : palestinienne)'},
-  {g:'p. 9 · Tu es Karim (ex. 9)', consigne:'Tu es Karim (19 ans). Complète · أنتِ كريم. أكملي', texte:'J’ai ……… ans.', ok:['dix-neuf','19','dix neuf'], rep:'J’ai dix-neuf ans.'},
-  {g:'p. 9 · Tu es Karim (ex. 9)', consigne:'Tu es Karim. Complète · أنتِ كريم. أكملي', texte:'Je parle ………', ok:['arabe'], rep:'Je parle arabe.'},
+  {g:'p. 9 · Tu es Karim (ex. 9)', consigne:'Tu es Karim (19 ans). Clique sur le bon mot · أنتِ كريم. اختاري', texte:'J’ai ……… ans.', choix:['neuf','dix-neuf','dix-huit'], ok:['dix-neuf'], rep:'J’ai dix-neuf ans.'},
+  {g:'p. 9 · Tu es Karim (ex. 9)', consigne:'Tu es Karim. Clique sur le bon mot · أنتِ كريم. اختاري', texte:'Je parle ………', choix:['palestinien','arabe','Gaza'], ok:['arabe'], rep:'Je parle arabe.'},
   /* p. 10 : à l'accueil de la mairie */
   {g:'p. 10 · À la mairie (ex. 10)', consigne:'Qui parle ? · من يتكلّم؟', texte:'« Comment vous appelez-vous ? »', choix:['Youssef','Mme Martin'], ok:['Mme Martin'], rep:'Mme Martin'},
   {g:'p. 10 · À la mairie (ex. 10)', consigne:'Qui parle ? · من يتكلّم؟', texte:'« Je m’appelle Youssef Haddad. »', choix:['Mme Martin','Youssef'], ok:['Youssef'], rep:'Youssef'},
   {g:'p. 10 · À la mairie (ex. 10)', consigne:'Qui parle ? · من يتكلّم؟', texte:'« Pouvez-vous épeler votre nom ? »', choix:['Youssef','Mme Martin'], ok:['Mme Martin'], rep:'Mme Martin'},
   {g:'p. 10 · À la mairie (ex. 10)', consigne:'Qui parle ? · من يتكلّم؟', texte:'« Prenez un ticket et veuillez patienter. »', choix:['Mme Martin','Youssef'], ok:['Mme Martin'], rep:'Mme Martin'},
-  {g:'p. 10 · À la mairie', consigne:EPE.replace('prénom','nom'), texte:'🎧 🔤', dire:'H – A – double D – A – D', ok:['haddad'], rep:'HADDAD'}
+  {g:'p. 10 · À la mairie', consigne:'🎧 Écoute et clique sur le prénom · استمعي واختاري الاسم'.replace('prénom','nom'), texte:'🎧 🔤', dire:'H – A – double D – A – D', choix:['HADAD','HADDAD','HAMMAD'], ok:['HADDAD'], rep:'HADDAD'}
 ];
+
+var THEMES = [
+  ['p. 3 · Saluer (ex. 1)', '☀️🌙 Bonjour ou Bonsoir ?', 'صباحًا أم مساءً؟'],
+  ['p. 3 · Saluer', '👋 Les salutations', 'التحيات'],
+  ['p. 4', '💬 Le dialogue : Omar et Sami', 'الحوار'],
+  ['p. 5', '🪪 Comment tu t’appelles ?', 'ما اسمكِ؟'],
+  ['p. 6 · Épeler', '🔤 Épeler un prénom', 'تهجئة الاسم'],
+  ['p. 6 · Les lettres', '🔤 Les lettres pièges', 'حروف صعبة'],
+  ['p. 7', '❓ Comment vas-tu ?', 'كيف حالكِ؟'],
+  ['p. 8 · Les nombres', '🔢 Les nombres', 'الأرقام'],
+  ['p. 8 · Tu as quel âge', '⏳ Tu as quel âge ?', 'كم عمركِ؟'],
+  ['p. 9', '✋ Me présenter', 'أقدّم نفسي'],
+  ['p. 10', '🏛️ À l’accueil de la mairie', 'في استقبال البلدية'],
+  ['Questions libres', '✏️ Question du professeur', 'سؤال المعلّمة']];
+function themeDe(g){ for (var i = 0; i < THEMES.length; i++) if (String(g).indexOf(THEMES[i][0]) === 0) return { fr: THEMES[i][1], ar: THEMES[i][2] }; return { fr: g, ar: '' }; }
+function bandeau(th){ return th ? '<div class="theme">' + esc(th.fr) + (th.ar ? '<span class="ar">' + esc(th.ar) + '</span>' : '') + '</div>' : ''; }
 
 /* ═════════ PAGE DE L'ENSEIGNANTE (?prof) */
 function prof(){
@@ -160,7 +178,8 @@ function prof(){
   var eleves = {}, cur = null, reps = {}, faites = {}, points = {}, montre = false, qid = 0, libres = [];
   function nomsEleves(){ var st = ch.presenceState(), o = {}; Object.keys(st).forEach(function(k){ if(k!=='prof' && st[k][0]) o[k] = st[k][0].nom; }); eleves = o; }
   function envoyer(ev, p){ ch.send({ type:'broadcast', event:ev, payload:p }); }
-  function payloadQ(){ return cur ? { id:cur.id, consigne:cur.q.consigne, texte:cur.q.texte, choix:cur.q.choix||null } : null; }
+  function payloadQ(){ return cur ? { id:cur.id, theme:themeDe(cur.q.g), consigne:cur.q.consigne, texte:cur.q.texte, choix:cur.q.choix||null } : null; }
+  var derCorr = null; setInterval(function(){ if (cur && montre && derCorr && derCorr.id === cur.id) envoyer('corr', derCorr); else if (cur && !montre) envoyer('q', payloadQ()); }, 4000);
   function lancer(i, q){ qid++; cur = { id: qid, i: i, q: q }; reps = {}; montre = false; faites[i] = 1; envoyer('q', payloadQ()); rendu(); }
   function corriger(){
     if(!cur) return; montre = true; var res = {};
@@ -169,7 +188,7 @@ function prof(){
     var gain = {}, rang = {};
     bons.forEach(function(s, i){ gain[s] = i === 0 ? 3 : i === 1 ? 2 : 1; rang[s] = i + 1; if (!cur.compte) points[s] = (points[s]||0) + gain[s]; });
     cur.compte = true; cur.podium = bons.slice(0, 3).map(function(s){ return [reps[s].nom, gain[s]]; });
-    envoyer('corr', { id:cur.id, rep:cur.q.rep, res:res, gain:gain, rang:rang }); rendu();
+    derCorr = { id:cur.id, q:payloadQ(), rep:cur.q.rep, res:res, gain:gain, rang:rang }; envoyer('corr', derCorr); rendu();
   }
   function rendu(){
     var n = Object.keys(eleves).length, nr = Object.keys(reps).length;
@@ -189,7 +208,7 @@ function prof(){
     h += '<div class="carte">';
     if (!cur) h += '<p class="attente">Clique sur une question à gauche pour l’envoyer sur les téléphones.</p>';
     else {
-      h += '<p class="consigne">' + esc(cur.q.consigne) + '</p><div class="texte' + (isAr(cur.q.texte) ? ' ar' : '') + '">' + cur.q.texte + '</div>'
+      h += bandeau(themeDe(cur.q.g)) + '<p class="consigne">' + esc(cur.q.consigne) + '</p><div class="texte' + (isAr(cur.q.texte) ? ' ar' : '') + '">' + cur.q.texte + '</div>'
         + (cur.q.dire ? '<div class="dire">🗣️ Dis à voix haute, 2 fois : <b>« ' + esc(cur.q.dire) + ' »</b></div>' : '')
         + '<p><b>Réponses : ' + nr + ' / ' + n + '</b>' + (montre ? ' · Bonne réponse : <b>' + esc(cur.q.rep) + '</b>' : '') + '</p>';
       Object.keys(reps).forEach(function(s){ var r = reps[s];
@@ -217,7 +236,7 @@ function prof(){
   ch.on('presence', { event:'sync' }, function(){ nomsEleves(); rendu(); })
     .on('broadcast', { event:'r' }, function(m){ var p = m.payload; if (!cur || p.id !== cur.id || montre) return;
       if (reps[p.sid]) return; reps[p.sid] = { nom:p.nom, txt:p.txt, t:Date.now(), j: cur.q.libre ? (/\bans?\b/.test(norm(p.txt)) ? 'ok' : 'presque') : juger(p.txt, cur.q.ok) }; rendu(); })
-    .on('broadcast', { event:'hello' }, function(){ if (cur) envoyer('q', payloadQ()); if (cur && montre) corriger(); })
+    .on('broadcast', { event:'hello' }, function(){ if (cur && montre && derCorr) envoyer('corr', derCorr); else if (cur) envoyer('q', payloadQ()); })
     .subscribe(function(st){ if (st === 'SUBSCRIBED') ch.track({ nom:'prof' }); });
   rendu();
 }
@@ -240,30 +259,32 @@ function eleve(){
     };
   }
   function salle(code, nom){
-    var ch = client.channel('gdp-classe-' + code, { config:{ broadcast:{ self:false }, presence:{ key:sid } } });
-    var q = null, envoye = false, profVu = false;
+    var ch = client.channel('gdp-classe-' + code, { config:{ broadcast:{ self:false }, presence:{ key:sid } } }); window.__gdpCh = ch;
+    var q = null, envoye = false, profVu = false, mien = '', corrVue = 0;
     function attente(t){ el('<h1>Bonjour ' + esc(nom) + ' !</h1><div class="carte attente">' + t + '</div><p class="petit" style="text-align:center">Code ' + code + ' · <a href="#" id="sortir">changer</a></p>');
       document.getElementById('sortir').onclick = function(e){ e.preventDefault(); ch.unsubscribe(); sessionStorage.removeItem('gdp-classe-dedans'); code0 = ''; entree(); }; }
     function question(){
-      var h = '<div class="carte"><p class="consigne">' + esc(q.consigne) + '</p><div class="texte' + (isAr(q.texte) ? ' ar' : '') + '">' + q.texte + '</div>';
+      var h = '<div class="carte">' + bandeau(q.theme) + '<p class="consigne">' + esc(q.consigne) + '</p><div class="texte' + (isAr(q.texte) ? ' ar' : '') + '">' + q.texte + '</div>';
       if (q.choix) h += '<div class="choix">' + q.choix.map(function(c, i){ return '<button data-c="' + i + '">' + esc(c) + '</button>'; }).join('') + '</div>';
       else h += '<input id="t" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="…"><button class="gros" id="env">Envoyer · <span class="ar">أرسلي</span></button>';
       el(h + '</div>');
-      function envoyer(txt){ if (envoye || !txt.trim()) return; envoye = true; ch.send({ type:'broadcast', event:'r', payload:{ id:q.id, sid:sid, nom:nom, txt:txt.trim() } });
+      function envoyer(txt){ if (envoye || !txt.trim()) return; envoye = true; mien = txt.trim(); ch.send({ type:'broadcast', event:'r', payload:{ id:q.id, sid:sid, nom:nom, txt:txt.trim() } });
         attente('✅ Envoyé ! · <span class="ar">تم الإرسال</span><br><br>⏳ <span class="ar">انتظري…</span>'); }
       if (q.choix) app.querySelectorAll('.choix button').forEach(function(b){ b.onclick = function(){ b.classList.add('pris'); setTimeout(function(){ envoyer(q.choix[+b.dataset.c]); }, 150); }; });
       else { var t = document.getElementById('t'); t.focus(); document.getElementById('env').onclick = function(){ envoyer(t.value); }; t.onkeydown = function(e){ if (e.key === 'Enter') envoyer(t.value); }; }
     }
-    ch.on('broadcast', { event:'q' }, function(m){ if (!m.payload) return; if (q && q.id === m.payload.id) return; q = m.payload; envoye = false; question(); })
+    ch.on('broadcast', { event:'q' }, function(m){ if (!m.payload) return; if (q && q.id === m.payload.id) return; q = m.payload; envoye = false; mien = ''; question(); })
       .on('broadcast', { event:'pause' }, function(){ q = null; attente('⏳ Attends la question… · <span class="ar">انتظري السؤال…</span>'); })
-      .on('broadcast', { event:'corr' }, function(m){ var p = m.payload; if (!q || p.id !== q.id) return;
+      .on('broadcast', { event:'corr' }, function(m){ var p = m.payload; if (corrVue === p.id) return; if (!q || p.id !== q.id) { if (!p.q) return; q = p.q; mien = ''; } corrVue = p.id;
         var j = p.res[sid], h;
         if (j === 'ok') { var rg = (p.rang||{})[sid], g = (p.gain||{})[sid] || 1;
           h = '<div class="msg ok">' + (rg && rg <= 3 ? ['🥇','🥈','🥉'][rg-1] + ' ' : '⭐ ') + 'Bravo ! · <span class="ar">ممتاز!</span><br><b>+' + g + ' ⭐</b>' + (rg === 1 ? '<br>La plus rapide ! · <span class="ar">الأسرع!</span>' : '') + '</div>'; }
-        else if (j === 'presque') h = '<div class="msg presque">Tu y es presque ! · <span class="ar">قريب جدًا!</span><br><b>' + esc(p.rep) + '</b></div>';
-        else if (j === 'ko') h = '<div class="msg ko">La réponse · <span class="ar">الجواب</span><br><b>' + esc(p.rep) + '</b></div>';
-        else h = '<div class="msg presque">La réponse · <span class="ar">الجواب</span><br><b>' + esc(p.rep) + '</b></div>';
-        el('<div class="carte"><p class="consigne">' + esc(q.consigne) + '</p><div class="texte' + (isAr(q.texte) ? ' ar' : '') + '">' + q.texte + '</div>' + h + '</div><p class="attente">⏳ <span class="ar">انتظري السؤال التالي…</span></p>'); })
+        else if (j === 'presque') h = '<div class="msg presque">Tu y es presque ! · <span class="ar">قريب جدًا!</span></div>';
+        else if (j === 'ko') h = '<div class="msg ko">Ce n’est pas ça. · <span class="ar">ليس هذا.</span></div>';
+        else h = '';
+        h += (mien ? '<div class="mien">Ta réponse · <span class="ar">جوابكِ</span> : ' + esc(mien) + '</div>' : '')
+          + '<div class="msg ok">✅ La bonne réponse · <span class="ar">الجواب الصحيح</span><br><b class="bonne">' + esc(p.rep) + '</b></div>';
+        el('<div class="carte">' + bandeau(q.theme) + '<p class="consigne">' + esc(q.consigne) + '</p><div class="texte' + (isAr(q.texte) ? ' ar' : '') + '">' + q.texte + '</div>' + h + '</div><p class="attente">⏳ <span class="ar">انتظري السؤال التالي…</span></p>'); })
       .on('presence', { event:'sync' }, function(){ profVu = !!ch.presenceState().prof; })
       .subscribe(function(st){
         if (st === 'SUBSCRIBED') { ch.track({ nom:nom }); ch.send({ type:'broadcast', event:'hello', payload:{} });
@@ -272,6 +293,7 @@ function eleve(){
         if (st === 'CHANNEL_ERROR' || st === 'TIMED_OUT') attente('Connexion… · <span class="ar">جارٍ الاتصال…</span>');
       });
   }
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden && window.__gdpCh) window.__gdpCh.send({ type:'broadcast', event:'hello', payload:{} }); });
   if (sessionStorage.getItem('gdp-classe-dedans') && code0 && nom0) salle(code0, nom0); else entree();
 }
 
