@@ -169,7 +169,7 @@ var THEMES = [
   ['Questions libres', '✏️ Question du professeur', 'سؤال المعلّمة']];
 function themeDe(g){ for (var i = 0; i < THEMES.length; i++) if (String(g).indexOf(THEMES[i][0]) === 0) return { fr: THEMES[i][1], ar: THEMES[i][2] }; return { fr: g, ar: '' }; }
 function pageDe(g){ var m = /^p\. (\d+)/.exec(g || ''); return m ? +m[1] : 0; }
-function manuel(n, ouvert){ return n ? '<details class="man"' + (ouvert ? ' open' : '') + '><summary>📖 Manuel page ' + n + ' · <span class="ar">الكتاب صفحة ' + n + '</span></summary><img src="manuel/p' + n + '.jpg" alt="Manuel page ' + n + '" loading="lazy"></details>' : ''; }
+function manuel(n, ouvert){ return false ? '<details class="man"' + (ouvert ? ' open' : '') + '><summary>📖 Manuel page ' + n + ' · <span class="ar">الكتاب صفحة ' + n + '</span></summary><img src="manuel/p' + n + '.jpg" alt="Manuel page ' + n + '" loading="lazy"></details>' : ''; }
 function bandeau(th){ return th ? '<div class="theme">' + esc(th.fr) + (th.ar ? '<span class="ar">' + esc(th.ar) + '</span>' : '') + '</div>' : ''; }
 
 /* ═════════ PAGE DE L'ENSEIGNANTE (?prof) */
