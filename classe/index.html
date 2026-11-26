@@ -48,6 +48,7 @@ body.prof main{max-width:1200px}
 .barre{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .barre button{background:var(--fonce);color:#fff;font-size:18px}
 .barre button.sec{background:#e3ebe7;color:var(--fonce)}
+.podium{background:#1f3d33;color:#fff;border-radius:16px;padding:14px 18px;margin:12px 0;font-size:22px;font-weight:700}.podium div{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px}.podium span{background:rgba(255,255,255,.12);border-radius:12px;padding:8px 14px;font-size:30px}.podium small{font-size:20px;color:#ffd76a}
 .dire{background:var(--jaune);border-radius:12px;padding:8px 12px;font-size:20px;margin-top:8px}
 table{border-collapse:collapse;width:100%;font-size:22px}td{padding:6px 8px;border-bottom:1px solid #e3ebe7}
 </style>
@@ -75,26 +76,78 @@ var client = supabase.createClient(SB_URL, SB_KEY, { auth:{ persistSession:false
 
 /* ───────── Questions du cours 4 */
 var TR = 'Traduis en français · ترجمي إلى الفرنسية', LET = 'Écris le nombre en lettres · اكتبي الرقم بالحروف',
-    ECO = '🎧 Écoute et écris le nombre en chiffres · استمعي واكتبي الرقم', QCM = 'Clique sur la bonne réponse · اختاري الجواب الصحيح';
+    ECO = '🎧 Écoute et écris le nombre en chiffres · استمعي واكتبي الرقم', QCM = 'Clique sur la bonne réponse · اختاري الجواب الصحيح',
+    EPE = '🎧 Écoute. Écris le prénom épelé · استمعي واكتبي الاسم', COMP = 'Complète · أكملي';
 var QUESTIONS = [
-  {g:'Traduction', consigne:TR, texte:'مرحبًا!', ok:['bonjour','salut'], rep:'Bonjour !'},
-  {g:'Traduction', consigne:TR, texte:'كيف حالكِ؟', ok:['comment vas-tu','comment vas tu','ca va','comment ca va','comment tu vas'], rep:'Comment vas-tu ?'},
-  {g:'Traduction', consigne:TR, texte:'أنا بخير، شكرًا.', ok:['je vais bien merci','ca va bien merci','ca va merci','je vais bien','ca va bien'], rep:'Je vais bien, merci.'},
-  {g:'Traduction', consigne:TR, texte:'أنا متعبة.', ok:['je suis fatiguee'], rep:'Je suis fatiguée.'},
-  {g:'Traduction', consigne:TR, texte:'شكرًا', ok:['merci'], rep:'Merci.'},
-  {g:'Traduction', consigne:TR, texte:'مع السلامة', ok:['au revoir'], rep:'Au revoir !'},
-  {g:'Nombres', consigne:LET, texte:'4', ok:['quatre'], rep:'quatre'},
-  {g:'Nombres', consigne:QCM, texte:'7 = ?', choix:['six','sept','cinq'], ok:['sept'], rep:'sept'},
-  {g:'Nombres', consigne:LET, texte:'6', ok:['six'], rep:'six'},
-  {g:'Nombres', consigne:ECO, texte:'🎧', dire:'huit', ok:['8','huit'], rep:'8 (huit)'},
-  {g:'Nombres', consigne:LET, texte:'9', ok:['neuf'], rep:'neuf'},
-  {g:'Nombres', consigne:ECO, texte:'🎧', dire:'dix', ok:['10','dix'], rep:'10 (dix)'},
-  {g:'Nombres', consigne:'🎧 Écoute le calcul. Écris la réponse en chiffres · استمعي واكتبي الجواب', texte:'🎧 ➕', dire:'deux plus trois, égal ?', ok:['5','cinq'], rep:'2 + 3 = 5'},
-  {g:'Nombres', consigne:QCM, texte:'19 = ?', choix:['dix-neuf','neuf','vingt-neuf'], ok:['dix-neuf'], rep:'dix-neuf'},
-  {g:'Nombres', consigne:LET, texte:'21', ok:['vingt et un','vingt-et-un'], rep:'vingt et un'},
-  {g:'L’âge', consigne:TR, texte:'كم عمركِ؟', ok:['tu as quel age','quel age as-tu','quel age as tu','quel age tu as'], rep:'Tu as quel âge ?'},
-  {g:'L’âge', consigne:QCM, texte:'Quelle phrase est juste ?<br>أيّ جملة صحيحة؟', choix:['Je suis 18 ans.','J’ai 18 ans.'], ok:['J’ai 18 ans.'], rep:'J’ai 18 ans.'},
-  {g:'L’âge', consigne:TR, texte:'عمري ٢٠ سنة.', ok:['j\'ai vingt ans','j\'ai 20 ans'], rep:'J’ai vingt ans.'}
+  /* p. 3 : les mots pour saluer */
+  {g:'p. 3 · Saluer (ex. 1)', consigne:'Bonjour ou Bonsoir ? Regarde l’heure · انظري إلى الساعة', texte:'☀️ 9 h', choix:['Bonjour !','Bonsoir !'], ok:['Bonjour !'], rep:'Bonjour !'},
+  {g:'p. 3 · Saluer (ex. 1)', consigne:'Bonjour ou Bonsoir ? Regarde l’heure · انظري إلى الساعة', texte:'🌙 20 h', choix:['Bonjour !','Bonsoir !'], ok:['Bonsoir !'], rep:'Bonsoir !'},
+  {g:'p. 3 · Saluer (ex. 1)', consigne:'Bonjour ou Bonsoir ? Regarde l’heure · انظري إلى الساعة', texte:'☀️ 14 h', choix:['Bonsoir !','Bonjour !'], ok:['Bonjour !'], rep:'Bonjour !'},
+  {g:'p. 3 · Saluer (ex. 1)', consigne:'Bonjour ou Bonsoir ? Regarde l’heure · انظري إلى الساعة', texte:'🌙 21 h', choix:['Bonsoir !','Bonjour !'], ok:['Bonsoir !'], rep:'Bonsoir !'},
+  {g:'p. 3 · Saluer', consigne:QCM, texte:'✋ Avec une amie, je dis…', choix:['Merci !','Salut !','Pardon ?'], ok:['Salut !'], rep:'Salut !'},
+  {g:'p. 3 · Saluer', consigne:TR, texte:'مع السلامة', ok:['au revoir'], rep:'Au revoir !'},
+  {g:'p. 3 · Saluer', consigne:TR, texte:'شكرًا', ok:['merci'], rep:'Merci !'},
+  {g:'p. 3 · Saluer', consigne:TR, texte:'من فضلك', ok:['s\'il vous plait','s\'il te plait'], rep:'S’il vous plaît'},
+  {g:'p. 3 · Saluer', consigne:TR, texte:'عفوًا؟ لم أفهم.', ok:['pardon'], rep:'Pardon ?'},
+  {g:'p. 3 · Saluer', consigne:TR, texte:'تشرّفنا!', ok:['enchante','enchantee'], rep:'Enchanté !'},
+  /* p. 4 : Karim et Youssef, exercice 2 */
+  {g:'p. 4 · Le dialogue (ex. 2)', consigne:COMP, texte:'Omar : Bonjour ! Je ……… Omar.', choix:['toi','m’appelle','Enchanté'], ok:['m’appelle'], rep:'Je m’appelle Omar.'},
+  {g:'p. 4 · Le dialogue (ex. 2)', consigne:COMP, texte:'Omar : Et ……… ?', choix:['m’appelle','Enchanté','toi'], ok:['toi'], rep:'Et toi ?'},
+  {g:'p. 4 · Le dialogue (ex. 2)', consigne:COMP, texte:'Sami : Je m’appelle Sami.<br>Omar : ……… !', choix:['Enchanté','toi','m’appelle'], ok:['Enchanté'], rep:'Enchanté !'},
+  /* p. 5 : le dialogue */
+  {g:'p. 5 · Comment tu t’appelles ?', consigne:TR, texte:'ما اسمكِ؟', ok:['comment tu t\'appelles','comment t\'appelles tu','tu t\'appelles comment'], rep:'Comment tu t’appelles ?'},
+  {g:'p. 5 · Comment tu t’appelles ?', consigne:TR, texte:'اسمي …', ok:['je m\'appelle'], rep:'Je m’appelle …'},
+  {g:'p. 5 · Comment tu t’appelles ?', consigne:QCM, texte:'Enchanté ! → … ?', choix:['Au revoir !','Moi aussi !','Merci !'], ok:['Moi aussi !'], rep:'Moi aussi !'},
+  {g:'p. 5 · Comment tu t’appelles ?', consigne:QCM, texte:'Youssef Haddad<br>Le prénom = ?', choix:['Haddad','Youssef'], ok:['Youssef'], rep:'Youssef = le prénom · Haddad = le nom'},
+  {g:'p. 5 · Comment tu t’appelles ?', consigne:QCM, texte:'🏛️ À la mairie, je dis…', choix:['le prénom','le prénom + le nom'], ok:['le prénom + le nom'], rep:'À la mairie : le prénom + le nom'},
+  /* p. 6 : épeler son nom */
+  {g:'p. 6 · Épeler (ex. 4)', consigne:EPE, texte:'🎧 🔤', dire:'S – A – M – I', ok:['sami'], rep:'SAMI'},
+  {g:'p. 6 · Épeler (ex. 4)', consigne:EPE, texte:'🎧 🔤', dire:'A – M – A – L', ok:['amal'], rep:'AMAL'},
+  {g:'p. 6 · Épeler (ex. 4)', consigne:EPE, texte:'🎧 🔤', dire:'K – A – R – I – M', ok:['karim'], rep:'KARIM'},
+  {g:'p. 6 · Épeler (ex. 4)', consigne:EPE, texte:'🎧 🔤', dire:'Y – O – U – double S – E – F', ok:['youssef'], rep:'YOUSSEF'},
+  {g:'p. 6 · Épeler', consigne:QCM, texte:'La lettre <b>E</b> se dit…', choix:['[إي]','[أُ]'], ok:['[أُ]'], rep:'E = [أُ]'},
+  {g:'p. 6 · Épeler', consigne:QCM, texte:'La lettre <b>I</b> se dit…', choix:['[إي]','[آي]'], ok:['[إي]'], rep:'I = [إي]'},
+  {g:'p. 6 · Épeler', consigne:QCM, texte:'[جيه] = ?', choix:['J','G'], ok:['G'], rep:'G = [جيه] · J = [جي]'},
+  /* p. 7 : Comment vas-tu ? */
+  {g:'p. 7 · Comment vas-tu ? (ex. 5)', consigne:'Comment vas-tu ? Regarde l’image et réponds · انظري إلى الصورة وأجيبي', texte:'🌡️', ok:['je suis malade'], rep:'Je suis malade.'},
+  {g:'p. 7 · Comment vas-tu ? (ex. 5)', consigne:'Comment vas-tu ? Regarde l’image et réponds · انظري إلى الصورة وأجيبي', texte:'👍', ok:['ca va bien','ca va','je vais bien','ca va bien merci','je vais bien merci'], rep:'Ça va bien.'},
+  {g:'p. 7 · Comment vas-tu ? (ex. 5)', consigne:'Comment vas-tu ? Regarde l’image et réponds · انظري إلى الصورة وأجيبي', texte:'💤', ok:['je suis fatiguee','je suis fatigue'], rep:'Je suis fatiguée.'},
+  {g:'p. 7 · Comment vas-tu ? (ex. 5)', consigne:'Comment vas-tu ? Regarde l’image et réponds · انظري إلى الصورة وأجيبي', texte:'👎', ok:['ca va mal','je ne vais pas bien'], rep:'Ça va mal.'},
+  {g:'p. 7 · Comment vas-tu ?', consigne:TR, texte:'كيف حالكِ؟', ok:['comment vas-tu','comment vas tu','ca va','comment ca va','comment tu vas'], rep:'Comment vas-tu ?'},
+  {g:'p. 7 · Comment vas-tu ?', consigne:TR, texte:'بخير، شكرًا. وأنتِ؟', ok:['ca va bien merci et toi','je vais bien merci et toi','ca va merci et toi'], rep:'Ça va bien, merci. Et toi ?'},
+  /* p. 8 : les nombres */
+  {g:'p. 8 · Les nombres', consigne:QCM, texte:'7 = ?', choix:['six','sept','cinq'], ok:['sept'], rep:'sept'},
+  {g:'p. 8 · Les nombres', consigne:LET, texte:'4', ok:['quatre'], rep:'quatre'},
+  {g:'p. 8 · Les nombres', consigne:LET, texte:'9', ok:['neuf'], rep:'neuf'},
+  {g:'p. 8 · Les nombres', consigne:ECO, texte:'🎧', dire:'huit', ok:['8','huit'], rep:'8 (huit)'},
+  {g:'p. 8 · Les nombres', consigne:ECO, texte:'🎧', dire:'dix', ok:['10','dix'], rep:'10 (dix)'},
+  {g:'p. 8 · Les nombres', consigne:'🎧 Écoute le calcul. Écris la réponse en chiffres · استمعي واكتبي الجواب', texte:'🎧 ➕', dire:'deux plus trois, égal ?', ok:['5','cinq'], rep:'2 + 3 = 5'},
+  {g:'p. 8 · Les nombres', consigne:QCM, texte:'19 = ?', choix:['dix-neuf','neuf','vingt-neuf'], ok:['dix-neuf'], rep:'dix-neuf'},
+  {g:'p. 8 · Les nombres (ex. 6)', consigne:LET, texte:'12', ok:['douze'], rep:'douze'},
+  {g:'p. 8 · Les nombres (ex. 6)', consigne:LET, texte:'15', ok:['quinze'], rep:'quinze'},
+  {g:'p. 8 · Les nombres (ex. 6)', consigne:LET, texte:'20', ok:['vingt'], rep:'vingt'},
+  {g:'p. 8 · Les nombres (ex. 6)', consigne:LET, texte:'25', ok:['vingt-cinq','vingt cinq'], rep:'vingt-cinq'},
+  {g:'p. 8 · Les nombres (ex. 7)', consigne:ECO, texte:'🎧 1', dire:'dix-sept', ok:['17','dix-sept'], rep:'17 (dix-sept)'},
+  {g:'p. 8 · Les nombres (ex. 7)', consigne:ECO, texte:'🎧 2', dire:'six', ok:['6','six'], rep:'6 (six)'},
+  {g:'p. 8 · Les nombres (ex. 7)', consigne:ECO, texte:'🎧 3', dire:'vingt-deux', ok:['22','vingt-deux'], rep:'22 (vingt-deux)'},
+  {g:'p. 8 · Les nombres (ex. 7)', consigne:ECO, texte:'🎧 4', dire:'trente', ok:['30','trente'], rep:'30 (trente)'},
+  {g:'p. 8 · Tu as quel âge ? (ex. 8)', consigne:'Tu as quel âge ? Écris ton âge en lettres · كم عمركِ؟ اكتبي بالحروف', texte:'J’ai … ans.', libre:true, ok:[], rep:'J’ai … ans. (exemple : J’ai vingt ans.)'},
+  {g:'p. 8 · Tu as quel âge ?', consigne:TR, texte:'كم عمركِ؟', ok:['tu as quel age','quel age as-tu','quel age as tu','quel age tu as'], rep:'Tu as quel âge ?'},
+  {g:'p. 8 · Tu as quel âge ?', consigne:TR, texte:'عمري ٢٠ سنة.', ok:['j\'ai vingt ans','j\'ai 20 ans'], rep:'J’ai vingt ans.'},
+  /* p. 9 : me présenter */
+  {g:'p. 9 · Me présenter', consigne:QCM, texte:'Quelle phrase est juste ?<br>أيّ جملة صحيحة؟', choix:['Je suis 18 ans.','J’ai 18 ans.'], ok:['J’ai 18 ans.'], rep:'J’ai 18 ans.'},
+  {g:'p. 9 · Me présenter', consigne:TR, texte:'أنا فلسطينية.', ok:['je suis palestinienne'], rep:'Je suis palestinienne.'},
+  {g:'p. 9 · Me présenter', consigne:TR, texte:'أتكلّم العربية.', ok:['je parle arabe','je parle l\'arabe'], rep:'Je parle arabe.'},
+  {g:'p. 9 · Me présenter', consigne:TR, texte:'أتعلّم الفرنسية.', ok:['j\'apprends le francais'], rep:'J’apprends le français.'},
+  {g:'p. 9 · Me présenter', consigne:QCM, texte:'Karim est un garçon. Il dit : Je suis…', choix:['palestinienne','palestinien'], ok:['palestinien'], rep:'Je suis palestinien. (une fille : palestinienne)'},
+  {g:'p. 9 · Tu es Karim (ex. 9)', consigne:'Tu es Karim (19 ans). Complète · أنتِ كريم. أكملي', texte:'J’ai ……… ans.', ok:['dix-neuf','19','dix neuf'], rep:'J’ai dix-neuf ans.'},
+  {g:'p. 9 · Tu es Karim (ex. 9)', consigne:'Tu es Karim. Complète · أنتِ كريم. أكملي', texte:'Je parle ………', ok:['arabe'], rep:'Je parle arabe.'},
+  /* p. 10 : à l'accueil de la mairie */
+  {g:'p. 10 · À la mairie (ex. 10)', consigne:'Qui parle ? · من يتكلّم؟', texte:'« Comment vous appelez-vous ? »', choix:['Youssef','Mme Martin'], ok:['Mme Martin'], rep:'Mme Martin'},
+  {g:'p. 10 · À la mairie (ex. 10)', consigne:'Qui parle ? · من يتكلّم؟', texte:'« Je m’appelle Youssef Haddad. »', choix:['Mme Martin','Youssef'], ok:['Youssef'], rep:'Youssef'},
+  {g:'p. 10 · À la mairie (ex. 10)', consigne:'Qui parle ? · من يتكلّم؟', texte:'« Pouvez-vous épeler votre nom ? »', choix:['Youssef','Mme Martin'], ok:['Mme Martin'], rep:'Mme Martin'},
+  {g:'p. 10 · À la mairie (ex. 10)', consigne:'Qui parle ? · من يتكلّم؟', texte:'« Prenez un ticket et veuillez patienter. »', choix:['Mme Martin','Youssef'], ok:['Mme Martin'], rep:'Mme Martin'},
+  {g:'p. 10 · À la mairie', consigne:EPE.replace('prénom','nom'), texte:'🎧 🔤', dire:'H – A – double D – A – D', ok:['haddad'], rep:'HADDAD'}
 ];
 
 /* ═════════ PAGE DE L'ENSEIGNANTE (?prof) */
@@ -110,8 +163,12 @@ function prof(){
   function lancer(i, q){ qid++; cur = { id: qid, i: i, q: q }; reps = {}; montre = false; faites[i] = 1; envoyer('q', payloadQ()); rendu(); }
   function corriger(){
     if(!cur) return; montre = true; var res = {};
-    Object.keys(reps).forEach(function(s){ res[s] = reps[s].j; if(reps[s].j === 'ok') points[s] = (points[s]||0) + 1; });
-    envoyer('corr', { id:cur.id, rep:cur.q.rep, res:res }); rendu();
+    Object.keys(reps).forEach(function(s){ res[s] = reps[s].j; });
+    var bons = Object.keys(reps).filter(function(s){ return reps[s].j === 'ok'; }).sort(function(a, b){ return reps[a].t - reps[b].t; });
+    var gain = {}, rang = {};
+    bons.forEach(function(s, i){ gain[s] = i === 0 ? 3 : i === 1 ? 2 : 1; rang[s] = i + 1; if (!cur.compte) points[s] = (points[s]||0) + gain[s]; });
+    cur.compte = true; cur.podium = bons.slice(0, 3).map(function(s){ return [reps[s].nom, gain[s]]; });
+    envoyer('corr', { id:cur.id, rep:cur.q.rep, res:res, gain:gain, rang:rang }); rendu();
   }
   function rendu(){
     var n = Object.keys(eleves).length, nr = Object.keys(reps).length;
@@ -119,7 +176,7 @@ function prof(){
       + '<div class="code">' + code + '</div><div class="ar" style="font-size:22px">رمز الصف</div></div>'
       + '<div class="carte"><b>Connectées : ' + n + '</b><div class="eleves" style="margin-top:8px">'
       + (n ? Object.keys(eleves).map(function(k){ return '<span>' + esc(eleves[k]) + '</span>'; }).join('') : '<span class="petit" style="background:none">Personne pour le moment…</span>') + '</div></div>'
-      + '<div class="cols"><div class="carte liste"><b>Les questions</b>';
+      + '<div class="cols"><div class="carte liste"><b>Les questions</b> <span class="petit">(manuel p. 3 à 10)</span>';
     var g = '';
     QUESTIONS.concat(libres).forEach(function(q, i){
       if (q.g !== g){ g = q.g; h += '<div class="petit" style="margin-top:10px">' + esc(g) + '</div>'; }
@@ -136,7 +193,8 @@ function prof(){
         + '<p><b>Réponses : ' + nr + ' / ' + n + '</b>' + (montre ? ' · Bonne réponse : <b>' + esc(cur.q.rep) + '</b>' : '') + '</p>';
       Object.keys(reps).forEach(function(s){ var r = reps[s];
         h += '<div class="rep ' + r.j + '" data-s="' + s + '"><b>' + esc(r.nom) + '</b><span class="r">' + esc(r.txt) + '</span><span>' + (r.j==='ok'?'✅':r.j==='presque'?'🟡 presque':'❌') + '</span></div>'; });
-      if (nr) h += '<div class="petit">Une réponse mal jugée ? Clique dessus pour la changer (avant « Montrer la réponse »).</div>';
+      if (montre) h += '<div class="podium">⚡ Les plus rapides<div>' + (cur.podium && cur.podium.length ? cur.podium.map(function(x, i){ return '<span>' + ['🥇','🥈','🥉'][i] + ' ' + esc(x[0]) + ' <small>+' + x[1] + ' ⭐</small></span>'; }).join('') : '<span>Personne cette fois !</span>') + '</div></div>';
+      if (nr && !montre) h += '<div class="petit">Une réponse mal jugée ? Clique dessus pour la changer (avant « Montrer la réponse »).</div>';
       h += '<div class="barre"><button id="corr">✅ Montrer la réponse</button><button id="suiv" class="sec">➡️ Question suivante</button><button id="pause" class="sec">⏸️ Écran d’attente</button><button id="clas" class="sec">🏆 Classement</button></div>';
     }
     h += '<div id="classement"></div></div></div>';
@@ -157,7 +215,7 @@ function prof(){
   }
   ch.on('presence', { event:'sync' }, function(){ nomsEleves(); rendu(); })
     .on('broadcast', { event:'r' }, function(m){ var p = m.payload; if (!cur || p.id !== cur.id || montre) return;
-      reps[p.sid] = { nom:p.nom, txt:p.txt, j: juger(p.txt, cur.q.ok) }; rendu(); })
+      if (reps[p.sid]) return; reps[p.sid] = { nom:p.nom, txt:p.txt, t:Date.now(), j: cur.q.libre ? (/\bans?\b/.test(norm(p.txt)) ? 'ok' : 'presque') : juger(p.txt, cur.q.ok) }; rendu(); })
     .on('broadcast', { event:'hello' }, function(){ if (cur) envoyer('q', payloadQ()); if (cur && montre) corriger(); })
     .subscribe(function(st){ if (st === 'SUBSCRIBED') ch.track({ nom:'prof' }); });
   rendu();
@@ -199,7 +257,8 @@ function eleve(){
       .on('broadcast', { event:'pause' }, function(){ q = null; attente('⏳ Attends la question… · <span class="ar">انتظري السؤال…</span>'); })
       .on('broadcast', { event:'corr' }, function(m){ var p = m.payload; if (!q || p.id !== q.id) return;
         var j = p.res[sid], h;
-        if (j === 'ok') h = '<div class="msg ok">⭐ Bravo ! · <span class="ar">ممتاز!</span></div>';
+        if (j === 'ok') { var rg = (p.rang||{})[sid], g = (p.gain||{})[sid] || 1;
+          h = '<div class="msg ok">' + (rg && rg <= 3 ? ['🥇','🥈','🥉'][rg-1] + ' ' : '⭐ ') + 'Bravo ! · <span class="ar">ممتاز!</span><br><b>+' + g + ' ⭐</b>' + (rg === 1 ? '<br>La plus rapide ! · <span class="ar">الأسرع!</span>' : '') + '</div>'; }
         else if (j === 'presque') h = '<div class="msg presque">Tu y es presque ! · <span class="ar">قريب جدًا!</span><br><b>' + esc(p.rep) + '</b></div>';
         else if (j === 'ko') h = '<div class="msg ko">La réponse · <span class="ar">الجواب</span><br><b>' + esc(p.rep) + '</b></div>';
         else h = '<div class="msg presque">La réponse · <span class="ar">الجواب</span><br><b>' + esc(p.rep) + '</b></div>';
