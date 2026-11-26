@@ -32,11 +32,17 @@ button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:14px 18p
 .petit{font-size:16px;color:var(--gris)}
 .err{color:var(--rouge);font-weight:700;margin-top:10px}
 /* enseignante */
-body.prof main{max-width:1200px}
 .haut{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
 .code{font-size:64px;font-weight:700;letter-spacing:10px;color:var(--rouge);background:#fff;border-radius:16px;padding:4px 22px}
-.cols{display:grid;grid-template-columns:330px 1fr;gap:16px}
+.cols{display:grid;grid-template-columns:300px 1fr 330px;gap:16px;align-items:start}
+@media (max-width:1100px){.cols{grid-template-columns:300px 1fr}.telbloc{grid-column:1 / -1}}
 @media (max-width:820px){.cols{grid-template-columns:1fr}}
+body.prof main{max-width:1500px}
+.telbloc{position:sticky;top:10px}
+.telbloc h3{margin:14px 0 6px;font-size:19px;color:var(--fonce)}
+.tel{overflow-x:hidden;width:330px;height:640px;border:12px solid #1d1f1e;border-radius:34px;background:var(--fond);overflow-y:auto;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.tel .ecran{width:390px;zoom:.787;padding:14px 16px 30px;pointer-events:none}
+.tel .ecran .carte{margin:10px 0}
 .liste button{display:block;width:100%;text-align:left;background:#fff;border:2px solid #dde7e2;margin:6px 0;padding:10px 12px;font-size:17px;font-weight:400}
 .liste button.faite{opacity:.55}.liste button.active{border-color:var(--vert);background:#eaf3ee;opacity:1}
 .liste .t{font-weight:700}
@@ -182,9 +188,23 @@ function prof(){
   function nomsEleves(){ var st = ch.presenceState(), o = {}; Object.keys(st).forEach(function(k){ if(k!=='prof' && st[k][0]) o[k] = st[k][0].nom; }); eleves = o; }
   function envoyer(ev, p){ ch.send({ type:'broadcast', event:ev, payload:p }); }
   window.voirDire = function(b){ if (!cur || !cur.q.dire) return; b.innerHTML = '🗣️ Dis 2 fois : <b>« ' + esc(cur.q.dire) + ' »</b>'; clearTimeout(window.__dt); window.__dt = setTimeout(function(){ b.innerHTML = '🙈 Clique pour voir ce que tu dois dire (caché pour Zoom)'; }, 5000); };
-  function payloadQ(){ return cur ? { id:cur.id, page:pageDe(cur.q.g), theme:themeDe(cur.q.g), consigne:cur.q.consigne, texte:cur.q.texte, choix:cur.q.choix||null } : null; }
+  function apercu(){
+    var x = '';
+    if (!cur) x = '<h1>Bonjour !</h1><div class="carte attente">⏳ Attends la question… · <span class="ar">انتظري السؤال…</span></div>';
+    else {
+      var q = cur.q;
+      x = '<div class="carte">' + bandeau(themeDe(q.g)) + '<p class="consigne">' + esc(q.consigne) + '</p><div class="texte' + (isAr(q.texte) ? ' ar' : '') + '">' + q.texte + '</div>';
+      if (montre) x += '<div class="msg ok">✅ La bonne réponse · <span class="ar">الجواب الصحيح</span><br><b class="bonne">' + esc(q.rep) + '</b></div></div><p class="attente">⏳ <span class="ar">انتظري السؤال التالي…</span></p>';
+      else if (!cur.ouvert) x += '<div class="msg presque" style="font-size:28px">🎧 Écoute bien ! · <span class="ar">استمعي جيدًا!</span><br><span style="font-size:20px">Les réponses arrivent… · <span class="ar">الخيارات قادمة…</span></span></div>' + '</div>';
+      else if (q.choix) x += '<div class="choix">' + q.choix.map(function(c){ return '<button>' + esc(c) + '</button>'; }).join('') + '</div></div>';
+      else x += '<input placeholder="…"><button class="gros">Envoyer · <span class="ar">أرسلي</span></button></div>';
+    }
+    return '<div class="telbloc"><h3>📱 Ce que voient les élèves</h3><div class="tel"><div class="ecran">' + x + '</div></div>'
+      + (cur && !montre ? '<p class="petit">Après leur clic : « ✅ Envoyé ! Attends… »</p>' : '') + '</div>';
+  }
+  function payloadQ(){ return cur ? { id:cur.id, page:pageDe(cur.q.g), theme:themeDe(cur.q.g), consigne:cur.q.consigne, texte:cur.q.texte, choix:cur.q.choix||null, ferme: !cur.ouvert } : null; }
   var derCorr = null; setInterval(function(){ if (cur && montre && derCorr && derCorr.id === cur.id) envoyer('corr', derCorr); else if (cur && !montre) envoyer('q', payloadQ()); }, 4000);
-  function lancer(i, q){ qid++; cur = { id: qid, i: i, q: q }; reps = {}; montre = false; faites[i] = 1; envoyer('q', payloadQ()); rendu(); }
+  function lancer(i, q){ qid++; cur = { id: qid, i: i, q: q, ouvert: !q.dire }; reps = {}; montre = false; faites[i] = 1; envoyer('q', payloadQ()); rendu(); }
   function corriger(){
     if(!cur) return; montre = true; var res = {};
     Object.keys(reps).forEach(function(s){ res[s] = reps[s].j; });
@@ -213,16 +233,16 @@ function prof(){
     if (!cur) h += '<p class="attente">Clique sur une question à gauche pour l’envoyer sur les téléphones.</p>';
     else {
       h += bandeau(themeDe(cur.q.g)) + '<p class="consigne">' + esc(cur.q.consigne) + '</p><div class="texte' + (isAr(cur.q.texte) ? ' ar' : '') + '">' + cur.q.texte + '</div>'
-        + (cur.q.dire ? '<button class="dire" onclick="voirDire(this)">🙈 Clique pour voir ce que tu dois dire (caché pour Zoom)</button>' : '')
+        + (cur.q.dire ? '<div class="dire">🗣️ Dis à voix haute, 2 fois : <b>« ' + esc(cur.q.dire) + ' »</b></div>' : '')
         + '<p><b>Réponses : ' + nr + ' / ' + n + '</b>' + (montre ? ' · Bonne réponse : <b>' + esc(cur.q.rep) + '</b>' : '') + '</p>';
       Object.keys(reps).forEach(function(s){ var r = reps[s];
         h += '<div class="rep ' + r.j + '" data-s="' + s + '"><b>' + esc(r.nom) + '</b><span class="r">' + esc(r.txt) + '</span><span>' + (r.j==='ok'?'✅':r.j==='presque'?'🟡 presque':'❌') + '</span></div>'; });
       if (montre) h += '<div class="podium">⚡ Les plus rapides<div>' + (cur.podium && cur.podium.length ? cur.podium.map(function(x, i){ return '<span>' + ['🥇','🥈','🥉'][i] + ' ' + esc(x[0]) + ' <small>+' + x[1] + ' ⭐</small></span>'; }).join('') : '<span>Personne cette fois !</span>') + '</div></div>';
       if (nr && !montre) h += '<div class="petit">Une réponse mal jugée ? Clique dessus pour la changer (avant « Montrer la réponse »).</div>';
       h += manuel(pageDe(cur.q.g), true);
-      h += '<div class="barre"><button id="corr">✅ Montrer la réponse</button><button id="suiv" class="sec">➡️ Question suivante</button><button id="pause" class="sec">⏸️ Écran d’attente</button><button id="clas" class="sec">🏆 Classement</button></div>';
+      h += (!cur.ouvert ? '<div class="barre"><button id="ouvrir" style="background:var(--rouge);color:#fff;font-size:22px">🔓 J’ai dit le mot : montrer les choix</button></div>' : '') + '<div class="barre"><button id="corr">✅ Montrer la réponse</button><button id="suiv" class="sec">➡️ Question suivante</button><button id="pause" class="sec">⏸️ Écran d’attente</button><button id="clas" class="sec">🏆 Classement</button></div>';
     }
-    h += '<div id="classement"></div></div></div>';
+    h += '<div id="classement"></div></div>' + apercu() + '</div>';
     el(h);
     app.querySelectorAll('.liste button[data-i]').forEach(function(b){ b.onclick = function(){ var i = +b.dataset.i; lancer(i, QUESTIONS.concat(libres)[i]); }; });
     app.querySelectorAll('.rep').forEach(function(d){ d.onclick = function(){ if (montre) return; var r = reps[d.dataset.s]; r.j = r.j === 'ok' ? 'ko' : 'ok'; rendu(); }; });
@@ -231,6 +251,7 @@ function prof(){
       var oks = r.split('/').map(function(x){ return x.trim(); }).filter(Boolean);
       libres.push({ g:'Questions libres', consigne: isAr(t) ? TR : 'Réponds en français · أجيبي بالفرنسية', texte: esc(t), ok: oks, rep: oks[0] }); lancer(QUESTIONS.length + libres.length - 1, libres[libres.length-1]); };
     if ((b = document.getElementById('corr'))) b.onclick = corriger;
+    if ((b = document.getElementById('ouvrir'))) b.onclick = function(){ cur.ouvert = true; envoyer('q', payloadQ()); rendu(); };
     if ((b = document.getElementById('suiv'))) b.onclick = function(){ var t = QUESTIONS.concat(libres), i = cur.i + 1; if (i < t.length) lancer(i, t[i]); };
     if ((b = document.getElementById('pause'))) b.onclick = function(){ cur = null; envoyer('pause', {}); rendu(); };
     if ((b = document.getElementById('clas'))) b.onclick = function(){
@@ -270,6 +291,7 @@ function eleve(){
       document.getElementById('sortir').onclick = function(e){ e.preventDefault(); ch.unsubscribe(); sessionStorage.removeItem('gdp-classe-dedans'); code0 = ''; entree(); }; }
     function question(){
       var h = '<div class="carte">' + bandeau(q.theme) + '<p class="consigne">' + esc(q.consigne) + '</p><div class="texte' + (isAr(q.texte) ? ' ar' : '') + '">' + q.texte + '</div>';
+      if (q.ferme) { el(h + '<div class="msg presque" style="font-size:28px">🎧 Écoute bien ! · <span class="ar">استمعي جيدًا!</span><br><span style="font-size:20px">Les réponses arrivent… · <span class="ar">الخيارات قادمة…</span></span></div>' + '</div>'); return; }
       if (q.choix) h += '<div class="choix">' + q.choix.map(function(c, i){ return '<button data-c="' + i + '">' + esc(c) + '</button>'; }).join('') + '</div>';
       else h += '<input id="t" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="…"><button class="gros" id="env">Envoyer · <span class="ar">أرسلي</span></button>';
       el(h + manuel(q.page, true) + '</div>');
@@ -278,7 +300,7 @@ function eleve(){
       if (q.choix) app.querySelectorAll('.choix button').forEach(function(b){ b.onclick = function(){ b.classList.add('pris'); setTimeout(function(){ envoyer(q.choix[+b.dataset.c]); }, 150); }; });
       else { var t = document.getElementById('t'); t.focus(); document.getElementById('env').onclick = function(){ envoyer(t.value); }; t.onkeydown = function(e){ if (e.key === 'Enter') envoyer(t.value); }; }
     }
-    ch.on('broadcast', { event:'q' }, function(m){ if (!m.payload) return; if (q && q.id === m.payload.id) return; q = m.payload; envoye = false; mien = ''; question(); })
+    ch.on('broadcast', { event:'q' }, function(m){ if (!m.payload) return; if (q && q.id === m.payload.id && !(q.ferme && !m.payload.ferme)) return; q = m.payload; envoye = false; mien = ''; question(); })
       .on('broadcast', { event:'pause' }, function(){ q = null; attente('⏳ Attends la question… · <span class="ar">انتظري السؤال…</span>'); })
       .on('broadcast', { event:'corr' }, function(m){ var p = m.payload; if (corrVue === p.id) return; if (!q || p.id !== q.id) { if (!p.q) return; q = p.q; mien = ''; } corrVue = p.id;
         var j = p.res[sid], h;
