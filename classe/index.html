@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Classe en direct · Graines de Palestine</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap">
+<style>
+:root{--vert:#2f8a6e;--fonce:#1f3d33;--rouge:#c8213f;--fond:#f4f8f2;--carte:#fff;--gris:#5b6b65;--jaune:#fff4c9;--orange:#c86a00}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fond);color:#151a18;font-family:'Andika','Noto Naskh Arabic',sans-serif;font-size:20px}
+.ar{font-family:'Noto Naskh Arabic',serif;direction:rtl}
+.bande{display:flex;height:8px}.bande div{flex:1}
+main{max-width:560px;margin:0 auto;padding:18px 16px 40px}
+h1{font-size:26px;margin:10px 0 4px;color:var(--fonce)}
+.carte{background:var(--carte);border-radius:16px;padding:18px;margin:14px 0;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+label{display:block;font-weight:700;margin:10px 0 4px}
+input{width:100%;font:inherit;font-size:24px;padding:12px 14px;border:2px solid #c9d6d0;border-radius:12px;background:#fff}
+input:focus{outline:none;border-color:var(--vert)}
+button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:14px 18px;cursor:pointer}
+.gros{width:100%;font-size:24px;background:var(--vert);color:#fff;margin-top:14px}
+.gros:disabled{background:#9db8ad}
+.choix{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.choix button{background:#eaf3ee;color:var(--fonce);font-size:26px;border:2px solid #cfe2d8}
+.choix button.pris{background:var(--vert);color:#fff;border-color:var(--vert)}
+.consigne{color:var(--gris);font-size:19px;margin:0}
+.texte{font-size:40px;font-weight:700;text-align:center;margin:16px 0 6px;color:var(--fonce);line-height:1.3}
+.attente{text-align:center;color:var(--gris);font-size:22px;padding:30px 0}
+.ok{background:#dcefe6;color:var(--fonce)} .ko{background:#fde8e1} .presque{background:var(--jaune)}
+.msg{border-radius:14px;padding:14px;text-align:center;font-size:24px;margin-top:14px}
+.petit{font-size:16px;color:var(--gris)}
+.err{color:var(--rouge);font-weight:700;margin-top:10px}
+/* enseignante */
+body.prof main{max-width:1200px}
+.haut{display:flex;flex-wrap:wrap;gap:16px;align-items:center}
+.code{font-size:64px;font-weight:700;letter-spacing:10px;color:var(--rouge);background:#fff;border-radius:16px;padding:4px 22px}
+.cols{display:grid;grid-template-columns:330px 1fr;gap:16px}
+@media (max-width:820px){.cols{grid-template-columns:1fr}}
+.liste button{display:block;width:100%;text-align:left;background:#fff;border:2px solid #dde7e2;margin:6px 0;padding:10px 12px;font-size:17px;font-weight:400}
+.liste button.faite{opacity:.55}.liste button.active{border-color:var(--vert);background:#eaf3ee;opacity:1}
+.liste .t{font-weight:700}
+.eleves{display:flex;flex-wrap:wrap;gap:8px}
+.eleves span{background:#eaf3ee;border-radius:999px;padding:4px 12px;font-size:17px}
+.rep{display:flex;justify-content:space-between;align-items:center;gap:10px;border-radius:12px;padding:10px 14px;margin:6px 0;font-size:22px;cursor:pointer;background:#f1f1ee}
+.rep b{min-width:120px}
+.rep .r{flex:1}
+.barre{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.barre button{background:var(--fonce);color:#fff;font-size:18px}
+.barre button.sec{background:#e3ebe7;color:var(--fonce)}
+.dire{background:var(--jaune);border-radius:12px;padding:8px 12px;font-size:20px;margin-top:8px}
+table{border-collapse:collapse;width:100%;font-size:22px}td{padding:6px 8px;border-bottom:1px solid #e3ebe7}
+</style>
+</head>
+<body>
+<div class="bande"><div style="background:#c8213f"></div><div style="background:#151a18"></div><div style="background:#f4f8f2"></div><div style="background:#2f8a6e"></div></div>
+<main id="app"></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+<script>
+var SB_URL = 'https://ysjvkhcwwwjhwjajhbox.supabase.co', SB_KEY = 'sb_publishable_OCG6g79LV7FO17bKQXqsZA_L0QFRHlm';
+var app = document.getElementById('app');
+function el(h){ app.innerHTML = h; }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function norm(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[’'`]/g,"'").replace(/[^a-z0-9' ]+/g,' ').replace(/\s+/g,' ').trim(); }
+function dist(a,b){ var m=[],i,j; for(i=0;i<=a.length;i++){m[i]=[i];} for(j=0;j<=b.length;j++){m[0][j]=j;}
+  for(i=1;i<=a.length;i++)for(j=1;j<=b.length;j++)m[i][j]=Math.min(m[i-1][j]+1,m[i][j-1]+1,m[i-1][j-1]+(a[i-1]===b[j-1]?0:1)); return m[a.length][b.length]; }
+function juger(txt, oks){
+  var n = norm(txt); if(!n) return 'ko';
+  for (var i=0;i<oks.length;i++){ if (n === norm(oks[i])) return 'ok'; }
+  for (i=0;i<oks.length;i++){ var o = norm(oks[i]); if (o.length > 3 && dist(n,o) <= (o.length > 8 ? 2 : 1)) return 'presque'; }
+  return 'ko';
+}
+var isAr = function(s){ return /[؀-ۿ]/.test(s); };
+var client = supabase.createClient(SB_URL, SB_KEY, { auth:{ persistSession:false }, realtime:{ params:{ eventsPerSecond: 20 } } });
+
+/* ───────── Questions du cours 4 */
+var TR = 'Traduis en français · ترجمي إلى الفرنسية', LET = 'Écris le nombre en lettres · اكتبي الرقم بالحروف',
+    ECO = '🎧 Écoute et écris le nombre en chiffres · استمعي واكتبي الرقم', QCM = 'Clique sur la bonne réponse · اختاري الجواب الصحيح';
+var QUESTIONS = [
+  {g:'Traduction', consigne:TR, texte:'مرحبًا!', ok:['bonjour','salut'], rep:'Bonjour !'},
+  {g:'Traduction', consigne:TR, texte:'كيف حالكِ؟', ok:['comment vas-tu','comment vas tu','ca va','comment ca va','comment tu vas'], rep:'Comment vas-tu ?'},
+  {g:'Traduction', consigne:TR, texte:'أنا بخير، شكرًا.', ok:['je vais bien merci','ca va bien merci','ca va merci','je vais bien','ca va bien'], rep:'Je vais bien, merci.'},
+  {g:'Traduction', consigne:TR, texte:'أنا متعبة.', ok:['je suis fatiguee'], rep:'Je suis fatiguée.'},
+  {g:'Traduction', consigne:TR, texte:'شكرًا', ok:['merci'], rep:'Merci.'},
+  {g:'Traduction', consigne:TR, texte:'مع السلامة', ok:['au revoir'], rep:'Au revoir !'},
+  {g:'Nombres', consigne:LET, texte:'4', ok:['quatre'], rep:'quatre'},
+  {g:'Nombres', consigne:QCM, texte:'7 = ?', choix:['six','sept','cinq'], ok:['sept'], rep:'sept'},
+  {g:'Nombres', consigne:LET, texte:'6', ok:['six'], rep:'six'},
+  {g:'Nombres', consigne:ECO, texte:'🎧', dire:'huit', ok:['8','huit'], rep:'8 (huit)'},
+  {g:'Nombres', consigne:LET, texte:'9', ok:['neuf'], rep:'neuf'},
+  {g:'Nombres', consigne:ECO, texte:'🎧', dire:'dix', ok:['10','dix'], rep:'10 (dix)'},
+  {g:'Nombres', consigne:'🎧 Écoute le calcul. Écris la réponse en chiffres · استمعي واكتبي الجواب', texte:'🎧 ➕', dire:'deux plus trois, égal ?', ok:['5','cinq'], rep:'2 + 3 = 5'},
+  {g:'Nombres', consigne:QCM, texte:'19 = ?', choix:['dix-neuf','neuf','vingt-neuf'], ok:['dix-neuf'], rep:'dix-neuf'},
+  {g:'Nombres', consigne:LET, texte:'21', ok:['vingt et un','vingt-et-un'], rep:'vingt et un'},
+  {g:'L’âge', consigne:TR, texte:'كم عمركِ؟', ok:['tu as quel age','quel age as-tu','quel age as tu','quel age tu as'], rep:'Tu as quel âge ?'},
+  {g:'L’âge', consigne:QCM, texte:'Quelle phrase est juste ?<br>أيّ جملة صحيحة؟', choix:['Je suis 18 ans.','J’ai 18 ans.'], ok:['J’ai 18 ans.'], rep:'J’ai 18 ans.'},
+  {g:'L’âge', consigne:TR, texte:'عمري ٢٠ سنة.', ok:['j\'ai vingt ans','j\'ai 20 ans'], rep:'J’ai vingt ans.'}
+];
+
+/* ═════════ PAGE DE L'ENSEIGNANTE (?prof) */
+function prof(){
+  document.body.className = 'prof';
+  var code = sessionStorage.getItem('gdp-classe-code') || String(1000 + Math.floor(Math.random()*9000));
+  sessionStorage.setItem('gdp-classe-code', code);
+  var ch = client.channel('gdp-classe-' + code, { config:{ broadcast:{ self:false }, presence:{ key:'prof' } } });
+  var eleves = {}, cur = null, reps = {}, faites = {}, points = {}, montre = false, qid = 0, libres = [];
+  function nomsEleves(){ var st = ch.presenceState(), o = {}; Object.keys(st).forEach(function(k){ if(k!=='prof' && st[k][0]) o[k] = st[k][0].nom; }); eleves = o; }
+  function envoyer(ev, p){ ch.send({ type:'broadcast', event:ev, payload:p }); }
+  function payloadQ(){ return cur ? { id:cur.id, consigne:cur.q.consigne, texte:cur.q.texte, choix:cur.q.choix||null } : null; }
+  function lancer(i, q){ qid++; cur = { id: qid, i: i, q: q }; reps = {}; montre = false; faites[i] = 1; envoyer('q', payloadQ()); rendu(); }
+  function corriger(){
+    if(!cur) return; montre = true; var res = {};
+    Object.keys(reps).forEach(function(s){ res[s] = reps[s].j; if(reps[s].j === 'ok') points[s] = (points[s]||0) + 1; });
+    envoyer('corr', { id:cur.id, rep:cur.q.rep, res:res }); rendu();
+  }
+  function rendu(){
+    var n = Object.keys(eleves).length, nr = Object.keys(reps).length;
+    var h = '<div class="haut"><div><h1>Classe en direct</h1><div class="petit">Sur le téléphone : <b>grainesdepalestine.github.io/classe</b></div></div>'
+      + '<div class="code">' + code + '</div><div class="ar" style="font-size:22px">رمز الصف</div></div>'
+      + '<div class="carte"><b>Connectées : ' + n + '</b><div class="eleves" style="margin-top:8px">'
+      + (n ? Object.keys(eleves).map(function(k){ return '<span>' + esc(eleves[k]) + '</span>'; }).join('') : '<span class="petit" style="background:none">Personne pour le moment…</span>') + '</div></div>'
+      + '<div class="cols"><div class="carte liste"><b>Les questions</b>';
+    var g = '';
+    QUESTIONS.concat(libres).forEach(function(q, i){
+      if (q.g !== g){ g = q.g; h += '<div class="petit" style="margin-top:10px">' + esc(g) + '</div>'; }
+      h += '<button data-i="' + i + '" class="' + (cur && cur.i === i ? 'active' : faites[i] ? 'faite' : '') + '"><span class="t">' + (i+1) + '.</span> ' + q.texte.replace(/<br>.*/,'') + (q.dire ? ' <span class="petit">(dis « ' + esc(q.dire) + ' »)</span>' : '') + '</button>';
+    });
+    h += '<div class="petit" style="margin-top:12px">Question libre (réponses acceptées séparées par /)</div>'
+      + '<input id="lq" placeholder="Phrase ou mot à traduire" style="font-size:17px;margin-top:4px"><input id="lr" placeholder="Réponse 1 / réponse 2" style="font-size:17px;margin-top:6px">'
+      + '<button id="lgo" style="background:var(--vert);color:#fff;margin-top:6px;text-align:center;font-weight:700">Ajouter et envoyer</button></div>';
+    h += '<div class="carte">';
+    if (!cur) h += '<p class="attente">Clique sur une question à gauche pour l’envoyer sur les téléphones.</p>';
+    else {
+      h += '<p class="consigne">' + esc(cur.q.consigne) + '</p><div class="texte' + (isAr(cur.q.texte) ? ' ar' : '') + '">' + cur.q.texte + '</div>'
+        + (cur.q.dire ? '<div class="dire">🗣️ Dis à voix haute, 2 fois : <b>« ' + esc(cur.q.dire) + ' »</b></div>' : '')
+        + '<p><b>Réponses : ' + nr + ' / ' + n + '</b>' + (montre ? ' · Bonne réponse : <b>' + esc(cur.q.rep) + '</b>' : '') + '</p>';
+      Object.keys(reps).forEach(function(s){ var r = reps[s];
+        h += '<div class="rep ' + r.j + '" data-s="' + s + '"><b>' + esc(r.nom) + '</b><span class="r">' + esc(r.txt) + '</span><span>' + (r.j==='ok'?'✅':r.j==='presque'?'🟡 presque':'❌') + '</span></div>'; });
+      if (nr) h += '<div class="petit">Une réponse mal jugée ? Clique dessus pour la changer (avant « Montrer la réponse »).</div>';
+      h += '<div class="barre"><button id="corr">✅ Montrer la réponse</button><button id="suiv" class="sec">➡️ Question suivante</button><button id="pause" class="sec">⏸️ Écran d’attente</button><button id="clas" class="sec">🏆 Classement</button></div>';
+    }
+    h += '<div id="classement"></div></div></div>';
+    el(h);
+    app.querySelectorAll('.liste button[data-i]').forEach(function(b){ b.onclick = function(){ var i = +b.dataset.i; lancer(i, QUESTIONS.concat(libres)[i]); }; });
+    app.querySelectorAll('.rep').forEach(function(d){ d.onclick = function(){ if (montre) return; var r = reps[d.dataset.s]; r.j = r.j === 'ok' ? 'ko' : 'ok'; rendu(); }; });
+    var b;
+    if ((b = document.getElementById('lgo'))) b.onclick = function(){ var t = document.getElementById('lq').value.trim(), r = document.getElementById('lr').value.trim(); if(!t || !r) return;
+      var oks = r.split('/').map(function(x){ return x.trim(); }).filter(Boolean);
+      libres.push({ g:'Questions libres', consigne: isAr(t) ? TR : 'Réponds en français · أجيبي بالفرنسية', texte: esc(t), ok: oks, rep: oks[0] }); lancer(QUESTIONS.length + libres.length - 1, libres[libres.length-1]); };
+    if ((b = document.getElementById('corr'))) b.onclick = corriger;
+    if ((b = document.getElementById('suiv'))) b.onclick = function(){ var t = QUESTIONS.concat(libres), i = cur.i + 1; if (i < t.length) lancer(i, t[i]); };
+    if ((b = document.getElementById('pause'))) b.onclick = function(){ cur = null; envoyer('pause', {}); rendu(); };
+    if ((b = document.getElementById('clas'))) b.onclick = function(){
+      var t = Object.keys(eleves).map(function(s){ return [eleves[s], points[s]||0]; }).sort(function(a,b){ return b[1]-a[1]; });
+      document.getElementById('classement').innerHTML = '<h2>🏆 Classement</h2><table>' + t.map(function(x,i){ return '<tr><td>' + (i<3?['🥇','🥈','🥉'][i]:i+1) + '</td><td>' + esc(x[0]) + '</td><td><b>' + x[1] + '</b> ⭐</td></tr>'; }).join('') + '</table>';
+    };
+  }
+  ch.on('presence', { event:'sync' }, function(){ nomsEleves(); rendu(); })
+    .on('broadcast', { event:'r' }, function(m){ var p = m.payload; if (!cur || p.id !== cur.id || montre) return;
+      reps[p.sid] = { nom:p.nom, txt:p.txt, j: juger(p.txt, cur.q.ok) }; rendu(); })
+    .on('broadcast', { event:'hello' }, function(){ if (cur) envoyer('q', payloadQ()); if (cur && montre) corriger(); })
+    .subscribe(function(st){ if (st === 'SUBSCRIBED') ch.track({ nom:'prof' }); });
+  rendu();
+}
+
+/* ═════════ PAGE DES ÉLÈVES */
+function eleve(){
+  var sid = sessionStorage.getItem('gdp-classe-sid') || Math.random().toString(36).slice(2, 10);
+  sessionStorage.setItem('gdp-classe-sid', sid);
+  var params = new URLSearchParams(location.search);
+  var code0 = params.get('code') || localStorage.getItem('gdp-classe-code') || '', nom0 = localStorage.getItem('gdp-classe-nom') || '';
+  function entree(err){
+    el('<h1>Classe en direct</h1><p class="ar" style="margin:0">الصف المباشر</p><div class="carte">'
+      + '<label>Le code de la classe · <span class="ar">رمز الصف</span></label><input id="c" inputmode="numeric" maxlength="4" value="' + esc(code0) + '" placeholder="1234">'
+      + '<label>Ton prénom · <span class="ar">اسمكِ</span></label><input id="n" maxlength="20" value="' + esc(nom0) + '">'
+      + '<button class="gros" id="go">Entrer · <span class="ar">دخول</span></button>' + (err ? '<div class="err">' + err + '</div>' : '') + '</div>');
+    document.getElementById('go').onclick = function(){
+      var c = document.getElementById('c').value.replace(/\D/g,''), n = document.getElementById('n').value.trim();
+      if (c.length !== 4 || !n) return entree('Écris le code (4 chiffres) et ton prénom. · اكتبي الرمز واسمكِ.');
+      localStorage.setItem('gdp-classe-code', c); localStorage.setItem('gdp-classe-nom', n); code0 = c; nom0 = n; sessionStorage.setItem('gdp-classe-dedans', '1'); salle(c, n);
+    };
+  }
+  function salle(code, nom){
+    var ch = client.channel('gdp-classe-' + code, { config:{ broadcast:{ self:false }, presence:{ key:sid } } });
+    var q = null, envoye = false, profVu = false;
+    function attente(t){ el('<h1>Bonjour ' + esc(nom) + ' !</h1><div class="carte attente">' + t + '</div><p class="petit" style="text-align:center">Code ' + code + ' · <a href="#" id="sortir">changer</a></p>');
+      document.getElementById('sortir').onclick = function(e){ e.preventDefault(); ch.unsubscribe(); sessionStorage.removeItem('gdp-classe-dedans'); code0 = ''; entree(); }; }
+    function question(){
+      var h = '<div class="carte"><p class="consigne">' + esc(q.consigne) + '</p><div class="texte' + (isAr(q.texte) ? ' ar' : '') + '">' + q.texte + '</div>';
+      if (q.choix) h += '<div class="choix">' + q.choix.map(function(c, i){ return '<button data-c="' + i + '">' + esc(c) + '</button>'; }).join('') + '</div>';
+      else h += '<input id="t" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="…"><button class="gros" id="env">Envoyer · <span class="ar">أرسلي</span></button>';
+      el(h + '</div>');
+      function envoyer(txt){ if (envoye || !txt.trim()) return; envoye = true; ch.send({ type:'broadcast', event:'r', payload:{ id:q.id, sid:sid, nom:nom, txt:txt.trim() } });
+        attente('✅ Envoyé ! · <span class="ar">تم الإرسال</span><br><br>⏳ <span class="ar">انتظري…</span>'); }
+      if (q.choix) app.querySelectorAll('.choix button').forEach(function(b){ b.onclick = function(){ b.classList.add('pris'); setTimeout(function(){ envoyer(q.choix[+b.dataset.c]); }, 150); }; });
+      else { var t = document.getElementById('t'); t.focus(); document.getElementById('env').onclick = function(){ envoyer(t.value); }; t.onkeydown = function(e){ if (e.key === 'Enter') envoyer(t.value); }; }
+    }
+    ch.on('broadcast', { event:'q' }, function(m){ if (!m.payload) return; if (q && q.id === m.payload.id) return; q = m.payload; envoye = false; question(); })
+      .on('broadcast', { event:'pause' }, function(){ q = null; attente('⏳ Attends la question… · <span class="ar">انتظري السؤال…</span>'); })
+      .on('broadcast', { event:'corr' }, function(m){ var p = m.payload; if (!q || p.id !== q.id) return;
+        var j = p.res[sid], h;
+        if (j === 'ok') h = '<div class="msg ok">⭐ Bravo ! · <span class="ar">ممتاز!</span></div>';
+        else if (j === 'presque') h = '<div class="msg presque">Tu y es presque ! · <span class="ar">قريب جدًا!</span><br><b>' + esc(p.rep) + '</b></div>';
+        else if (j === 'ko') h = '<div class="msg ko">La réponse · <span class="ar">الجواب</span><br><b>' + esc(p.rep) + '</b></div>';
+        else h = '<div class="msg presque">La réponse · <span class="ar">الجواب</span><br><b>' + esc(p.rep) + '</b></div>';
+        el('<div class="carte"><p class="consigne">' + esc(q.consigne) + '</p><div class="texte' + (isAr(q.texte) ? ' ar' : '') + '">' + q.texte + '</div>' + h + '</div><p class="attente">⏳ <span class="ar">انتظري السؤال التالي…</span></p>'); })
+      .on('presence', { event:'sync' }, function(){ profVu = !!ch.presenceState().prof; })
+      .subscribe(function(st){
+        if (st === 'SUBSCRIBED') { ch.track({ nom:nom }); ch.send({ type:'broadcast', event:'hello', payload:{} });
+          if (!q) attente('⏳ Attends la question… · <span class="ar">انتظري السؤال…</span>');
+          setTimeout(function(){ if (!profVu && !q) attente('Le cours n’a pas encore commencé, ou le code n’est pas bon.<br><span class="ar">لم يبدأ الدرس بعد، أو الرمز غير صحيح.</span>'); }, 4000); }
+        if (st === 'CHANNEL_ERROR' || st === 'TIMED_OUT') attente('Connexion… · <span class="ar">جارٍ الاتصال…</span>');
+      });
+  }
+  if (sessionStorage.getItem('gdp-classe-dedans') && code0 && nom0) salle(code0, nom0); else entree();
+}
+
+if (!window.supabase) el('<div class="carte err">Pas de connexion internet. · لا يوجد اتصال بالإنترنت.</div>');
+else if (new URLSearchParams(location.search).has('prof')) prof(); else eleve();
+</script>
+</body>
+</html>
